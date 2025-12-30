@@ -1,0 +1,57 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-vaultwarden
+spec:
+  instances: 1
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+  postgresql:
+    parameters:
+      timezone: ${CLUSTER_TZ}
+  storage:
+    size: 5G
+    storageClass: democratic-csi-hostpath
+
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: bzip2
+      serverName: pg-vaultwarden-v3
+      destinationPath: s3://cnpg-backups/
+      endpointURL: "http://192.168.1.10:9000"
+      s3Credentials:
+        accessKeyId:
+          name: cloudnative-pg-secret
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: cloudnative-pg-secret
+          key: AWS_SECRET_ACCESS_KEY
+
+  bootstrap:
+    # initdb:
+    #   database: vaultwarden
+    #   owner: vaultwarden
+    recovery:
+      source: source
+      database: vaultwarden
+      owner: vaultwarden
+
+  externalClusters:
+    - name: source
+      barmanObjectStore:
+        wal:
+          compression: bzip2
+        serverName: pg-vaultwarden
+        destinationPath: s3://cnpg-backups/
+        endpointURL: "http://192.168.1.10:9000"
+        s3Credentials:
+          accessKeyId:
+            name: cloudnative-pg-secret
+            key: AWS_ACCESS_KEY_ID
+          secretAccessKey:
+            name: cloudnative-pg-secret
+            key: AWS_SECRET_ACCESS_KEY

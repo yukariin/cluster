@@ -1,0 +1,57 @@
+---
+# yaml-language-server: $schema=https://lds-schemas.pages.dev/infra.contrib.fluxcd.io/terraform_v1alpha2.json
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: authentik-provisioner
+spec:
+  interval: 10m
+  approvePlan: "auto"
+  path: infrastructure/terraform/security/authentik
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  varsFrom:
+    - kind: Secret
+      name: authentik-secret
+      varsKeys:
+        - AUTHENTIK_BOOTSTRAP_TOKEN
+  vars:
+    - name: authentik_url
+      value: http://authentik-server.security.svc.cluster.local:80
+    - name: authentik_host
+      value: "https://authentik.${CLUSTER_DOMAIN}"
+    - name: oauth2_applications
+      value:
+        kubectl:
+          group: Kubernetes-Admins
+          client_type: public
+          client_id: kubectl
+          client_secret: null
+          redirect_uris:
+            - matching_mode: strict
+              url: http://localhost:8000
+            - matching_mode: strict
+              url: http://localhost:18000
+    - name: groups
+      value:
+        Cluster-Admins:
+          name: Cluster Admins
+          superuser: true
+          parent: authentik-Admins
+        Kubernetes-Admins:
+          name: Kubernetes Admins
+          superuser: false
+          parent: Cluster-Admins
+        Kubernetes-Restricted:
+          name: Kubernetes Viewers
+          superuser: false
+    - name: users
+      value:
+        yukarin:
+          name: Yukari
+          email: mistelinn@gmail.com
+          groups:
+            - Cluster-Admins
+            - Kubernetes-Admins

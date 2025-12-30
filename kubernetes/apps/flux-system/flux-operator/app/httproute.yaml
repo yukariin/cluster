@@ -1,0 +1,15 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: flux
+spec:
+  parentRefs:
+    - { name: internal, namespace: kube-system }
+  hostnames:
+    - "flux.${CLUSTER_DOMAIN}"
+  rules:
+    - backendRefs:
+        - name: flux-operator
+          namespace: flux-system
+          port: 9080

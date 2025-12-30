@@ -1,0 +1,179 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/helmrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: netbird-helms
+spec:
+  interval: 15m
+  url: https://netbirdio.github.io/helms
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app netbird
+spec:
+  chart:
+    spec:
+      chart: netbird
+      version: 1.9.0
+      sourceRef:
+        kind: HelmRepository
+        name: netbird-helms
+  interval: 1h
+  values:
+    fullnameOverride: *app
+
+    signal:
+      image:
+        tag: 0.61.0 # renovate: docker=netbirdio/signal
+
+    relay:
+      image:
+        tag: 0.61.0 # renovate: docker=netbirdio/relay
+      envFromSecret:
+        NB_AUTH_SECRET: netbird-secret/NB_AUTH_SECRET
+      env:
+        NB_LOG_LEVEL: info
+        NB_LISTEN_ADDRESS: ":33080"
+        NB_RELAY_PATH: /relay
+        NB_EXPOSED_ADDRESS: "rels://netbird.${CLUSTER_DOMAIN}:443/relay"
+
+    management:
+      image:
+        tag: 0.61.0 # renovate: docker=netbirdio/management
+      configmap: |-
+        {
+          "Stuns": [
+            {
+              "Proto": "udp",
+              "URI": "{{ .STUN_SERVER }}",
+              "Username": "",
+              "Password": ""
+            }
+          ],
+          "TURNConfig": {
+            "TimeBasedCredentials": false,
+            "CredentialsTTL": "12h0m0s",
+            "Secret": "secret",
+            "Turns": [
+              {
+                "Proto": "udp",
+                "URI": "{{ .TURN_SERVER }}",
+                "Username": "{{ .TURN_SERVER_USER }}",
+                "Password": "{{ .TURN_SERVER_PASSWORD }}"
+              }
+            ]
+          },
+          "Relay": {
+            "Addresses": ["rels://netbird.${CLUSTER_DOMAIN}:443/relay"],
+            "CredentialsTTL": "24h",
+            "Secret": "{{ .RELAY_PASSWORD }}"
+          },
+          "Signal": {
+            "Proto": "https",
+            "URI": "netbird.${CLUSTER_DOMAIN}:443",
+            "Username": "",
+            "Password": ""
+          },
+          "Datadir": "/var/lib/netbird/",
+          "DataStoreEncryptionKey": "{{ .DATASTORE_ENCRYPTION_KEY }}",
+          "HttpConfig": {
+            "LetsEncryptDomain": "",
+            "CertFile": "",
+            "CertKey": "",
+            "AuthAudience": "{{ .IDP_CLIENT_ID }}",
+            "AuthIssuer": "https://authentik.${CLUSTER_DOMAIN}/application/o/netbird/",
+            "AuthUserIDClaim": "",
+            "AuthKeysLocation": "https://authentik.${CLUSTER_DOMAIN}/application/o/netbird/jwks/",
+            "OIDCConfigEndpoint": "https://authentik.${CLUSTER_DOMAIN}/application/o/netbird/.well-known/openid-configuration",
+            "IdpSignKeyRefreshEnabled": true
+          },
+          "IdpManagerConfig": {
+            "ManagerType": "authentik",
+            "ClientConfig": {
+              "Issuer": "https://authentik.${CLUSTER_DOMAIN}/application/o/totmicro-traefik-netbird",
+              "TokenEndpoint": "https://authentik.${CLUSTER_DOMAIN}/application/o/token/",
+              "ClientID": "{{ .IDP_CLIENT_ID }}",
+              "ClientSecret": "",
+              "GrantType": "client_credentials"
+            },
+            "ExtraConfig": {
+              "Password": "{{ .IDP_SERVICE_ACCOUNT_PASSWORD }}",
+              "Username": "{{ .IDP_SERVICE_ACCOUNT_USER }}"
+            },
+            "Auth0ClientCredentials": null,
+            "AzureClientCredentials": null,
+            "KeycloakClientCredentials": null,
+            "ZitadelClientCredentials": null
+          },
+          "DeviceAuthorizationFlow": {
+            "Provider": "hosted",
+            "ProviderConfig": {
+              "ClientID": "{{ .IDP_CLIENT_ID }}",
+              "ClientSecret": "",
+              "Domain": "authentik.${CLUSTER_DOMAIN}",
+              "Audience": "{{ .IDP_CLIENT_ID }}",
+              "TokenEndpoint": "https://authentik.${CLUSTER_DOMAIN}/application/o/token/",
+              "DeviceAuthEndpoint": "https://authentik.${CLUSTER_DOMAIN}/application/o/device/",
+              "AuthorizationEndpoint": "",
+              "Scope": "openid",
+              "UseIDToken": false,
+              "RedirectURLs": null
+            }
+          },
+          "PKCEAuthorizationFlow": {
+            "ProviderConfig": {
+              "ClientID": "{{ .IDP_CLIENT_ID }}",
+              "ClientSecret": "",
+              "Domain": "",
+              "Audience": "{{ .IDP_CLIENT_ID }}",
+              "TokenEndpoint": "https://authentik.${CLUSTER_DOMAIN}/application/o/token/",
+              "DeviceAuthEndpoint": "",
+              "AuthorizationEndpoint": "https://authentik.${CLUSTER_DOMAIN}/application/o/authorize/",
+              "Scope": "openid profile email offline_access api",
+              "UseIDToken": false,
+              "RedirectURLs": ["http://localhost:53000"]
+            }
+          },
+          "StoreConfig": {
+            "Engine": "postgres"
+          },
+          "ReverseProxy": {
+            "TrustedHTTPProxies": null,
+            "TrustedHTTPProxiesCount": 0,
+            "TrustedPeers": null
+          }
+        }
+      envFromSecret:
+        STUN_SERVER: netbird-secret/STUN_SERVER
+        TURN_SERVER: netbird-secret/TURN_SERVER
+        TURN_SERVER_USER: netbird-secret/TURN_SERVER_USER
+        TURN_SERVER_PASSWORD: netbird-secret/TURN_SERVER_PASSWORD
+        RELAY_PASSWORD: netbird-secret/NB_AUTH_SECRET
+        IDP_CLIENT_ID: netbird-secret/IDP_CLIENT_ID
+        IDP_SERVICE_ACCOUNT_USER: netbird-secret/IDP_SERVICE_ACCOUNT_USER
+        IDP_SERVICE_ACCOUNT_PASSWORD: netbird-secret/IDP_SERVICE_ACCOUNT_PASSWORD
+        DATASTORE_ENCRYPTION_KEY: netbird-secret/DATASTORE_ENCRYPTION_KEY
+        NETBIRD_STORE_ENGINE_POSTGRES_DSN: pg-netbird-app/uri
+      persistentVolume:
+        enabled: false
+
+    dashboard:
+      image:
+        tag: v2.25.0 # renovate: docker=netbirdio/dashboard
+      env:
+        # Endpoints
+        NETBIRD_MGMT_API_ENDPOINT: "https://netbird.${CLUSTER_DOMAIN}:443"
+        NETBIRD_MGMT_GRPC_API_ENDPOINT: "https://netbird.${CLUSTER_DOMAIN}:443"
+        # OIDC
+        AUTH_AUTHORITY: "https://authentik.${CLUSTER_DOMAIN}/application/o/netbird/"
+        USE_AUTH0: "false"
+        AUTH_AUDIENCE: &oidc_client_id netbird
+        AUTH_CLIENT_ID: *oidc_client_id
+        AUTH_SUPPORTED_SCOPES: "openid profile email offline_access api"
+        AUTH_REDIRECT_URI: /auth
+        AUTH_SILENT_REDIRECT_URI: /silent-auth
+        NETBIRD_TOKEN_SOURCE: accessToken

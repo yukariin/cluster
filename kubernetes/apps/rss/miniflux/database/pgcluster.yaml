@@ -1,0 +1,57 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-miniflux
+spec:
+  instances: 1
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+  postgresql:
+    parameters:
+      timezone: ${CLUSTER_TZ}
+  storage:
+    size: 1G
+    storageClass: democratic-csi-hostpath
+
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: bzip2
+      serverName: pg-miniflux-v3
+      destinationPath: s3://cnpg-backups/
+      endpointURL: "http://192.168.1.10:9000"
+      s3Credentials:
+        accessKeyId:
+          name: cloudnative-pg-secret
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: cloudnative-pg-secret
+          key: AWS_SECRET_ACCESS_KEY
+
+  bootstrap:
+    # initdb:
+    #   database: miniflux
+    #   owner: miniflux
+    recovery:
+      source: source
+      database: miniflux
+      owner: miniflux
+
+  externalClusters:
+    - name: source
+      barmanObjectStore:
+        wal:
+          compression: bzip2
+        serverName: pg-miniflux
+        destinationPath: s3://cnpg-backups/
+        endpointURL: "http://192.168.1.10:9000"
+        s3Credentials:
+          accessKeyId:
+            name: cloudnative-pg-secret
+            key: AWS_ACCESS_KEY_ID
+          secretAccessKey:
+            name: cloudnative-pg-secret
+            key: AWS_SECRET_ACCESS_KEY

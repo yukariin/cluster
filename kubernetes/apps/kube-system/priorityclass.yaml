@@ -1,0 +1,25 @@
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: platform-cluster-critical
+preemptionPolicy: PreemptLowerPriority
+globalDefault: false
+value: 100000000
+description: >-
+  Used for shared platform services (e.g., Ingress, Monitoring, Logging)
+  that are critical for applications but not required for node health.
+  Preempts standard workloads.
+
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: platform-node-critical
+preemptionPolicy: PreemptLowerPriority
+globalDefault: false
+value: 100001000
+description: >-
+  Used for per-node critical infrastructure (e.g., CNI, CSI drivers, DaemonSets)
+  required for the node to function correctly.
+  Preempts platform services and standard workloads.

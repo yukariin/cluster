@@ -1,0 +1,144 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: grafana
+spec:
+  interval: 15m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 10.4.2
+  url: oci://ghcr.io/grafana/helm-charts/grafana
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: grafana
+  interval: 1h
+  values:
+    deploymentStrategy:
+      type: Recreate
+    admin:
+      existingSecret: grafana-secret
+    env:
+      GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
+      GF_EXPLORE_ENABLED: true
+      GF_SECURITY_ANGULAR_SUPPORT_ENABLED: true
+      GF_SERVER_ROOT_URL: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+    grafana.ini:
+      analytics:
+        check_for_updates: false
+        check_for_plugin_updates: false
+        reporting_enabled: false
+      auth.anonymous:
+        enabled: true
+      news:
+        news_feed_enabled: false
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        deleteDatasources:
+          - { name: Alertmanager, orgId: 1 }
+          - { name: Prometheus, orgId: 1 }
+        datasources:
+          - name: Alertmanager
+            type: alertmanager
+            uid: alertmanager
+            access: proxy
+            url: http://alertmanager-operated.observability.svc.cluster.local:9093
+            jsonData:
+              implementation: prometheus
+          - name: Prometheus
+            type: prometheus
+            uid: prometheus
+            access: proxy
+            url: http://prometheus-operated.observability.svc.cluster.local:9090
+            isDefault: true
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: default
+            orgId: 1
+            folder: ""
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
+    dashboards:
+      default:
+        blackbox-exporter:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/7587/revisions/3/download
+        cert-manager:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/20842/revisions/3/download
+        etcd:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/22236/revisions/4/download
+        kubernetes-api-server:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/15761/revisions/20/download
+        kubernetes-coredns:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/15762/revisions/22/download
+        kubernetes-global:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/15757/revisions/43/download
+        kubernetes-namespaces:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/15758/revisions/44/download
+        kubernetes-nodes:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/15759/revisions/40/download
+        kubernetes-pods:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/15760/revisions/37/download
+        kubernetes-pvc-stats:
+          datasource: [{ name: DS_PROMETHEUS, value: Prometheus }]
+          url: https://grafana.com/api/dashboards/23233/revisions/6/download
+        kubernetes-volumes:
+          datasource: [{ name: DS_PROMETHEUS, value: Prometheus }]
+          url: https://grafana.com/api/dashboards/11454/revisions/14/download
+        node-exporter-full:
+          datasource: [{ name: DS_PROMETHEUS, value: Prometheus }]
+          url: https://grafana.com/api/dashboards/1860/revisions/42/download
+        prometheus:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/19105/revisions/8/download
+        volsync:
+          datasource: [{ name: DS_PROMETHEUS, value: Prometheus }]
+          url: https://grafana.com/api/dashboards/21356/revisions/3/download
+        cloudnative-pg:
+          url: https://grafana.com/api/dashboards/20417/revisions/4/download
+        external-dns:
+          url: https://grafana.com/api/dashboards/15038/revisions/3/download
+    plugins:
+      - grafana-clock-panel
+      - grafana-piechart-panel
+      - grafana-worldmap-panel
+    serviceMonitor:
+      enabled: true
+    route:
+      main:
+        enabled: true
+        hostnames:
+          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+    persistence:
+      enabled: false
+    testFramework:
+      enabled: false

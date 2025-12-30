@@ -1,0 +1,9 @@
+---
+ingress:
+  - hostname: "*.${CLUSTER_DOMAIN}"
+    service: https://cilium-gateway-external.kube-system.svc.cluster.local:443
+    originRequest:
+      http2Origin: true
+      originServerName: "external.${CLUSTER_DOMAIN}"
+
+  - service: http_status:404

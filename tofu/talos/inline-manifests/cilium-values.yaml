@@ -1,0 +1,156 @@
+---
+# https://github.com/cilium/cilium/blob/main/install/kubernetes/cilium/values.yaml
+cluster:
+  name: talos
+  id: 1
+
+# https://www.talos.dev/v1.5/kubernetes-guides/network/deploying-cilium/
+kubeProxyReplacement: true
+
+ipam:
+  mode: kubernetes
+
+k8sServiceHost: 127.0.0.1
+k8sServicePort: 7445
+
+cgroup:
+  autoMount:
+    enabled: false
+  hostRoot: /sys/fs/cgroup
+
+gatewayAPI:
+  enabled: true
+  enableAlpn: true
+  enableAppProtocol: true
+
+securityContext:
+  capabilities:
+    ciliumAgent:
+      - CHOWN
+      - KILL
+      - NET_ADMIN
+      - NET_RAW
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYS_RESOURCE
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETGID
+      - SETUID
+    cleanCiliumState:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_RESOURCE
+
+# Increase rate limit when doing L2 announcements
+k8sClientRateLimit:
+  qps: 50
+  burst: 200
+
+l2announcements:
+  enabled: true
+
+externalIPs:
+  enabled: true
+
+# https://docs.cilium.io/en/stable/network/concepts/routing/#native-routing
+routingMode: native
+ipv4NativeRoutingCIDR: 10.244.0.0/16
+autoDirectNodeRoutes: true
+
+# https://docs.cilium.io/en/stable/network/kubernetes/local-redirect-policy/
+socketLB:
+  enabled: true
+  hostNamespaceOnly: true
+localRedirectPolicies:
+  enabled: true
+
+# https://docs.cilium.io/en/latest/operations/performance/tuning/
+bpf:
+  masquerade: true
+bgpControlPlane:
+  enabled: true
+
+operator:
+  rollOutPods: true
+  replicas: 1
+  prometheus:
+    metricsService: true
+    enabled: true
+    port: 9963
+    serviceMonitor:
+      enabled: true
+  dashboards:
+    enabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+# Roll out cilium agent pods automatically when ConfigMap is updated.
+rollOutCiliumPods: true
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+  limits:
+    cpu: 1
+    memory: 1Gi
+
+# debug:
+#  enabled: true
+
+loadBalancer:
+  # https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/#maglev-consistent-hashing
+  algorithm: maglev
+  mode: dsr
+
+envoy:
+  prometheus:
+    enabled: true
+    port: "9964"
+    serviceMonitor:
+      enabled: true
+
+hubble:
+  enabled: true
+  metrics:
+    enabled:
+      - dns:query
+      - drop
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - "httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction;sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity"
+    enableOpenMetrics: true
+    port: 9965
+    serviceMonitor:
+      enabled: true
+    dashboards:
+      enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+    prometheus:
+      enabled: true
+      port: 9966
+      serviceMonitor:
+        enabled: true
+  ui:
+    enabled: true
+    rollOutPods: true
+
+prometheus:
+  metricsService: true
+  enabled: true
+  port: 9962
+  serviceMonitor:
+    enabled: true
+    trustCRDsExist: true
+
+dashboards:
+  enabled: true

@@ -1,0 +1,19 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: netbird-grpc
+spec:
+  parentRefs:
+    - { name: external, namespace: kube-system }
+    - { name: internal, namespace: kube-system }
+  hostnames: ["netbird.${CLUSTER_DOMAIN}"]
+  rules:
+    - backendRefs: [{ name: netbird-management, port: 80 }]
+      matches:
+        - headers: [{ name: Content-Type, value: application/grpc }]
+          method: { service: management.ManagementService }
+    - backendRefs: [{ name: netbird-signal, port: 80 }]
+      matches:
+        - headers: [{ name: Content-Type, value: application/grpc }]
+          method: { service: signalexchange.SignalExchange }

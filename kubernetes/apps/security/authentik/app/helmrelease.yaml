@@ -1,0 +1,72 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: authentik
+spec:
+  interval: 15m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 2025.10.3
+  url: oci://ghcr.io/goauthentik/helm-charts/authentik
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: authentik
+  interval: 1h
+  values:
+    global:
+      env:
+        - name: AUTHENTIK_POSTGRESQL__NAME
+          valueFrom:
+            secretKeyRef:
+              name: pg-authentik-app
+              key: username
+        - name: AUTHENTIK_POSTGRESQL__USER
+          valueFrom:
+            secretKeyRef:
+              name: pg-authentik-app
+              key: username
+        - name: AUTHENTIK_POSTGRESQL__PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pg-authentik-app
+              key: password
+      envFrom:
+        - secretRef:
+            name: authentik-secret
+
+    authentik:
+      error_reporting:
+        enabled: false
+      email:
+        host: "smtp-relay.network.svc.cluster.local"
+        port: 25
+        use_tls: false
+        from: "authentik <authentik@${CLUSTER_DOMAIN}>"
+      postgresql:
+        host: pg-authentik-rw
+
+    server:
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          parentRefs:
+            - name: external
+              namespace: kube-system
+              sectionName: https
+            - name: internal
+              namespace: kube-system
+              sectionName: https

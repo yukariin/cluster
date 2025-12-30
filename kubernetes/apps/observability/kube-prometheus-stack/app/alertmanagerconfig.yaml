@@ -1,0 +1,87 @@
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: alertmanager
+spec:
+  route:
+    receiver: telegram
+    groupBy:
+      - alertname
+      - job
+    groupWait: 1m
+    groupInterval: 5m
+    repeatInterval: 12h
+    routes:
+      - receiver: blackhole
+        matchers:
+          - name: alertname
+            matchType: "="
+            value: Watchdog
+      - receiver: blackhole
+        matchers:
+          - name: alertname
+            matchType: "="
+            value: InfoInhibitor
+
+  inhibitRules:
+    - equal:
+        - alertname
+        - namespace
+      sourceMatch:
+        - name: severity
+          matchType: "="
+          value: critical
+      targetMatch:
+        - name: severity
+          matchType: "="
+          value: warning
+
+  receivers:
+    - name: blackhole
+
+    - name: telegram
+      telegramConfigs:
+        - sendResolved: true
+          chatID: -1003021821850
+          messageThreadID: 2
+          parseMode: HTML
+          botToken:
+            name: alertmanager-secret
+            key: BOT_TOKEN
+
+          message: |-
+            {{- $severity := .CommonLabels.severity -}}
+            {{- $status := .Status -}}
+            {{- $severityIcon := "⚪️" -}}
+            {{- if eq $severity "critical" }}{{ $severityIcon = "🔴" }}{{ else if eq $severity "warning" }}{{ $severityIcon = "🟠" }}{{ end -}}
+
+            {{- if eq $status "firing" -}}
+            {{ $severityIcon }} <b>[FIRING:{{ .Alerts.Firing | len }}] {{ .CommonLabels.alertname }}</b>
+            {{- else -}}
+            ✅ <b>[RESOLVED] {{ .CommonLabels.alertname }}</b>
+            {{- end }}
+
+            <b>Severity:</b> {{ $severityIcon }} {{ $severity | title }}
+            {{- range .Alerts }}
+
+            ———
+            {{- if ne .Annotations.description "" }}
+            📝 {{ .Annotations.description }}
+            {{- else if ne .Annotations.summary "" }}
+            📝 {{ .Annotations.summary }}
+            {{- else if ne .Annotations.message "" }}
+            📝 {{ .Annotations.message }}
+            {{- else }}
+            📝 <i>Alert description not available</i>
+            {{- end }}
+
+            <b>Labels:</b>
+            {{- range .Labels.SortedPairs }}
+            • <code>{{ .Name }}</code>: {{ .Value }}
+            {{- end }}
+            {{- if .Annotations.runbook_url }}
+
+            <a href="{{ .Annotations.runbook_url }}">📖 Runbook</a>
+            {{- end }}
+            {{- end }}
