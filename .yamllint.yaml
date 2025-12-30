@@ -2,12 +2,10 @@
 # This configuration serves as a base for the entire repo
 ignore: |
   *.sops.yaml
-  **/kubernetes/clusters/**
+  *.raw.yaml
   .github/workflows/
-  .taskfiles/
   tofu/output/
   **/resources/**
-  **/*.raw.yaml
 
 extends: default
 rules:
