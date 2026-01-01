@@ -75,7 +75,7 @@ spec:
             subPath: torrents
       qbrr:
         type: image
-        image: ghcr.io/buroa/qbrr:0.1.2
+        image: ghcr.io/buroa/qbrr:0.1.3
         globalMounts:
           - readOnly: true
       tmpfs:
