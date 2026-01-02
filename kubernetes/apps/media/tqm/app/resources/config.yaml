@@ -21,6 +21,8 @@ filters:
       - Downloaded == false && !IsUnregistered()
       # Don't touch very recently added torrents
       - SeedingHours < 26 && !IsUnregistered()
+      # Don't touch manually added torrents
+      - Label == "manual" && !IsUnregistered()
 
     remove:
       # Remove unregistered torrents (after 1 day grace period)
@@ -72,3 +74,6 @@ filters:
       - { name: site:ST,       update: ['TrackerName == "scenetime.com"'] }
       - { name: site:TD,       update: ['TrackerName in ["jumbohostpro.eu", "td-peers.com"]'] }
       - { name: site:TL,       update: ['TrackerName in ["tleechreload.org", "torrentleech.org"]'] }
+      - { name: cross-seed,   mode: full, update: ['Label == "cross-seed"'] }
+      - { name: tracker-down, mode: full, update: ['IsTrackerDown()'] }
+      - { name: unregistered, mode: full, update: ['IsUnregistered()'] }
