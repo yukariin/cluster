@@ -15,12 +15,18 @@ filters:
       - clean
 
     ignore:
+      # Don't touch if tracker appears down
       - IsTrackerDown()
+      # Don't touch torrents that are still downloading
       - Downloaded == false && !IsUnregistered()
+      # Don't touch very recently added torrents
       - SeedingHours < 26 && !IsUnregistered()
 
     remove:
-      - IsUnregistered()
+      # Remove unregistered torrents (after 1 day grace period)
+      - IsUnregistered() && AddedDays >= 1
+      # Remove public torrents that meet 3.0 ratio/7d seed time criteria
+      - IsPublic && (Ratio > 3.0 || SeedingDays >= 7.0)
       # Remove private torrents that meet 3.0 ratio/24d seed time criteria
       - (
           HasAnyTag(
@@ -51,7 +57,7 @@ filters:
       - { name: added:14d,     update: ['AddedDays >= 14 && AddedDays < 30'] }
       - { name: added:30d,     update: ['AddedDays >= 30 && AddedDays < 180'] }
       - { name: added:180d,    update: ['AddedDays >= 180'] }
-      - { name: not-linked,    update: ['HardlinkedOutsideClient == false && Label in ["lidarr", "radarr", "tv-sonarr"]'] }
+      - { name: not-linked,    update: ['HardlinkedOutsideClient == false && Label in ["lidarr", "radarr", "tv-sonarr", "cross-seed"]'] }
       - { name: site:ANT,      update: ['TrackerName == "anthelion.me"'] }
       - { name: site:AR,       update: ['TrackerName == "alpharatio.cc"'] }
       - { name: site:AB,       update: ['TrackerName == "animebytes.tv"'] }
