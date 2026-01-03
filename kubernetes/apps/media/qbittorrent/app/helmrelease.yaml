@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: qbittorrent
+  name: &app qbittorrent
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      qbittorrent:
+      *app :
         containers:
           app:
             image:
@@ -22,6 +22,18 @@ spec:
               TZ: ${CLUSTER_TZ}
               QBT_TORRENTING_PORT: &bittorrentPort 50413
               QBT_WEBUI_PORT: &port 80
+              QBT_Application__MemoryWorkingSetLimit:
+                valueFrom:
+                  resourceFieldRef:
+                    containerName: app
+                    resource: limits.memory
+                    divisor: 1Mi
+              QBT_BitTorrent__Session__Interface: eth0
+              QBT_BitTorrent__Session__InterfaceAddress:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.podIP
+              QBT_BitTorrent__Session__InterfaceName: eth0
             probes:
               liveness: &probes
                 enabled: true
@@ -60,7 +72,7 @@ spec:
         runAsUser: 568
         runAsGroup: 568
         fsGroup: 568
-        # fsGroupChangePolicy: OnRootMismatch
+        fsGroupChangePolicy: OnRootMismatch
         supplementalGroups: [65536]
         seccompProfile: { type: RuntimeDefault }
     persistence:
@@ -106,7 +118,7 @@ spec:
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: ${CLUSTER_LB_BTORRENT}
-        externalTrafficPolicy: Local
+        # externalTrafficPolicy: Local
         ports:
           bittorrent-tcp:
             port: *bittorrentPort
