@@ -24,15 +24,23 @@ spec:
               TZ: ${CLUSTER_TZ}
               DOTNET_BUNDLE_EXTRACT_BASE_DIR: /tmp/.net
               SLSKD_APP_DIR: /config
+              SLSKD_REMOTE_CONFIGURATION: false
               SLSKD_HTTP_PORT: &port 80
               SLSKD_NO_HTTPS: true
+              SLSKD_NO_VERSION_CHECK: true
               SLSKD_SLSK_LISTEN_PORT: &soulseekPort 50300
+              SLSKD_FILE_PERMISSION_MODE: 760
+              SLSKD_DOWNLOADS_DIR: /media/soulseek/complete
+              SLSKD_INCOMPLETE_DIR: /media/soulseek/incomplete
               SLSKD_RETENTION_TRANSFERS_UPLOAD_SUCCEEDED: 20160
               SLSKD_RETENTION_TRANSFERS_UPLOAD_ERRORED: 1440
               SLSKD_RETENTION_TRANSFERS_UPLOAD_CANCELLED: 5
               SLSKD_RETENTION_TRANSFERS_DOWNLOAD_SUCCEEDED: 20160
               SLSKD_RETENTION_TRANSFERS_DOWNLOAD_ERRORED: 1440
               SLSKD_RETENTION_TRANSFERS_DOWNLOAD_CANCELLED: 5
+              SLSKD_METRICS: true
+              SLSKD_METRICS_URL: /metrics
+              SLSKD_METRICS_NO_AUTH: true
             probes:
               liveness: &probes
                 enabled: true
@@ -121,3 +129,7 @@ spec:
           soulseek:
             port: *soulseekPort
             protocol: TCP
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: http
