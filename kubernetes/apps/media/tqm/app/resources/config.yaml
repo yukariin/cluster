@@ -75,5 +75,3 @@ filters:
       - { name: site:TD,       update: ['TrackerName in ["jumbohostpro.eu", "td-peers.com"]'] }
       - { name: site:TL,       update: ['TrackerName in ["tleechreload.org", "torrentleech.org"]'] }
       - { name: cross-seed,   mode: full, update: ['Label == "cross-seed"'] }
-      - { name: tracker-down, mode: full, update: ['IsTrackerDown()'] }
-      - { name: unregistered, mode: full, update: ['IsUnregistered()'] }
