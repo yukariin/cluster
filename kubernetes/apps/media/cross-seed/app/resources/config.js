@@ -16,6 +16,7 @@ function fetchIndexers(baseUrl, apiKey, tag) {
 export default {
   action: "inject",
   apiKey: process.env.CROSS_SEED_API_KEY,
+  blockList: ["category:manual"],
   linkCategory: "cross-seed",
   linkDirs: ["/media/torrents/complete/cross-seed"],
   linkType: "hardlink",
@@ -24,6 +25,12 @@ export default {
   port: Number(process.env.CROSS_SEED_PORT),
   skipRecheck: true,
   torrentClients: ["qbittorrent:http://qbittorrent.media.svc.cluster.local"],
+  radarr: [
+    `http://radarr.media.svc.cluster.local/?apikey=$${process.env.RADARR__AUTH__APIKEY}`,
+  ],
+  sonarr: [
+    `http://sonarr.media.svc.cluster.local/?apikey=$${process.env.SONARR__AUTH__APIKEY}`,
+  ],
   torznab: fetchIndexers("http://prowlarr.media.svc.cluster.local", process.env.PROWLARR__AUTH__APIKEY, "cross-seed"),
   useClientTorrents: true,
 };
