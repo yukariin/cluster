@@ -48,6 +48,11 @@ filters:
       # Remove torrents that are not linked and seeding for more than 24 days
       - HasAnyTag("not-linked") && SeedingDays > 24
 
+    orphan:
+      grace_period: 24h
+      ignore_paths:
+        - /media/torrents/complete/manual
+
     tag:
       - { name: activity:1d,   update: ['LastActivityDays < 7'] }
       - { name: activity:7d,   update: ['LastActivityDays >= 7 && LastActivityDays < 14'] }
