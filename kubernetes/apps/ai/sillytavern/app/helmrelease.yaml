@@ -19,7 +19,7 @@ spec:
           app:
             image:
               repository: ghcr.io/sillytavern/sillytavern
-              tag: staging@sha256:81242d7c1484336d1c4c6f4a364a1ed989f6c21b3f1586d461e2f15b1eaddab9
+              tag: staging@sha256:7321a65b4da46cb7f5e323e26b0fe2009aedd75dc9f443f9af0f449189886ac9
             env:
               NODE_ENV: production
               TZ: ${CLUSTER_TZ}
