@@ -5,9 +5,9 @@
 import { execSync } from 'child_process';
 
 function fetchIndexers(baseUrl, apiKey, tag) {
-  const buffer = execSync(`curl -fsSL "$${baseUrl}/api/v1/tag/detail?apiKey=$${apiKey}"`);
-  const response = JSON.parse(buffer.toString("utf8"));
-  const indexerIds = response.filter(i => i.label === tag)[0]?.indexerIds ?? [];
+  const buffer = execSync(`curl -fsSL "$${baseUrl}/api/v1/tag/detail?apikey=$${apiKey}"`);
+  const response = JSON.parse(buffer.toString('utf8'));
+  const indexerIds = response.filter(t => t.label === tag)[0]?.indexerIds ?? [];
   const indexers = indexerIds.map(i => `$${baseUrl}/$${i}/api?apikey=$${apiKey}`);
   console.log(`Loaded $${indexers.length} indexers from Prowlarr`);
   return indexers;
@@ -25,12 +25,8 @@ export default {
   port: Number(process.env.CROSS_SEED_PORT),
   skipRecheck: true,
   torrentClients: ["qbittorrent:http://qbittorrent.media.svc.cluster.local"],
-  radarr: [
-    `http://radarr.media.svc.cluster.local/?apikey=$${process.env.RADARR__AUTH__APIKEY}`,
-  ],
-  sonarr: [
-    `http://sonarr.media.svc.cluster.local/?apikey=$${process.env.SONARR__AUTH__APIKEY}`,
-  ],
+  radarr: [`http://radarr.media.svc.cluster.local/?apikey=$${process.env.RADARR__AUTH__APIKEY}`,],
+  sonarr: [`http://sonarr.media.svc.cluster.local/?apikey=$${process.env.SONARR__AUTH__APIKEY}`,],
   torznab: fetchIndexers("http://prowlarr.media.svc.cluster.local", process.env.PROWLARR__AUTH__APIKEY, "cross-seed"),
   useClientTorrents: true,
 };
