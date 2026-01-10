@@ -24,6 +24,7 @@ export default {
   outputDir: null,
   port: Number(process.env.CROSS_SEED_PORT),
   skipRecheck: true,
+  searchCadence: "1 day",
   torrentClients: ["qbittorrent:http://qbittorrent.media.svc.cluster.local"],
   radarr: [`http://radarr.media.svc.cluster.local/?apikey=$${process.env.RADARR__AUTH__APIKEY}`,],
   sonarr: [`http://sonarr.media.svc.cluster.local/?apikey=$${process.env.SONARR__AUTH__APIKEY}`,],
