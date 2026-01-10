@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - autobrr/ks.yaml
-  - cross-seed/ks.yaml
+  # - cross-seed/ks.yaml
   - jellyfin/ks.yaml
   - jellyseerr/ks.yaml
   - kavita/ks.yaml
@@ -20,4 +20,4 @@ resources:
   - radarr/ks.yaml
   - slskd/ks.yaml
   - sonarr/ks.yaml
-  - tqm/ks.yaml
+  # - tqm/ks.yaml
