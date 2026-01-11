@@ -20,4 +20,4 @@ resources:
   - radarr/ks.yaml
   - slskd/ks.yaml
   - sonarr/ks.yaml
-  # - tqm/ks.yaml
+  - tqm/ks.yaml
