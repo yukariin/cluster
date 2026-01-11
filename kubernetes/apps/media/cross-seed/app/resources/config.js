@@ -18,6 +18,7 @@ export default {
   action: "inject",
   apiKey: process.env.CROSS_SEED_API_KEY,
   includeNonVideos: true,
+  includeSingleEpisodes: true,
   rssCadence: "20min",
   skipRecheck: true,
   // Blocklist
