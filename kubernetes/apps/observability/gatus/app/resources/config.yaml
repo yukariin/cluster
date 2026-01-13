@@ -42,7 +42,7 @@ ui:
     - name: Github
       link: https://github.com/yukariin
     - name: Homelab
-      link: https://github.com/yukariin/homelab
+      link: https://github.com/yukariin/cluster
 
 web:
   port: ${GATUS_WEB_PORT}
