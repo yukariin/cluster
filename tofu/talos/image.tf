@@ -12,7 +12,6 @@ locals {
   update_image_id = "${local.update_schematic_id}_${local.update_version}"
 
   # Comment the above 2 lines and un-comment the below 2 lines to use the provider schematic ID instead of the HTTP one
-  # ref - https://github.com/Yukariin/homelab/issues/106
   # image_id = "${talos_image_factory_schematic.this.id}_${local.version}"
   # update_image_id = "${talos_image_factory_schematic.updated.id}_${local.update_version}"
 }

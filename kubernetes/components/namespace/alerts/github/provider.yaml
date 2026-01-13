@@ -5,6 +5,6 @@ metadata:
   name: github
 spec:
   type: github
-  address: https://github.com/yukariin/homelab
+  address: https://github.com/yukariin/cluster
   secretRef:
     name: github-token-secret
