@@ -14,8 +14,3 @@ spec:
     kind: ClusterIssuer
     name: cloudflare-cluster-issuer
   secretName: production-tls
-  usages:
-    - server auth
-    - client auth
-    - digital signature
-    - key encipherment
