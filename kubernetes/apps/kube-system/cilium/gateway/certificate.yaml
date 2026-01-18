@@ -8,6 +8,7 @@ spec:
   dnsNames:
     - "*.${CLUSTER_DOMAIN}"
     - ${CLUSTER_DOMAIN}
+  duration: 160h
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -16,3 +17,5 @@ spec:
   usages:
     - server auth
     - client auth
+    - digital signature
+    - key encipherment

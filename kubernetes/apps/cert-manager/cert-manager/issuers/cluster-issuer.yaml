@@ -6,6 +6,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
+    profile: shortlived
     email: "${PRIVATE_EMAIL}"
     privateKeySecretRef:
       name: cloudflare-key
@@ -16,3 +17,6 @@ spec:
             apiTokenSecretRef:
               name: cloudflare-api-token
               key: api-token
+        selector:
+          dnsZones:
+            - ${CLUSTER_DOMAIN}
