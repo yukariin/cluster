@@ -163,7 +163,7 @@ spec:
 
     dashboard:
       image:
-        tag: v2.30.1 # renovate: docker=netbirdio/dashboard
+        tag: v2.31.0 # renovate: docker=netbirdio/dashboard
       env:
         # Endpoints
         NETBIRD_MGMT_API_ENDPOINT: "https://netbird.${CLUSTER_DOMAIN}:443"
