@@ -83,7 +83,7 @@ spec:
                     port: &port 7979
                   initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 1
+                  timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *probe2
             securityContext: *securityContext
