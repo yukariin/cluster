@@ -76,3 +76,133 @@ spec:
               smtp_port: 25
               require_transport_security: false
               notif_from: "Matrix <noreply@${CLUSTER_DOMAIN}>"
+
+    matrixAuthenticationService:
+      enabled: true
+      ingress:
+        host: "matrix-auth.${CLUSTER_DOMAIN}"
+        className: disabled
+        tlsEnabled: false
+      additional:
+        0-baseConfig:
+          config: |
+            branding:
+              service_name: "Mistelinn Matrix"
+            passwords:
+              enabled: false
+            account:
+              email_change_allowed: true
+              displayname_change_allowed: true
+            upstream_oauth2:
+              providers:
+                - id: 01KH4CXFQFYXJGJ231M2FSVBGK
+                  human_name: Authentik
+                  issuer: https://authentik.${CLUSTER_DOMAIN}/application/o/matrix/
+                  client_id: matrix
+                  client_secret: ${CLIENT_SECRET}
+                  userinfo_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/userinfo/
+                  authorization_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/authorize/
+                  token_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/token/
+                  jwks_uri: https://authentik.${CLUSTER_DOMAIN}/application/o/matrix/jwks/
+                  token_endpoint_auth_method: client_secret_post
+                  scope: "openid email profile"
+                  discovery_mode: oidc
+                  pkce_method: auto
+                  claims_imports:
+                    localpart:
+                      action: require
+                      template: "{{ user.preferred_username }}"
+                      on_conflict: replace
+                    displayname:
+                      action: suggest
+                      template: "{{ user.name }}"
+                    email:
+                      action: suggest
+                      template: "{{ user.email }}"
+
+    matrixRTC:
+      enabled: true
+      ingress:
+        host: "rtc.${CLUSTER_DOMAIN}"
+        className: disabled
+        tlsEnabled: false
+      sfu:
+        useStunToDiscoverPublicIP: false
+
+    elementAdmin:
+      enabled: true
+      ingress:
+        host: "matrix-admin.${CLUSTER_DOMAIN}"
+        className: disabled
+        tlsEnabled: false
+
+    elementWeb:
+      enabled: true
+      ingress:
+        host: "element.${CLUSTER_DOMAIN}"
+        className: disabled
+        tlsEnabled: false
+      additional:
+        extra-config.json: |
+          {
+            "brand": "Mistelinn Matrix",
+            "default_theme": "dark",
+            "show_labs_settings": true,
+            "force_verification": false,
+            "default_server_config": {
+              "m.homeserver": {
+                "base_url": "https://matrix.${CLUSTER_DOMAIN}",
+                "server_name": "matrix.${CLUSTER_DOMAIN}"
+              },
+              "m.identity_server": {
+                "base_url": "https://vector.im"
+              }
+            },
+            "features": {
+              "feature_video_rooms": true,
+              "feature_element_call_video_rooms": true,
+              "feature_group_calls": true,
+              "feature_native_sliding_sync": true,
+              "feature_new_room_list": false,
+              "feature_pinning": true
+            },
+            "setting_defaults": {
+              "FTUE.userOnboardingButton": false,
+              "Spaces.allRoomsInHome": true,
+              "alwaysShowTimestamps": true
+            },
+            "jitsi": {
+              "preferred_domain": "meet.jit.si"
+            },
+            "permalink_prefix": "https://element.${CLUSTER_DOMAIN}"
+          }
+
+    wellKnownDelegation:
+      enabled: true
+      ingress:
+        className: disabled
+        tlsEnabled: false
+      additional:
+        server: |
+          {
+            "m.server": "matrix.${CLUSTER_DOMAIN}:443"
+          }
+        client: |
+          {
+            "m.homeserver": {
+              "base_url": "https://matrix.${CLUSTER_DOMAIN}"
+            },
+            "m.identity_server": {
+              "base_url": "https://vector.im"
+            },
+            "org.matrix.msc3575.proxy": {
+              "url": "https://matrix.${CLUSTER_DOMAIN}"
+            },
+            "io.element.e2ee": {
+              "force_disable": false,
+              "default": false
+            },
+            "io.element.call": {
+              "rtc_backend": "https://rtc.${CLUSTER_DOMAIN}"
+            }
+          }
