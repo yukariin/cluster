@@ -18,6 +18,14 @@ spec:
         - path:
             type: PathPrefix
             value: /
+    - backendRefs:
+        - name: matrix-well-known
+          namespace: matrix
+          port: 8010
+      matches:
+        - path:
+            type: PathPrefix
+            value: /.well-known/
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
