@@ -12,7 +12,7 @@ spec:
   rules:
     - backendRefs:
         - name: matrix-synapse
-          namespace: matrix
+          namespace: comms
           port: 8008
       matches:
         - path:
@@ -20,7 +20,7 @@ spec:
             value: /
     - backendRefs:
         - name: matrix-well-known
-          namespace: matrix
+          namespace: comms
           port: 8010
       matches:
         - path:
@@ -41,7 +41,7 @@ spec:
   rules:
     - backendRefs:
         - name: matrix-matrix-authentication-service
-          namespace: matrix
+          namespace: comms
           port: 8080
       matches:
         - path:
@@ -61,7 +61,7 @@ spec:
   rules:
     - backendRefs:
         - name: matrix-element-admin
-          namespace: matrix
+          namespace: comms
           port: 8080
       matches:
         - path:
