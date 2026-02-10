@@ -74,7 +74,7 @@ spec:
             email:
               smtp_host: smtp-relay.network.svc.cluster.local
               smtp_port: 25
-              require_transport_security: false
+              enable_tls: false
               notif_from: "Matrix <noreply@${CLUSTER_DOMAIN}>"
 
     matrixAuthenticationService:
