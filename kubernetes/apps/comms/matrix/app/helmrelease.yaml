@@ -99,7 +99,7 @@ spec:
                   human_name: Authentik
                   issuer: https://authentik.${CLUSTER_DOMAIN}/application/o/matrix/
                   client_id: matrix
-                  client_secret: ${CLIENT_SECRET}
+                  client_secret: ${MATRIX_CLIENT_SECRET}
                   userinfo_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/userinfo/
                   authorization_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/authorize/
                   token_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/token/
