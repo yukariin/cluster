@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: matrix
+spec:
+  interval: 15m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 26.2.0
+  url: oci://ghcr.io/element-hq/ess-helm/matrix-stack
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: matrix
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: matrix
+  interval: 1h
+  values:
+    serverName: "matrix.${CLUSTER_DOMAIN}"
+
+    synapse:
+      enabled: true
+      ingress:
+        host: "matrix.${CLUSTER_DOMAIN}"
+        className: disabled
+        tlsEnabled: false
+      media:
+        storage:
+          existingClaim: "{{ .Release.Name }}"
+        maxUploadSize: 100M
+      additional:
+        0-baseConfig:
+          config: |
+            public_baseurl: "matrix.${CLUSTER_DOMAIN}"
+            presence:
+              enabled: true
+            enable_metrics: true
+            report_stats: false
+            suppress_key_server_warning: true
+            trusted_key_servers:
+              - server_name: "matrix.org"
+            admin_contact: "mailto:admin@${CLUSTER_DOMAIN}"
+            enable_search: true
+            url_preview_enabled: true
+            url_preview_ip_range_blacklist:
+              - '127.0.0.0/8'
+              - '10.0.0.0/8'
+              - '172.16.0.0/12'
+              - '192.168.0.0/16'
+              - '100.64.0.0/10'
+              - '169.254.0.0/16'
+              - '::1/128'
+              - 'fe80::/64'
+              - 'fc00::/7'
+            rc_message:
+              per_second: 10
+              burst_count: 50
+            experimental_features:
+              msc3575_enabled: true
+              msc4186_enabled: true
+            database:
+              allow_unsafe_locale: true
+        1-emailConfig:
+          config: |
+            email:
+              smtp_host: smtp-relay.network.svc.cluster.local
+              smtp_port: 25
+              require_transport_security: false
+              notif_from: "Matrix <noreply@${CLUSTER_DOMAIN}>"
