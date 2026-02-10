@@ -53,7 +53,7 @@ spec:
         host: "smtp-relay.network.svc.cluster.local"
         port: 25
         use_tls: false
-        from: "authentik <authentik@${CLUSTER_DOMAIN}>"
+        from: "Authentik <noreply@${CLUSTER_DOMAIN}>"
       postgresql:
         host: pg-authentik-rw
 
