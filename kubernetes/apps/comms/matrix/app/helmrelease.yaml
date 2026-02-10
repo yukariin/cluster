@@ -25,7 +25,7 @@ spec:
     name: matrix
   interval: 1h
   values:
-    serverName: "${CLUSTER_DOMAIN}"
+    serverName: "matrix.${CLUSTER_DOMAIN}"
 
     synapse:
       enabled: true
