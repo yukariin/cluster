@@ -206,3 +206,9 @@ spec:
               "rtc_backend": "https://rtc.${CLUSTER_DOMAIN}"
             }
           }
+
+    postgres:
+      enabled: true
+      storage:
+        size: 5Gi
+        storageClassName: democratic-csi-hostpath
