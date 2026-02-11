@@ -9,4 +9,4 @@ resources:
   - gw-internal.yaml
   # - gw-passthrough.yaml
   - httproute.yaml
-  - redirect.yaml
+  # - redirect.yaml
