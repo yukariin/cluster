@@ -34,9 +34,7 @@ spec:
           hostnames:
             - "alertmanager.${CLUSTER_DOMAIN}"
           parentRefs:
-            - name: internal
-              namespace: kube-system
-              sectionName: https
+            - { name: internal, namespace: kube-system }
       alertmanagerSpec:
         externalUrl: "https://alertmanager.${CLUSTER_DOMAIN}"
         alertmanagerConfiguration:
@@ -66,9 +64,7 @@ spec:
           hostnames:
             - "prometheus.${CLUSTER_DOMAIN}"
           parentRefs:
-            - name: internal
-              namespace: kube-system
-              sectionName: https
+            - { name: internal, namespace: kube-system }
       prometheusSpec:
         externalUrl: "https://prometheus.${CLUSTER_DOMAIN}"
         version: v2.55.1 # override 'unsupported Prometheus version' error

@@ -135,9 +135,7 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
         parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
+          - { name: internal, namespace: kube-system }
     persistence:
       enabled: false
     testFramework:

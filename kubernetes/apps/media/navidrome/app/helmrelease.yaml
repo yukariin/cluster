@@ -88,12 +88,8 @@ spec:
         hostnames:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
         parentRefs:
-          - name: external
-            namespace: kube-system
-            sectionName: https
-          - name: internal
-            namespace: kube-system
-            sectionName: https
+          - { name: external, namespace: kube-system }
+          - { name: internal, namespace: kube-system }
         rules:
           - backendRefs:
               - identifier: app

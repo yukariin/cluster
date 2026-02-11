@@ -5,9 +5,7 @@ metadata:
   name: hubble
 spec:
   parentRefs:
-    - name: internal
-      namespace: kube-system
-      sectionName: https
+    - { name: internal, namespace: kube-system }
   hostnames:
     - "hubble.${CLUSTER_DOMAIN}"
   rules:
