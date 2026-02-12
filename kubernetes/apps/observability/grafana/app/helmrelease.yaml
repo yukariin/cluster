@@ -72,6 +72,12 @@ spec:
             url: http://victoria-logs-server.observability.svc.cluster.local:9428
             jsonData:
               implementation: prometheus
+    sidecar:
+      dashboards:
+        enabled: true
+        label: grafana_dashboard
+        labelValue: "1"
+        searchNamespace: ALL
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
