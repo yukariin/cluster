@@ -35,8 +35,6 @@ spec:
 
       serviceMonitor:
         enabled: true
-      dashboards:
-        enabled: true
 
       resources:
         requests:
@@ -63,3 +61,6 @@ spec:
               - path:
                   type: Exact
                   value: /
+
+    dashboards:
+      enabled: true
