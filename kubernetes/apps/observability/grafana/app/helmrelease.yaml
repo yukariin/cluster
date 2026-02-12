@@ -38,6 +38,7 @@ spec:
       analytics:
         check_for_updates: false
         check_for_plugin_updates: false
+        feedback_links_enabled: false
         reporting_enabled: false
       auth.anonymous:
         enabled: true
@@ -49,6 +50,7 @@ spec:
         deleteDatasources:
           - { name: Alertmanager, orgId: 1 }
           - { name: Prometheus, orgId: 1 }
+          - { name: Victoria, orgId: 1 }
         datasources:
           - name: Alertmanager
             type: alertmanager
@@ -63,6 +65,13 @@ spec:
             access: proxy
             url: http://prometheus-operated.observability.svc.cluster.local:9090
             isDefault: true
+          - name: Victoria
+            type: victoriametrics-logs-datasource
+            uid: victoria
+            access: proxy
+            url: http://victoria-logs-server.observability.svc.cluster.local:9428
+            jsonData:
+              implementation: prometheus
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -127,6 +136,7 @@ spec:
       - grafana-clock-panel
       - grafana-piechart-panel
       - grafana-worldmap-panel
+      - victoriametrics-logs-datasource
     serviceMonitor:
       enabled: true
     route:
