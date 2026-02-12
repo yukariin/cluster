@@ -131,8 +131,6 @@ spec:
         volsync:
           datasource: [{ name: DS_PROMETHEUS, value: Prometheus }]
           url: https://grafana.com/api/dashboards/21356/revisions/3/download
-        cloudnative-pg:
-          url: https://grafana.com/api/dashboards/20417/revisions/4/download
         external-dns:
           url: https://grafana.com/api/dashboards/15038/revisions/3/download
     plugins:
