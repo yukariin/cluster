@@ -64,3 +64,5 @@ spec:
 
     dashboards:
       enabled: true
+      annotations:
+        grafana_dashboard: "1"
