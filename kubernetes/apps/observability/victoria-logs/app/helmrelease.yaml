@@ -35,6 +35,8 @@ spec:
 
       serviceMonitor:
         enabled: true
+      dashboards:
+        enabled: true
 
       resources:
         requests:
