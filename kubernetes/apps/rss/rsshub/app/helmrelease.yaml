@@ -20,7 +20,7 @@ spec:
           app:
             image:
               repository: ghcr.io/diygod/rsshub
-              tag: latest@sha256:d564e8c178b60f4996e75cd771c7ca9ff0a1335e85e67d95405b9c78b3804de5
+              tag: latest@sha256:c0b3401c56d06315f805c0adc46d7a2b38ff1b73d404d5701d0b9616ac84629f
             env:
               NODE_ENV: production
               CACHE_TYPE: redis
