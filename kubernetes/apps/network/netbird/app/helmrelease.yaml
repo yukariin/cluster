@@ -28,11 +28,11 @@ spec:
 
     signal:
       image:
-        tag: 0.65.0 # renovate: docker=netbirdio/signal
+        tag: 0.65.1 # renovate: docker=netbirdio/signal
 
     relay:
       image:
-        tag: 0.65.0 # renovate: docker=netbirdio/relay
+        tag: 0.65.1 # renovate: docker=netbirdio/relay
       envFromSecret:
         NB_AUTH_SECRET: netbird-secret/NB_AUTH_SECRET
       env:
@@ -43,7 +43,7 @@ spec:
 
     management:
       image:
-        tag: 0.65.0 # renovate: docker=netbirdio/management
+        tag: 0.65.1 # renovate: docker=netbirdio/management
       configmap: |-
         {
           "Stuns": [
