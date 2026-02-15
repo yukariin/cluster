@@ -29,7 +29,8 @@ spec:
               SLSKD_NO_HTTPS: true
               SLSKD_NO_VERSION_CHECK: true
               SLSKD_SLSK_LISTEN_PORT: &soulseekPort 50300
-              SLSKD_FILE_PERMISSION_MODE: 760
+              SLSKD_UMASK: "002"
+              SLSKD_FILE_PERMISSION_MODE: 664
               SLSKD_DOWNLOADS_DIR: /media/soulseek/complete
               SLSKD_INCOMPLETE_DIR: /media/soulseek/incomplete
               SLSKD_RETENTION_TRANSFERS_UPLOAD_SUCCEEDED: 20160
