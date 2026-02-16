@@ -162,7 +162,6 @@ spec:
               "feature_video_rooms": true,
               "feature_element_call_video_rooms": true,
               "feature_group_calls": true,
-              "feature_native_sliding_sync": true,
               "feature_new_room_list": false,
               "feature_pinning": true
             },
