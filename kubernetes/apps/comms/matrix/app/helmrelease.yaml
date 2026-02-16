@@ -99,8 +99,6 @@ spec:
               mode: plain
               hostname: smtp-relay.network.svc.cluster.local
               port: 25
-              username: none
-              password: none
             upstream_oauth2:
               providers:
                 - id: 01KH4CXFQFYXJGJ231M2FSVBGK
