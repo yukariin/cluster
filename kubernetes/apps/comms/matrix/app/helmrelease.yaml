@@ -227,7 +227,7 @@ spec:
           }
 
     postgres:
-      enabled: true
+      enabled: false
       storage:
         size: 1Gi
         storageClassName: democratic-csi-hostpath
