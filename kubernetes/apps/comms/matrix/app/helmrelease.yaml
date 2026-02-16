@@ -40,7 +40,7 @@ spec:
       additional:
         0-baseConfig:
           config: |
-            public_baseurl: "matrix.${CLUSTER_DOMAIN}"
+            public_baseurl: "https://matrix.${CLUSTER_DOMAIN}"
             presence:
               enabled: true
             enable_metrics: true
