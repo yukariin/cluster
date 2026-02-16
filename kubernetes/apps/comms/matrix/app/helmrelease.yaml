@@ -95,7 +95,7 @@ spec:
               displayname_change_allowed: true
             email:
               from: "Matrix Auth <noreply@${CLUSTER_DOMAIN}>"
-              reply_to: '"No reply" <noreply@${CLUSTER_DOMAIN}>'
+              reply_to: "No reply <noreply@${CLUSTER_DOMAIN}>"
               transport: smtp
               mode: plain
               hostname: smtp-relay.network.svc.cluster.local
