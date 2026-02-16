@@ -42,3 +42,5 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: comms
+  dependsOn:
+    - name: matrix-database
