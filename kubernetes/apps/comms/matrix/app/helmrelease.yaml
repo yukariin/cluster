@@ -37,6 +37,17 @@ spec:
         storage:
           existingClaim: "{{ .Release.Name }}"
         maxUploadSize: 100M
+      extraEnv:
+        - name: PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pg-matrix-app
+              key: password
+        - name: PG_USER
+          valueFrom:
+            secretKeyRef:
+              name: pg-matrix-app
+              key: username
       additional:
         0-baseConfig:
           config: |
@@ -76,13 +87,34 @@ spec:
               smtp_port: 25
               enable_tls: false
               notif_from: "Matrix <noreply@${CLUSTER_DOMAIN}>"
-
+        2-databaseConfig:
+          config: |
+            database:
+              name: psycopg2
+              args:
+                user: "${PG_USER}"
+                password: "${PG_PASSWORD}"
+                database: synapse
+                host: pg-matrix-rw.comms.svc.cluster.local
+                cp_min: 5
+                cp_max: 10
     matrixAuthenticationService:
       enabled: true
       ingress:
         host: "matrix-auth.${CLUSTER_DOMAIN}"
         className: disabled
         tlsEnabled: false
+      extraEnv:
+        - name: PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pg-matrix-app
+              key: password
+        - name: PG_USER
+          valueFrom:
+            secretKeyRef:
+              name: pg-matrix-app
+              key: username
       additional:
         0-baseConfig:
           config: |
@@ -126,6 +158,10 @@ spec:
                     email:
                       action: suggest
                       template: "{{ user.email }}"
+        2-databaseConfig:
+          config: |
+            database:
+              uri: "postgres://${PG_USER}:${PG_PASSWORD}@pg-matrix-rw.comms.svc.cluster.local/mas"
 
     matrixRTC:
       enabled: true
