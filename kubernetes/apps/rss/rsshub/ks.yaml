@@ -6,6 +6,8 @@ metadata:
   name: rsshub
   namespace: flux-system
 spec:
+  components:
+    - ../../../../components/dragonfly
   interval: 1h
   path: kubernetes/apps/rss/rsshub/app
   prune: true
@@ -14,5 +16,3 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: rss
-  dependsOn:
-    - name: dragonfly-cluster

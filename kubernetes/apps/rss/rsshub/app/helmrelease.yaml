@@ -24,7 +24,7 @@ spec:
             env:
               NODE_ENV: production
               CACHE_TYPE: redis
-              REDIS_URL: "redis://dragonfly.database.svc.cluster.local:6379/1"
+              REDIS_URL: "redis://rsshub-dragonfly.rss.svc.cluster.local:6379"
               PORT: &port 80
               LISTEN_INADDR_ANY: 1
               LOG_LEVEL: warning
