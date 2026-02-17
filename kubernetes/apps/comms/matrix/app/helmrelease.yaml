@@ -100,7 +100,7 @@ spec:
         0-baseConfig:
           config: |
             branding:
-              service_name: "Mistelinn Matrix"
+              service_name: "${CLUSTER_BRAND} Matrix"
             passwords:
               enabled: false
             account:
@@ -165,7 +165,7 @@ spec:
       additional:
         extra-config.json: |
           {
-            "brand": "Mistelinn Matrix",
+            "brand": "${CLUSTER_BRAND} Matrix",
             "default_theme": "dark",
             "show_labs_settings": true,
             "force_verification": false,
