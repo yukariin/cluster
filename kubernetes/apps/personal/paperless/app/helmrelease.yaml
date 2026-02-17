@@ -51,7 +51,7 @@ spec:
               PAPERLESS_CONSUMER_RECURSIVE: "true"
               PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
               # Redis
-              PAPERLESS_REDIS: "redis://dragonfly.database.svc.cluster.local:6379/2"
+              PAPERLESS_REDIS: "redis://paperless-dragonfly.personal.svc.cluster.local:6379"
               # Tika/Gotenberg
               # PAPERLESS_TIKA_ENABLED: "true"
               # PAPERLESS_TIKA_ENDPOINT: "http://tika.tools.svc.cluster.local:80"

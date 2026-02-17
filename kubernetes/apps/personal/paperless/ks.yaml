@@ -9,6 +9,7 @@ spec:
   components:
     - ../../../../components/keda
     - ../../../../components/volsync
+    - ../../../../components/dragonfly
   interval: 1h
   path: kubernetes/apps/personal/paperless/app
   prune: true
@@ -23,4 +24,3 @@ spec:
   targetNamespace: personal
   dependsOn:
     - name: democratic-csi
-    - name: dragonfly-cluster
