@@ -83,8 +83,8 @@ spec:
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
-        retention: 3d
-        retentionSize: 10GB
+        retention: 7d
+        retentionSize: 8GB
         storageSpec:
           volumeClaimTemplate:
             spec:
