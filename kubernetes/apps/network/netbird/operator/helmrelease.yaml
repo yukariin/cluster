@@ -45,7 +45,7 @@ spec:
         name: netbird-agent-secret
         key: NB_API_KEY
 
-    routingClientImage: netbirdio/netbird:0.65.2-rootless # renovate: docker=netbirdio/netbird
+    routingClientImage: netbirdio/netbird:0.65.3-rootless # renovate: docker=netbirdio/netbird
 
   postRenderers:
     - kustomize:
