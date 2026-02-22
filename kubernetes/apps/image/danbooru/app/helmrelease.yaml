@@ -62,7 +62,7 @@ spec:
       images:
         type: nfs
         server: ${NAS_ADDRESS}
-        path: /mnt/data_pool/data
+        path: /mnt/data_pool/danbooru
       tmp:
         type: emptyDir
     route:
