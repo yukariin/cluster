@@ -32,6 +32,7 @@ spec:
               # App settings
               DANBOORU_APP_NAME: Booru
               DANBOORU_CANONICAL_URL: "https://booru.${CLUSTER_DOMAIN}"
+              DANBOORU_IQDB_URL: "http://iqdb.image.svc.cluster.local:5588"
               DANBOORU_REDIS_URL: "redis://danbooru-dragonfly.image.svc.cluster.local:6379"
               DANBOORU_MAIL_DELIVERY_URL: "smtp://smtp-relay.network.svc.cluster.local:25?openssl_verify_mode=none"
               DATABASE_URL:
