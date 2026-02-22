@@ -21,8 +21,9 @@ spec:
             args:
               - "bash"
               - "-c"
-              - "bin/rails db:prepare && bin/rails db:seed && bin/rails server -b 0.0.0.0"
+              - "bin/rails db:prepare && bin/rails server -b 0.0.0.0"
             env:
+              DANBOORU_CANONICAL_URL: "booru.${CLUSTER_DOMAIN}"
               RAILS_ENV: "production"
               RAILS_SERVE_STATIC_FILES: "true"
               PUMA_WORKERS: "1"
@@ -49,8 +50,13 @@ spec:
                   timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
     defaultPodOptions:
       securityContext:
+        runAsNonRoot: true
         runAsUser: 568
         runAsGroup: 568
         fsGroup: 568
