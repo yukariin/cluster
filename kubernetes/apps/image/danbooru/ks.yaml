@@ -30,7 +30,6 @@ spec:
   components:
     - ../../../../components/dragonfly
     - ../../../../components/keda
-    - ../../../../components/volsync
   interval: 1h
   path: kubernetes/apps/image/danbooru/app
   prune: true
