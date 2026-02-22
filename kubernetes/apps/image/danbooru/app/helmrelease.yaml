@@ -21,14 +21,13 @@ spec:
             args:
               - "bash"
               - "-c"
-              - "bin/rails db:prepare && bin/rails server -b 0.0.0.0"
+              - "mkdir -p /tmp/rails-tmp && export TMPDIR=/tmp/rails-tmp && bin/rails db:prepare && bin/rails server -b 0.0.0.0"
             env:
               DANBOORU_CANONICAL_URL: "booru.${CLUSTER_DOMAIN}"
               RAILS_ENV: "production"
               RAILS_SERVE_STATIC_FILES: "true"
               PUMA_WORKERS: "1"
               DANBOORU_IMAGE_STORAGE_PATH: /images
-              TMPDIR: /tmp
               DANBOORU_REDIS_URL: "redis://danbooru-dragonfly.personal.svc.cluster.local:6379"
               DATABASE_URL:
                 valueFrom:
