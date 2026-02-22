@@ -65,7 +65,9 @@ spec:
         server: ${NAS_ADDRESS}
         path: /mnt/data_pool/danbooru
       danbooru:
-        type: emptyDir
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /danbooru/public/data
       tmp:
         type: emptyDir
     route:
