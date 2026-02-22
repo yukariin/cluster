@@ -19,7 +19,7 @@ spec:
           app:
             image: &image
               repository: ghcr.io/danbooru/danbooru
-              tag: production
+              tag: production@sha256:baf62c8e3e3080b8adefd3ad0ce4e1a5e86c98d54ab73173932998480c4383bf
             args:
               - "bash"
               - "-c"
