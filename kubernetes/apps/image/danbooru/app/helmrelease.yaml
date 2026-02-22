@@ -22,7 +22,7 @@ spec:
               - "bash"
               - "-c"
               - "mkdir -p /tmp/rails-tmp && export TMPDIR=/tmp/rails-tmp && bin/rails db:prepare && bin/rails server -b 0.0.0.0"
-            env:
+            env: &env
               DANBOORU_CANONICAL_URL: "booru.${CLUSTER_DOMAIN}"
               RAILS_ENV: "production"
               RAILS_SERVE_STATIC_FILES: "true"
@@ -34,7 +34,7 @@ spec:
                   secretKeyRef:
                     name: pg-danbooru-app
                     key: uri
-            envFrom:
+            envFrom: &envFrom
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
             probes:
@@ -50,10 +50,26 @@ spec:
                   timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
+            securityContext: &containerSec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+      cron:
+        containers:
+          app:
+            image: *image
+            args: ["bash", "-c", "bin/wait-for-http http://danbooru:3000 5s && bin/rails danbooru:cron"]
+            env: *env
+            envFrom: *envFrom
+            securityContext: *containerSec
+      job:
+        containers:
+          app:
+            image: *image
+            args: ["bash", "-c", "bin/wait-for-http http://danbooru:3000 5s && bin/good_job start"]
+            env: *env
+            envFrom: *envFrom
+            securityContext: *containerSec
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -81,6 +97,7 @@ spec:
                 port: *port
     service:
       app:
+        controller: danbooru
         ports:
           http:
             port: *port
