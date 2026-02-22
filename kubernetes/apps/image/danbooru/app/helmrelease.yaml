@@ -23,7 +23,9 @@ spec:
               - "-c"
               - "mkdir -p /tmp/rails-tmp && export TMPDIR=/tmp/rails-tmp && bin/rails db:prepare && bin/rails server -b 0.0.0.0"
             env: &env
+              DANBOORU_APP_NAME: Booru
               DANBOORU_CANONICAL_URL: "https://booru.${CLUSTER_DOMAIN}"
+              DANBOORU_MAIL_DELIVERY_URL: "smtp://smtp-relay.network.svc.cluster.local:25?openssl_verify_mode=none"
               RAILS_ENV: "production"
               RAILS_SERVE_STATIC_FILES: "true"
               PUMA_WORKERS: "1"
