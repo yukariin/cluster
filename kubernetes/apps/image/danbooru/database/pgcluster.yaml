@@ -1,0 +1,57 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-danbooru
+spec:
+  instances: 1
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+  postgresql:
+    parameters:
+      timezone: ${CLUSTER_TZ}
+  storage:
+    size: 10G
+    storageClass: democratic-csi-hostpath
+
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: zstd
+      serverName: pg-danbooru-v1
+      destinationPath: s3://cnpg-backups/
+      endpointURL: "http://192.168.1.10:9000"
+      s3Credentials:
+        accessKeyId:
+          name: cloudnative-pg-secret
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: cloudnative-pg-secret
+          key: AWS_SECRET_ACCESS_KEY
+
+  bootstrap:
+    initdb:
+      database: danbooru
+      owner: danbooru
+    # recovery:
+    #   source: source
+    #   database: danbooru
+    #   owner: danbooru
+
+  externalClusters:
+    - name: source
+      barmanObjectStore:
+        wal:
+          compression: zstd
+        serverName: pg-danbooru-v1
+        destinationPath: s3://cnpg-backups/
+        endpointURL: "http://192.168.1.10:9000"
+        s3Credentials:
+          accessKeyId:
+            name: cloudnative-pg-secret
+            key: AWS_ACCESS_KEY_ID
+          secretAccessKey:
+            name: cloudnative-pg-secret
+            key: AWS_SECRET_ACCESS_KEY
