@@ -49,6 +49,9 @@ spec:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
+    persistence:
+      tmp:
+        type: emptyDir
     service:
       app:
         ports:
