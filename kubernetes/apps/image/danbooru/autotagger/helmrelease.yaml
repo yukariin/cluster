@@ -50,6 +50,10 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     persistence:
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /.cache
       tmp:
         type: emptyDir
     service:
