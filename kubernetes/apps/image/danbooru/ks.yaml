@@ -89,5 +89,3 @@ spec:
   wait: true
   dependsOn:
     - name: danbooru-database
-    - name: iqdb
-    - name: autotagger
