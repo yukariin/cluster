@@ -17,7 +17,7 @@ spec:
           app:
             image:
               repository: ghcr.io/yukariin/autotagger
-              tag: eva02@sha256:c19ed941abb3a34bcb4240c468672c387d437d69e54f1d5aeec45de6a2113ebe
+              tag: eva02@sha256:eb94f0cdf8d8eb065b5fd189872288ba3b3745c64b4405aaa725101128443637
             probes:
               liveness: &probes
                 enabled: true
