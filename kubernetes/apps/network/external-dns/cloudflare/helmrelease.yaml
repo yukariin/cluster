@@ -22,7 +22,7 @@ spec:
               tag: v0.20.0@sha256:ddc7f4212ed09a21024deb1f470a05240837712e74e4b9f6d1f2632ff10672e7
             args:
               - --cloudflare-dns-records-per-page=1000
-              # - --cloudflare-proxied
+              - --cloudflare-proxied
               - --domain-filter=${CLUSTER_DOMAIN}
               - --events
               - --gateway-name=external
