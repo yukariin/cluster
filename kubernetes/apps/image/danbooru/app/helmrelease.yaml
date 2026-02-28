@@ -70,7 +70,7 @@ spec:
             args:
               - wait-for
               - --target
-              - "http://danbooru:3000/up"
+              - "http://danbooru.image.svc.cluster.local:3000/up"
               - --timeout
               - "300s"
             securityContext: *containerSec
