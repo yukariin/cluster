@@ -27,7 +27,6 @@ spec:
             env: &env
               # Base settings
               RAILS_ENV: "production"
-              RAILS_SERVE_STATIC_FILES: "true"
               PUMA_WORKERS: "1"
               # App settings
               DANBOORU_APP_NAME: Booru
