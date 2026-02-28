@@ -71,7 +71,7 @@ spec:
               - wait-for
               - --target
               - "http://danbooru:3000/up"
-              - --http_status
+              - --http-status
               - "204"
               - --timeout
               - "5s"
