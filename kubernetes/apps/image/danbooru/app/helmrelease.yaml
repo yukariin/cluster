@@ -71,6 +71,8 @@ spec:
               - wait-for
               - --target
               - "http://danbooru:3000/up"
+              - --http_status
+              - "204"
               - --timeout
               - "5s"
             securityContext: *containerSec
