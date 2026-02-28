@@ -36,6 +36,7 @@ spec:
               DANBOORU_IQDB_URL: "http://iqdb.image.svc.cluster.local:5588"
               DANBOORU_AUTOTAGGER_URL: "http://autotagger.image.svc.cluster.local:5000"
               DANBOORU_MAIL_DELIVERY_URL: "smtp://smtp-relay.network.svc.cluster.local:25?openssl_verify_mode=none"
+              DANBOORU_IMAGE_STORAGE_PATH: /images
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
@@ -51,7 +52,7 @@ spec:
                 spec:
                   httpGet:
                     path: /up
-                    port: &port 3000
+                    port: &appPort 3000
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 5
@@ -61,6 +62,24 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
+          openresty:
+            image: *image
+            args: ["openresty", "-e", "/dev/stderr"]
+            env: *env
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /up
+                    port: &port 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext: *containerSec
       cron:
         initContainers:
           wait-for-app: &waitForApp
@@ -103,12 +122,17 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: { type: RuntimeDefault }
     persistence:
+      nginx-config:
+        type: configMap
+        name: "{{ .Release.Name }}-configmap"
+        globalMounts:
+          - path: /usr/local/nginx/conf/nginx.conf
+            subPath: nginx.conf
+            readOnly: true
       images:
         type: nfs
         server: ${NAS_ADDRESS}
         path: /mnt/data_pool/danbooru
-        globalMounts:
-          - path: /danbooru/public/data
       tmp:
         type: emptyDir
         medium: Memory

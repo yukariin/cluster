@@ -5,3 +5,9 @@ kind: Kustomization
 resources:
   - secret.sops.yaml
   - helmrelease.yaml
+configMapGenerator:
+  - name: danbooru-configmap
+    files:
+      - ./resources/nginx.conf
+generatorOptions:
+  disableNameSuffixHash: true
