@@ -62,6 +62,18 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
       cron:
+        initContainers:
+          wait-for-app: &waitForApp
+            image:
+              repository: ghcr.io/kitstream/initium
+              tag: 1.1.0@sha256:490aca2df35489fc9dfd189692b4bc385dfc1ec33f0d14d2f899343e802fc4bd
+            args:
+              - wait-for
+              - --target
+              - "http://danbooru:3000/up"
+              - --timeout
+              - "300s"
+            securityContext: *containerSec
         containers:
           app:
             image: *image
@@ -71,6 +83,8 @@ spec:
             securityContext: *containerSec
       job:
         annotations: *annotations
+        initContainers:
+          wait-for-app: *waitForApp
         containers:
           app:
             image: *image
@@ -109,7 +123,7 @@ spec:
                 port: *port
     service:
       app:
-        controller: danbooru
+        controller: *app
         ports:
           http:
             port: *port
