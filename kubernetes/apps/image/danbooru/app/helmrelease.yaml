@@ -89,7 +89,7 @@ spec:
             args:
               - wait-for
               - --target
-              - "http://danbooru:3000/up"
+              - "http://danbooru:8080/up"
               - --http-status
               - "204"
               - --timeout
