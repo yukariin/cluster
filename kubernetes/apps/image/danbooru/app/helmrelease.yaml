@@ -72,7 +72,7 @@ spec:
               - --target
               - "http://danbooru.image.svc.cluster.local:3000/up"
               - --timeout
-              - "300s"
+              - "120s"
             securityContext: *containerSec
         containers:
           app:
