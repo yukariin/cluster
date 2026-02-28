@@ -74,7 +74,7 @@ spec:
         containers:
           app:
             image: *image
-            args: ["bash", "-c", "mkdir -p /tmp/rails-tmp && export TMPDIR=/tmp/rails-tmp && bin/good_job start"]
+            args: ["bash", "-c", "bin/good_job start"]
             env: *env
             envFrom: *envFrom
             securityContext: *containerSec
