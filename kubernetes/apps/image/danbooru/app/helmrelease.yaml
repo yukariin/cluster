@@ -13,7 +13,7 @@ spec:
   values:
     controllers:
       *app :
-        annotations:
+        annotations: &annotations
           reloader.stakater.com/auto: "true"
         containers:
           app:
@@ -23,7 +23,7 @@ spec:
             args:
               - "bash"
               - "-c"
-              - "mkdir -p /tmp/rails-tmp && export TMPDIR=/tmp/rails-tmp && bin/rails db:prepare && bin/rails server -b 0.0.0.0"
+              - "bin/rails db:prepare && bin/rails server -b 0.0.0.0"
             env: &env
               # Base settings
               RAILS_ENV: "production"
@@ -70,8 +70,7 @@ spec:
             envFrom: *envFrom
             securityContext: *containerSec
       job:
-        annotations:
-          reloader.stakater.com/auto: "true"
+        annotations: *annotations
         containers:
           app:
             image: *image
@@ -96,6 +95,8 @@ spec:
           - path: /danbooru/public/data
       tmp:
         type: emptyDir
+        medium: Memory
+        sizeLimit: 1Gi
     route:
       app:
         hostnames:
