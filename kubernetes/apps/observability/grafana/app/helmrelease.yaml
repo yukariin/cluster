@@ -99,7 +99,7 @@ spec:
           datasource: Prometheus
           url: https://grafana.com/api/dashboards/20842/revisions/3/download
         cloudflared:
-          datasource: Prometheus
+          datasource: [{ name: DS_PROMETHEUS, value: Prometheus }]
           url: https://grafana.com/api/dashboards/24874/revisions/4/download
         etcd:
           datasource: Prometheus
