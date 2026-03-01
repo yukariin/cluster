@@ -98,6 +98,9 @@ spec:
         cert-manager:
           datasource: Prometheus
           url: https://grafana.com/api/dashboards/20842/revisions/3/download
+        cloudflared:
+          datasource: Prometheus
+          url: https://grafana.com/api/dashboards/24874/revisions/4/download
         etcd:
           datasource: Prometheus
           url: https://grafana.com/api/dashboards/22236/revisions/4/download
