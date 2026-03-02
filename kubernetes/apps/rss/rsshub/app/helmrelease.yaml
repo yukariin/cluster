@@ -31,7 +31,6 @@ spec:
               NO_LOGFILES: true
               SENTRY: false
               PIXIV_IMG_PROXY: "https://i.yuki.sh"
-              HOTLINK_TEMPLATE: "https://rss-img-relay.miflab.workers.dev/$${href_ue}"
               TZ: ${CLUSTER_TZ}
             envFrom:
               - secretRef:
