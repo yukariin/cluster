@@ -36,7 +36,7 @@ spec:
       media:
         storage:
           existingClaim: "{{ .Release.Name }}"
-        maxUploadSize: 100M
+        maxUploadSize: 256M
       postgres:
         host: pg-matrix-rw.comms.svc.cluster.local
         user: matrix
