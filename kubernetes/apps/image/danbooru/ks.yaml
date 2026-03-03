@@ -3,51 +3,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: autotagger
-  namespace: flux-system
-spec:
-  interval: 1h
-  path: kubernetes/apps/image/danbooru/autotagger
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: image
-  wait: true
-
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app iqdb
-  namespace: flux-system
-spec:
-  components:
-    - ../../../../components/volsync
-  interval: 1h
-  path: kubernetes/apps/image/danbooru/iqdb
-  prune: true
-  postBuild:
-    substitute:
-      APP: *app
-      VOLSYNC_CACHE_CAPACITY: 5Gi
-      VOLSYNC_CAPACITY: 10Gi
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: image
-  wait: true
-  dependsOn:
-    - name: democratic-csi
-
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: danbooru-database
   namespace: flux-system
 spec:
@@ -89,3 +44,46 @@ spec:
   wait: true
   dependsOn:
     - name: danbooru-database
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: autotagger
+  namespace: flux-system
+spec:
+  interval: 1h
+  path: kubernetes/apps/image/danbooru/autotagger
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: image
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app iqdb
+  namespace: flux-system
+spec:
+  components:
+    - ../../../../components/volsync
+  interval: 1h
+  path: kubernetes/apps/image/danbooru/iqdb
+  prune: true
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CACHE_CAPACITY: 5Gi
+      VOLSYNC_CAPACITY: 10Gi
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: image
+  dependsOn:
+    - name: democratic-csi
