@@ -73,6 +73,9 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: "https://miniflux.${CLUSTER_DOMAIN}/healthcheck"
         hostnames:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
         parentRefs:
