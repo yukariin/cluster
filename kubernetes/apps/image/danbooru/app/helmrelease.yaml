@@ -30,7 +30,7 @@ spec:
               PUMA_WORKERS: "1"
               # App settings
               DANBOORU_APP_NAME: Booru
-              DANBOORU_CANONICAL_URL: "https://booru.${CLUSTER_DOMAIN}"
+              DANBOORU_CANONICAL_URL: &appUrl "https://booru.${CLUSTER_DOMAIN}"
               DANBOORU_REDIS_URL: "redis://danbooru-dragonfly.image.svc.cluster.local:6379"
               DANBOORU_IQDB_URL: "http://iqdb.image.svc.cluster.local:5588"
               DANBOORU_AUTOTAGGER_URL: "http://autotagger.image.svc.cluster.local:5000"
@@ -64,7 +64,8 @@ spec:
           openresty:
             image: *image
             args: ["openresty", "-e", "/dev/stderr"]
-            env: *env
+            env:
+              DANBOORU_CANONICAL_URL: *appUrl
             probes:
               liveness: &probes
                 enabled: true
