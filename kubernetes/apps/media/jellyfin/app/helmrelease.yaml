@@ -84,13 +84,14 @@ spec:
                 subPath: tmp
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: "https://jellyfin.${CLUSTER_DOMAIN}/health"
         hostnames:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
         parentRefs:
-          - name: external
-            namespace: kube-system
-          - name: internal
-            namespace: kube-system
+          - { name: external, namespace: kube-system }
+          - { name: internal, namespace: kube-system }
         rules:
           - backendRefs:
               - identifier: app
