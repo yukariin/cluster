@@ -89,9 +89,9 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}/identity"
+            url: "https://plex.${CLUSTER_DOMAIN}/identity"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "plex.${CLUSTER_DOMAIN}"
         parentRefs:
           - { name: external, namespace: kube-system }
           - { name: internal, namespace: kube-system }
