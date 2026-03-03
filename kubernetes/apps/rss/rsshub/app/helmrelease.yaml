@@ -66,6 +66,9 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: "https://rsshub.${CLUSTER_DOMAIN}/healthz"
         hostnames:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
         parentRefs:
