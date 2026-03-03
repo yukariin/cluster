@@ -63,6 +63,7 @@ spec:
           enabled: true
           annotations:
             gatus.home-operations.com/endpoint: |-
+              name: authentik
               url: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}/-/health/live/"
           hostnames:
             - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
