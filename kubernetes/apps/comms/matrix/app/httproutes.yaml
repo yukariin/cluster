@@ -22,13 +22,24 @@ spec:
             type: PathPrefix
             value: /.well-known/
     - backendRefs:
+        - name: matrix-matrix-authentication-service
+          namespace: comms
+          port: 8080
+      matches:
+        - path:
+            type: RegularExpression
+            value: "^/_matrix/client/[^/]+/(?:login|logout|refresh)"
+    - backendRefs:
         - name: matrix-synapse
           namespace: comms
           port: 8008
       matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /_matrix
+        - path:
+            type: PathPrefix
+            value: /_synapse
 
 ---
 apiVersion: gateway.networking.k8s.io/v1
