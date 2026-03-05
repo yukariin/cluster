@@ -20,10 +20,6 @@ spec:
             image: &image
               repository: ghcr.io/danbooru/danbooru
               tag: production@sha256:a10f8d48676e7cee507fe151b24a85c703f58a2a4ad8fadc1113eb5d8870b074
-            args:
-              - "bash"
-              - "-c"
-              - "bin/rails db:prepare && bin/rails server -b 0.0.0.0"
             env: &env
               # Base settings
               RAILS_ENV: "production"
@@ -36,6 +32,14 @@ spec:
               DANBOORU_AUTOTAGGER_URL: "http://autotagger.image.svc.cluster.local:5000"
               DANBOORU_MAIL_DELIVERY_URL: "smtp://smtp-relay.network.svc.cluster.local:25?openssl_verify_mode=none"
               DANBOORU_IMAGE_STORAGE_PATH: /images
+              K8S_NODE_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: spec.nodeName
+              K8S_POD_NAME:
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
               DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
@@ -57,6 +61,8 @@ spec:
                   timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *probes
+            lifecycle: &lifecycle
+              preStop: { exec: { command: ["sleep", "15"] }}
             securityContext: &containerSec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -72,44 +78,29 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /up
+                    path: /nginx/status
                     port: &port 8080
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *probes
+            lifecycle: *lifecycle
             securityContext: *containerSec
       cron:
-        initContainers:
-          wait-for-app: &waitForApp
-            image:
-              repository: ghcr.io/kitstream/initium
-              tag: 1.1.0@sha256:490aca2df35489fc9dfd189692b4bc385dfc1ec33f0d14d2f899343e802fc4bd
-            args:
-              - wait-for
-              - --target
-              - "http://danbooru:8080/up"
-              - --http-status
-              - "204"
-              - --timeout
-              - "120s"
-            securityContext: *containerSec
         containers:
           app:
             image: *image
-            args: ["bash", "-c", "bin/rails danbooru:cron"]
+            args: ["bin/rails", "danbooru:cron"]
             env: *env
             envFrom: *envFrom
             securityContext: *containerSec
       job:
         annotations: *annotations
-        initContainers:
-          wait-for-app: *waitForApp
         containers:
           app:
             image: *image
-            args: ["bash", "-c", "bin/good_job start"]
+            args: ["bin/good_job", "start"]
             env: *env
             envFrom: *envFrom
             securityContext: *containerSec
