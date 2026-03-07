@@ -19,7 +19,7 @@ spec:
           app:
             image:
               repository: ghcr.io/fosrl/newt
-              tag: 1.10.2@sha256:21647ea5e01f8f11f9a16a2939f936e98978cae7c5e5a8ba94bd67f572e52738
+              tag: 1.10.2@sha256:a8029ea7bba8496bc428868f18103453b86b1b7f08bffa934f7ba91dabc3a652
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
