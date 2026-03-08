@@ -14,6 +14,8 @@ spec:
   storage:
     size: 10G
     storageClass: democratic-csi-hostpath
+  monitoring:
+    enablePodMonitor: true
 
   backup:
     retentionPolicy: 30d
@@ -32,13 +34,13 @@ spec:
           key: AWS_SECRET_ACCESS_KEY
 
   bootstrap:
-    initdb:
-      database: danbooru
-      owner: danbooru
-    # recovery:
-    #   source: source
+    # initdb:
     #   database: danbooru
     #   owner: danbooru
+    recovery:
+      source: source
+      database: danbooru
+      owner: danbooru
 
   externalClusters:
     - name: source
