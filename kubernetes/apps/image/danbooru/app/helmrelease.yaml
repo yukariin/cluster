@@ -32,7 +32,7 @@ spec:
               DANBOORU_AUTOTAGGER_URL: "http://autotagger.image.svc.cluster.local:5000"
               DANBOORU_MAIL_DELIVERY_URL: "smtp://smtp-relay.network.svc.cluster.local:25?openssl_verify_mode=none"
               DANBOORU_IMAGE_STORAGE_PATH: /images
-              DANBOORU_MAX_FILE_SIZE: 150_000_000
+              DANBOORU_MAX_FILE_SIZE: 209_715_200 # 200MiB
               K8S_NODE_NAME:
                 valueFrom:
                   fieldRef:
