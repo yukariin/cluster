@@ -25,6 +25,7 @@ spec:
               # Base settings
               RAILS_ENV: "production"
               PUMA_WORKERS: "1"
+              RACK_TIMEOUT_SERVICE_TIMEOUT: "120"
               # App settings
               DANBOORU_APP_NAME: Booru
               DANBOORU_CANONICAL_URL: &appUrl "https://booru.${CLUSTER_DOMAIN}"
