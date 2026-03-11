@@ -57,4 +57,3 @@ spec:
   targetNamespace: security
   dependsOn:
     - name: authentik
-    - name: tf-controller
