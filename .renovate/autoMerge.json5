@@ -44,15 +44,5 @@
       minimumReleaseAge: "1 minute",
       ignoreTests: true,
     },
-    {
-      description: "Auto-merge latest/staging container digests",
-      matchDatasources: ["docker"],
-      automerge: true,
-      automergeType: "branch",
-      matchUpdateTypes: ["digest"],
-      matchPackageNames: ["/rsshub/", "/sillytavern/"],
-      ignoreTests: true,
-      schedule: ["* 0-4 * * *"],
-    },
   ],
 }

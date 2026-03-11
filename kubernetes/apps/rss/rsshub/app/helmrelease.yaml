@@ -15,12 +15,12 @@ spec:
       rsshub:
         annotations:
           reloader.stakater.com/auto: "true"
-        strategy: Recreate
         containers:
           app:
             image:
               repository: ghcr.io/diygod/rsshub
-              tag: latest@sha256:903b6bae50ad36c3ad490c1f129f4b6d212981310fc24841acde8f2a09b3e305
+              tag: latest
+              pullPolicy: Always
             env:
               NODE_ENV: production
               CACHE_TYPE: redis
