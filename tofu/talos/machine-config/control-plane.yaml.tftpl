@@ -1,4 +1,13 @@
 # https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/
+machine:
+  features:
+    kubernetesTalosAPIAccess:
+      allowedKubernetesNamespaces:
+        - system-upgrade
+      allowedRoles:
+        - os:admin
+      enabled: true
+
 cluster:
   #allowSchedulingOnControlPlanes: true
   apiServer:
