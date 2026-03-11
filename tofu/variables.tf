@@ -38,6 +38,7 @@ variable "talos_cluster_config" {
     subnet_mask                  = optional(string, "24")
     talos_machine_config_version = optional(string)
     proxmox_cluster              = string
+    kubernetes_version           = string
     gateway_api_version          = string
     extra_manifests              = optional(list(string), [])
     kubelet                      = optional(string)

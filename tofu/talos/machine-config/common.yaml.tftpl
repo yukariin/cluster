@@ -1,5 +1,8 @@
 # https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/
 machine:
+  kubelet:
+    image: ghcr.io/siderolabs/kubelet:${kubernetes_version}
+    ${indent(4, kubelet)}
   nodeLabels:
     topology.kubernetes.io/region: ${cluster_name}
     topology.kubernetes.io/zone: ${node_name}
@@ -39,5 +42,12 @@ machine:
     net.ipv4.tcp_window_scaling: 1         # 10Gb/s
     vm.nr_hugepages: 1024                  # PostgreSQL
 
-  kubelet:
-    ${indent(4, kubelet)}
+cluster:
+  apiServer:
+    image: registry.k8s.io/kube-apiserver:${kubernetes_version}
+  controllerManager:
+    image: registry.k8s.io/kube-controller-manager:${kubernetes_version}
+  proxy:
+    image: registry.k8s.io/kube-proxy:${kubernetes_version}
+  scheduler:
+    image: registry.k8s.io/kube-scheduler:${kubernetes_version}

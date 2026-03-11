@@ -65,6 +65,7 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/machine-config/common.yaml.tftpl", {
       node_name          = each.value.host_node
       cluster_name       = var.cluster.proxmox_cluster
+      kubernetes_version = var.cluster.kubernetes_version
       type               = each.value.machine_type
       hostname           = each.key
       ip                 = each.value.ip
