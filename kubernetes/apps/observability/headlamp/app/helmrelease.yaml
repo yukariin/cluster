@@ -27,6 +27,8 @@ spec:
   values:
     config:
       watchPlugins: true
+      # Bypasses: https://github.com/kubernetes-sigs/headlamp/issues/4883
+      sessionTTL: null
       oidc:
         secret:
           create: false
