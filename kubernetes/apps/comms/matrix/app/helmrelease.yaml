@@ -150,6 +150,8 @@ spec:
         host: "rtc.${CLUSTER_DOMAIN}"
         className: disabled
         tlsEnabled: false
+      sfu:
+        useStunToDiscoverPublicIP: false
 
     elementAdmin:
       enabled: true
