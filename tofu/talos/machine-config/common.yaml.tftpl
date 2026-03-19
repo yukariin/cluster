@@ -1,7 +1,6 @@
 # https://www.talos.dev/v1.10/reference/configuration/v1alpha1/config/
 machine:
   kubelet:
-    image: ghcr.io/siderolabs/kubelet:${kubernetes_version}
     ${indent(4, kubelet)}
   nodeLabels:
     topology.kubernetes.io/region: ${cluster_name}
