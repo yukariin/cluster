@@ -58,6 +58,7 @@ data "talos_machine_configuration" "this" {
   # @formatter:off
   talos_version = var.cluster.talos_machine_config_version != null ? var.cluster.talos_machine_config_version : (each.value.update == true ? var.image.update_version : var.image.version)
   # @formatter:on
+  kubernetes_version = var.cluster.kubernetes_version
 
   machine_type    = each.value.machine_type
   machine_secrets = talos_machine_secrets.this.machine_secrets
@@ -65,7 +66,6 @@ data "talos_machine_configuration" "this" {
     templatefile("${path.module}/machine-config/common.yaml.tftpl", {
       node_name          = each.value.host_node
       cluster_name       = var.cluster.proxmox_cluster
-      kubernetes_version = var.cluster.kubernetes_version
       type               = each.value.machine_type
       hostname           = each.key
       ip                 = each.value.ip
