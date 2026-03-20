@@ -5,7 +5,7 @@ metadata:
   name: kubernetes
 spec:
   kubernetes:
-    version: v1.35.2 # renovate: docker=ghcr.io/siderolabs/kubelet
+    version: v1.35.3 # renovate: docker=ghcr.io/siderolabs/kubelet
   maintenance:
     windows:
       - start: "0 2 * * 0"

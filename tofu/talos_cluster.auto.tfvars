@@ -7,7 +7,7 @@ talos_cluster_config = {
   gateway = "192.168.1.1"
 
   proxmox_cluster    = "homelab"
-  kubernetes_version = "v1.35.2" # renovate: docker=ghcr.io/siderolabs/kubelet
+  kubernetes_version = "v1.35.3" # renovate: docker=ghcr.io/siderolabs/kubelet
 
   cilium = {
     bootstrap_manifest_path = "talos/inline-manifests/cilium-install.yaml"
