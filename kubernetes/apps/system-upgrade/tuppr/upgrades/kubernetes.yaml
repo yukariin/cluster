@@ -10,3 +10,4 @@ spec:
     windows:
       - start: "0 2 * * 0"
         duration: "4h"
+        timezone: "${CLUSTER_TZ}"
