@@ -34,13 +34,13 @@ spec:
           key: AWS_SECRET_ACCESS_KEY
 
   bootstrap:
-    initdb:
-      database: synapse
-      owner: matrix
-    # recovery:
-    #   source: source
+    # initdb:
     #   database: synapse
     #   owner: matrix
+    recovery:
+      source: source
+      database: synapse
+      owner: matrix
 
   externalClusters:
     - name: source
