@@ -22,7 +22,7 @@ spec:
     barmanObjectStore:
       wal:
         compression: zstd
-      serverName: pg-authentik-v3
+      serverName: pg-authentik-v4
       destinationPath: s3://cnpg-backups/
       endpointURL: "http://192.168.1.10:9000"
       s3Credentials:
@@ -47,7 +47,7 @@ spec:
       barmanObjectStore:
         wal:
           compression: zstd
-        serverName: pg-authentik
+        serverName: pg-authentik-v3
         destinationPath: s3://cnpg-backups/
         endpointURL: "http://192.168.1.10:9000"
         s3Credentials:

@@ -22,7 +22,7 @@ spec:
     barmanObjectStore:
       wal:
         compression: zstd
-      serverName: pg-danbooru-v1
+      serverName: pg-danbooru-v2
       destinationPath: s3://cnpg-backups/
       endpointURL: "http://192.168.1.10:9000"
       s3Credentials:
