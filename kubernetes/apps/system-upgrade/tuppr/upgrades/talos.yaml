@@ -10,10 +10,16 @@ spec:
     rebootMode: powercycle
   maintenance:
     windows:
-      - start: "0 2 * * 0"
+      - start: "0 4 * * 0"
         duration: "4h"
         timezone: "${CLUSTER_TZ}"
   healthChecks:
     - apiVersion: volsync.backube/v1alpha1
       kind: ReplicationSource
       expr: status.conditions.filter(c, c.type == "Synchronizing").all(c, c.status == "False")
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      expr: status.conditions.filter(c, c.type == "Ready").all(c, c.status == "True")
+    - apiVersion: dragonflydb.io/v1alpha1
+      kind: Dragonfly
+      expr: status.phase in ['Ready']
