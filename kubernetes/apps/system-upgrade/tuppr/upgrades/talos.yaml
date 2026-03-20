@@ -8,6 +8,10 @@ spec:
     version: v1.12.6 # renovate: docker=ghcr.io/siderolabs/installer
   policy:
     rebootMode: powercycle
+  maintenance:
+    windows:
+      - start: "0 2 * * 0"
+        duration: "4h"
   healthChecks:
     - apiVersion: volsync.backube/v1alpha1
       kind: ReplicationSource
