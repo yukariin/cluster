@@ -89,6 +89,19 @@ spec:
               readiness: *probes
             lifecycle: *lifecycle
             securityContext: *containerSec
+      migrate-hook:
+        type: job
+        annotations:
+          helm.sh/hook: pre-install,pre-upgrade
+          helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+          helm.sh/hook-weight: "-5"
+        containers:
+          db-migrate-job:
+            image: *image
+            args: ["bin/rails", "db:migrate"]
+            env: *env
+            envFrom: *envFrom
+            securityContext: *containerSec
       cron:
         containers:
           app:
