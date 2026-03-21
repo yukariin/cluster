@@ -70,7 +70,7 @@ spec:
               - 'fc00::/7'
             rc_message:
               per_second: 5
-              burst_count: 50
+              burst_count: 20
             experimental_features:
               # MSC3575: original sliding sync API plumbing.
               msc3575_enabled: true
