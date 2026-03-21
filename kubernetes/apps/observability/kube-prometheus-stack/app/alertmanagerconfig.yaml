@@ -5,9 +5,10 @@ metadata:
   name: alertmanager
 spec:
   route:
-    receiver: telegram
+    receiver: pushover
     groupBy:
       - alertname
+      - cluster
       - job
     groupWait: 1m
     groupInterval: 5m
@@ -17,12 +18,14 @@ spec:
         matchers:
           - name: alertname
             matchType: "="
-            value: Watchdog
-      - receiver: blackhole
+            value: InfoInhibitor
+      - receiver: heartbeat
+        groupWait: 0s
+        repeatInterval: 2m30s
         matchers:
           - name: alertname
             matchType: "="
-            value: InfoInhibitor
+            value: Watchdog
 
   inhibitRules:
     - equal:
@@ -39,6 +42,12 @@ spec:
 
   receivers:
     - name: blackhole
+
+    - name: heartbeat
+      webhookConfigs:
+        - urlSecret:
+            name: alertmanager-secret
+            key: HEARTBEAT_URL
 
     - name: telegram
       telegramConfigs:
@@ -85,3 +94,40 @@ spec:
             <a href="{{ .Annotations.runbook_url }}">📖 Runbook</a>
             {{- end }}
             {{- end }}
+
+    - name: pushover
+      pushoverConfigs:
+        - html: true
+          sendResolved: true
+          sound: gamelan
+          ttl: 86400s
+          priority: |-
+            {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
+          title: >-
+            [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+          message: |-
+            {{- range .Alerts }}
+              {{- if ne .Annotations.description "" }}
+                {{ .Annotations.description }}
+              {{- else if ne .Annotations.summary "" }}
+                {{ .Annotations.summary }}
+              {{- else if ne .Annotations.message "" }}
+                {{ .Annotations.message }}
+              {{- else }}
+                Alert description not available
+              {{- end }}
+              {{- if gt (len .Labels.SortedPairs) 0 }}
+                <small>
+                  {{- range .Labels.SortedPairs }}
+                    <b>{{ .Name }}:</b> {{ .Value }}
+                  {{- end }}
+                </small>
+              {{- end }}
+            {{- end }}
+          token:
+            name: alertmanager-secret
+            key: PUSHOVER_APP_TOKEN
+          userKey:
+            name: alertmanager-secret
+            key: PUSHOVER_USER_KEY
+          urlTitle: View in Alertmanager
