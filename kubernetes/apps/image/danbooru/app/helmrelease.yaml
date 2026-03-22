@@ -115,7 +115,7 @@ spec:
         containers:
           app:
             image: *image
-            args: ["bin/good_job", "start"]
+            args: ["bin/good_job", "start", "--poll-interval=60", "--max-threads=4", "--probe-port=3000"]
             env: *env
             envFrom: *envFrom
             securityContext: *containerSec
