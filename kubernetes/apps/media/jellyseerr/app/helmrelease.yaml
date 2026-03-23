@@ -79,6 +79,7 @@ spec:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
           - "requests.${CLUSTER_DOMAIN}"
         parentRefs:
+          - { name: external, namespace: kube-system }
           - { name: internal, namespace: kube-system }
         rules:
           - backendRefs:
