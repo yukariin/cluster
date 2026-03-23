@@ -72,9 +72,9 @@ spec:
                 subPath: tmp
     route:
       app:
-        # annotations:
-        #   gatus.home-operations.com/endpoint: |-
-        #     url: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}/api/v1/status"
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            url: "https://jellyseerr.${CLUSTER_DOMAIN}/api/v1/status"
         hostnames:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
           - "requests.${CLUSTER_DOMAIN}"
