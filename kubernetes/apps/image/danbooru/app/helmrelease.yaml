@@ -24,6 +24,7 @@ spec:
             env: &env
               # Base settings
               RAILS_ENV: "production"
+              PUMA_WORKERS: "2"
               RACK_REQUEST_TIMEOUT: "120"
               # App settings
               DANBOORU_APP_NAME: Booru
