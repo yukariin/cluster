@@ -72,7 +72,7 @@ spec:
       tmpfs:
         type: emptyDir
         advancedMounts:
-          sonarr:
+          *app :
             app:
               - path: /config/cache
                 subPath: cache
