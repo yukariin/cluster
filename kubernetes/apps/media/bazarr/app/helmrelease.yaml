@@ -69,6 +69,10 @@ spec:
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
+      media:
+        type: nfs
+        server: ${NAS_ADDRESS}
+        path: /mnt/data_pool/data
       tmpfs:
         type: emptyDir
         advancedMounts:
