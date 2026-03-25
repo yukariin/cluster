@@ -57,10 +57,10 @@ spec:
     service:
       app:
         ports:
-          http:
-            port: *metricsPort
           smtp:
             port: *smtpPort
+          http:
+            port: *metricsPort
     serviceMonitor:
       app:
         endpoints:
