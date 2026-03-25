@@ -44,7 +44,7 @@ spec:
                 cpu: 10m
                 memory: 256Mi
               limits:
-                memory: 1Gi
+                memory: 512Mi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -69,15 +69,13 @@ spec:
         type: emptyDir
         medium: Memory
         sizeLimit: 64Mi
-        advancedMounts:
-          *app :
-            app:
-              - path: /home/node/app/backups
-                subPath: backups
-              - path: /home/node/app/data/default-user/backups
-                subPath: root-user-backups
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /home/node/app/backups
+            subPath: backups
+          - path: /home/node/app/data/default-user/backups
+            subPath: root-user-backups
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         hostnames:
