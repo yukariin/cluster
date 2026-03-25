@@ -59,6 +59,7 @@ spec:
         ports:
           smtp:
             port: *smtpPort
+            primary: true
           http:
             port: *metricsPort
     serviceMonitor:
