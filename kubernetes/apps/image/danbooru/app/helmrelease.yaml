@@ -115,7 +115,7 @@ spec:
         containers:
           app:
             image: *image
-            args: ["bin/good_job", "start", "--poll-interval=60", "--max-threads=4", "--probe-port=3000"]
+            args: ["bin/good_job", "start", "--poll-interval=60", "--max-threads=4", "--probe-port=7001"]
             env: *env
             envFrom: *envFrom
             probes:
@@ -125,7 +125,7 @@ spec:
                 spec:
                   httpGet:
                     path: /status/started
-                    port: &jobPort 3000
+                    port: &jobPort 7001
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 30
