@@ -51,7 +51,7 @@ spec:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
             probes:
-              liveness: &probes
+              liveness: &appProbes
                 enabled: true
                 custom: true
                 spec:
@@ -62,7 +62,7 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 3
-              readiness: *probes
+              readiness: *appProbes
             lifecycle: &lifecycle
               preStop: { exec: { command: ["sleep", "15"] }}
             securityContext: &containerSec
@@ -75,7 +75,7 @@ spec:
             env:
               DANBOORU_CANONICAL_URL: *appUrl
             probes:
-              liveness: &probes
+              liveness: &nginxProbes
                 enabled: true
                 custom: true
                 spec:
@@ -86,7 +86,7 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 3
-              readiness: *probes
+              readiness: *nginxProbes
             lifecycle: *lifecycle
             securityContext: *containerSec
       migrate-hook:
@@ -118,6 +118,27 @@ spec:
             args: ["bin/good_job", "start", "--poll-interval=60", "--max-threads=4", "--probe-port=3000"]
             env: *env
             envFrom: *envFrom
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /status/started
+                    port: &jobPort 3000
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 30
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /status/connected
+                    port: *jobPort
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
             securityContext: *containerSec
     defaultPodOptions:
       securityContext:
