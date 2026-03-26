@@ -53,31 +53,20 @@ spec:
       capabilities:
         ciliumAgent:
           - CHOWN
+          - DAC_OVERRIDE
+          - FOWNER
+          - IPC_LOCK
           - KILL
           - NET_ADMIN
           - NET_RAW
-          - IPC_LOCK
-          - SYS_ADMIN
-          - SYS_RESOURCE
-          - DAC_OVERRIDE
-          - FOWNER
           - SETGID
           - SETUID
+          - SYS_ADMIN
+          - SYS_RESOURCE
         cleanCiliumState:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
-
-    # Increase rate limit when doing L2 announcements
-    k8sClientRateLimit:
-      qps: 50
-      burst: 200
-
-    l2announcements:
-      enabled: true
-
-    externalIPs:
-      enabled: true
 
     # https://docs.cilium.io/en/stable/network/concepts/routing/#native-routing
     routingMode: native
@@ -99,11 +88,10 @@ spec:
 
     operator:
       rollOutPods: true
-      replicas: 1
+      replicas: 2
       prometheus:
         metricsService: true
         enabled: true
-        port: 9963
         serviceMonitor:
           enabled: true
       dashboards:
@@ -113,17 +101,15 @@ spec:
           cpu: 50m
           memory: 128Mi
         limits:
-          cpu: 100m
           memory: 256Mi
 
     # Roll out cilium agent pods automatically when ConfigMap is updated.
     rollOutCiliumPods: true
     resources:
       requests:
-        cpu: 100m
+        cpu: 50m
         memory: 512Mi
       limits:
-        cpu: 1
         memory: 1Gi
 
     # debug:
@@ -140,11 +126,9 @@ spec:
           cpu: 50m
           memory: 128Mi
         limits:
-          cpu: 500m
           memory: 512Mi
       prometheus:
         enabled: true
-        port: "9964"
         serviceMonitor:
           enabled: true
 
@@ -158,9 +142,7 @@ spec:
           - flow
           - port-distribution
           - icmp
-          - "httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction;sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity"
-        enableOpenMetrics: true
-        port: 9965
+          - http
         serviceMonitor:
           enabled: true
         dashboards:
@@ -170,7 +152,6 @@ spec:
         rollOutPods: true
         prometheus:
           enabled: true
-          port: 9966
           serviceMonitor:
             enabled: true
       ui:
@@ -180,7 +161,6 @@ spec:
     prometheus:
       metricsService: true
       enabled: true
-      port: 9962
       serviceMonitor:
         enabled: true
         trustCRDsExist: true
