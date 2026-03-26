@@ -6,6 +6,5 @@ resources:
   - namespace.yaml
   - cloudflared/ks.yaml
   - external-dns/ks.yaml
-  # - netbird/ks.yaml
   - newt/ks.yaml
   - smtp-relay/ks.yaml
