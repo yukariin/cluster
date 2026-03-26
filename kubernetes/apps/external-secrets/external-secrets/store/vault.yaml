@@ -16,5 +16,5 @@ spec:
           roleId: "3e5a6aeb-87d5-9997-e733-057df87c8a63"
           secretRef:
             namespace: "external-secrets"
-            name: "vault"
+            name: "vault-secret"
             key: "secretId"
