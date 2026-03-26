@@ -9,6 +9,7 @@ spec:
     - "${CLUSTER_DOMAIN}"
     - "*.${CLUSTER_DOMAIN}"
   duration: 160h
+  renewBefore: 48h
   issuerRef:
     kind: ClusterIssuer
     name: letsencrypt-production
