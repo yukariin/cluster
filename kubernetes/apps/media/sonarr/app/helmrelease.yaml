@@ -73,7 +73,7 @@ spec:
           - path: /config/MediaCover
       media:
         type: nfs
-        server: ${NAS_ADDRESS}
+        server: nas.lan
         path: /mnt/data_pool/data
       tmpfs:
         type: emptyDir
