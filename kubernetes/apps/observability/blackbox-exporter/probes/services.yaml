@@ -2,13 +2,15 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Probe
 metadata:
-  name: devices
+  name: services
 spec:
-  module: icmp
+  module: https
   prober:
     url: blackbox-exporter.observability.svc.cluster.local:9115
   targets:
     staticConfig:
       static:
-        - router.lan
-        - nas.lan
+        # docker on nas
+        - https://traefik.${CLUSTER_DOMAIN}
+        - https://nas.${CLUSTER_DOMAIN}
+        - https://vault.${CLUSTER_DOMAIN}
