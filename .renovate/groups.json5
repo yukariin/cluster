@@ -50,20 +50,5 @@
       },
       minimumGroupSize: 2,
     },
-    {
-      description: "NetBird Group",
-      groupName: "netbird",
-      matchDatasources: ["docker"],
-      matchPackageNames: [
-        "/netbirdio\/signal/",
-        "/netbirdio\/relay/",
-        "/netbirdio\/management/",
-        "/netbirdio\/netbird/"
-      ],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-      minimumGroupSize: 4,
-    },
   ],
 }
