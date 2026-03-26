@@ -34,7 +34,7 @@ spec:
           create: false
         externalSecret:
           enabled: true
-          name: headlamp-oidc
+          name: headlamp-secret
 
     httpRoute:
       enabled: true
