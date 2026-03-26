@@ -26,6 +26,11 @@ spec:
           - name: alertname
             matchType: "="
             value: Watchdog
+      - receiver: pushover
+        matchers:
+          - name: severity
+            matchType: "="
+            value: critical
 
   inhibitRules:
     - equal:
