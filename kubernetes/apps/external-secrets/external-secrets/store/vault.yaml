@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/external-secrets.io/clustersecretstore_v1.json
+apiVersion: external-secrets.io/v1
+kind: ClusterSecretStore
+metadata:
+  name: vault
+spec:
+  provider:
+    vault:
+      server: "${VAULT_HOST}"
+      path: "homelab"
+      version: "v2"
+      auth:
+        appRole:
+          path: "approle"
+          roleId: "3e5a6aeb-87d5-9997-e733-057df87c8a63"
+          secretRef:
+            namespace: "external-secrets"
+            name: "vault"
+            key: "secretId"
