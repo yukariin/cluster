@@ -12,32 +12,28 @@ spec:
   interval: 1h
   values:
     controllers:
-      external-dns-openwrt:
+      *app :
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
           webhook:
             image:
               repository: renanqts/external-dns-openwrt-webhook
-              tag: v0.1.0
+              tag: v0.1.0@sha256:40e47e96536f11011d563809f033831e523e8832cdb743082f1dde3f31b727ec
             env:
-              - name: SHUTDOWN_TIMEOUT_SECONDS
-                value: "5"
-              - name: LOG_LEVEL
-                value: info
-              - name: LOG_STACK_TRACE
-                value: "false"
-              - name: LOG_ENCODING
-                value: json
-              - name: ROUTER_HEALTHCHECK_INTERVAL
-                value: /ping
-              - name: ROUTER_HEALTHCHECK_PORT
-                value: "8888"
-              - name: ROUTER_GIN_RELEASE_MODE
-                value: "true"
+              SHUTDOWN_TIMEOUT_SECONDS: "5"
+              LOG_LEVEL: info
+              LOG_STACK_TRACE: "false"
+              LOG_ENCODING: json
+              ROUTER_HEALTHCHECK_INTERVAL: /ping
+              ROUTER_HEALTHCHECK_PORT: "8888"
+              ROUTER_GIN_RELEASE_MODE: "true"
+              PROVIDER_OPENWRT_LUCIRPC_HOSTNAME: 192.168.1.1
+              PROVIDER_OPENWRT_LUCIRPC_PORT: "80"
+              PROVIDER_OPENWRT_LUCIRPC_SSL: "false"
             envFrom:
               - secretRef:
-                  name: "{{ .Release.Name }}"
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness: &probe1
                 enabled: true
@@ -74,7 +70,7 @@ spec:
               - --txt-owner-id=k8s
               - --txt-prefix=k8s.
             probes:
-              liveness: &probe2
+              liveness: &probes
                 enabled: true
                 custom: true
                 spec:
@@ -85,7 +81,7 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 3
-              readiness: *probe2
+              readiness: *probes
             securityContext: *securityContext
         serviceAccount:
           name: *app
