@@ -7,13 +7,11 @@ spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
     profile: shortlived
-    email: "${PRIVATE_EMAIL}"
     privateKeySecretRef:
       name: cloudflare-key
     solvers:
       - dns01:
           cloudflare:
-            email: "${PRIVATE_EMAIL}"
             apiTokenSecretRef:
               name: cloudflare-issuer-secret
               key: CLOUDFLARE_API_TOKEN
