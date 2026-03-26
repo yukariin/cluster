@@ -19,7 +19,7 @@ spec:
           webhook:
             image:
               repository: renanqts/external-dns-openwrt-webhook
-              tag: v0.1.0@sha256:40e47e96536f11011d563809f033831e523e8832cdb743082f1dde3f31b727ec
+              tag: v0.1.0@sha256:a356eb7ead234dc673108c30de761ed9f9542709fc0d8cc8332f81dd53a74d63
             env:
               SHUTDOWN_TIMEOUT_SECONDS: "5"
               LOG_LEVEL: info
