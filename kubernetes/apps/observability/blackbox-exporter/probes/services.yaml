@@ -13,4 +13,6 @@ spec:
         # docker on nas
         - https://traefik.${CLUSTER_DOMAIN}
         - https://nas.${CLUSTER_DOMAIN}
+        - https://garage.${CLUSTER_DOMAIN}
+        - https://s3.${CLUSTER_DOMAIN}
         - https://vault.${CLUSTER_DOMAIN}
