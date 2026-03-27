@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/other/docker-compose.json
+services:
+  garage:
+    image: dxflrs/garage:v2.2.0@sha256:45a61ce3f7c9c24fc23d9ed2b09b27ed560ab87b34605d175d5c588f539c24e4
+    container_name: garage
+    user: "1000:1000"
+    restart: unless-stopped
+    configs:
+      - source: garage-toml
+        target: /etc/garage.toml
+    env_file:
+      - ./override.env
+    volumes:
+      - "${S3_DATA_DIRECTORY:-/s3}:/var/lib/garage"
+    networks:
+      - proxy_network
+    # security
+    cap_drop:
+      - all
+    security_opt:
+      - no-new-privileges
+    # traefik
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: proxy_network
+      # S3
+      traefik.http.services.s3.loadbalancer.server.port: "3900"
+      traefik.http.routers.s3.entrypoints: websecure
+      traefik.http.routers.s3.rule: Host(`s3.${ROOT_DOMAIN}`)
+      traefik.http.routers.s3.service: s3
+      traefik.http.routers.s3.tls: true
+      traefik.http.routers.s3.tls.certresolver: letsencrypt
+      # nix
+      traefik.http.services.nix.loadbalancer.server.port: "3902"
+      traefik.http.routers.nix.entrypoints: websecure
+      traefik.http.routers.nix.rule: Host(`nix.${ROOT_DOMAIN}`)
+      traefik.http.routers.nix.service: nix
+      traefik.http.routers.nix.tls: true
+      traefik.http.routers.nix.tls.certresolver: letsencrypt
+
+  garage-ui:
+    image: khairul169/garage-webui:1.1.0@sha256:17c793551873155065bf9a022dabcde874de808a1f26e648d4b82e168806439c
+    container_name: garage-ui
+    user: "1000:1000"
+    restart: unless-stopped
+    environment:
+      API_BASE_URL: "http://garage:3903"
+      S3_ENDPOINT_URL: "http://garage:3900"
+      S3_REGION: "eu-central-1"
+    env_file:
+      - ./override.env
+    configs:
+      - source: garage-toml
+        target: /etc/garage.toml
+    networks:
+      - proxy_network
+    # security
+    cap_drop:
+      - all
+    security_opt:
+      - no-new-privileges
+    # traefik
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: proxy_network
+      # Dashboard
+      traefik.http.services.garage.loadbalancer.server.port: "3909"
+      traefik.http.routers.garage.entrypoints: websecure
+      traefik.http.routers.garage.rule: Host(`garage.${ROOT_DOMAIN}`)
+      traefik.http.routers.garage.service: garage
+      traefik.http.routers.garage.tls: true
+      traefik.http.routers.garage.tls.certresolver: letsencrypt
+
+configs:
+  garage-toml:
+    file: ./config/garage.toml
+
+networks:
+  proxy_network:
+    external: true
