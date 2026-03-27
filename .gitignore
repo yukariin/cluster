@@ -78,3 +78,7 @@ sealed-secrets.*
 
 # Charts
 charts
+
+# docker stacks
+override.env
+.env
