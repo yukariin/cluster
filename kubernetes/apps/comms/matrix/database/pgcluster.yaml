@@ -17,22 +17,6 @@ spec:
   monitoring:
     enablePodMonitor: true
 
-  backup:
-    retentionPolicy: 30d
-    barmanObjectStore:
-      wal:
-        compression: zstd
-      serverName: pg-matrix-v3
-      destinationPath: s3://cnpg-backups/
-      endpointURL: "https://s3.${CLUSTER_DOMAIN}"
-      s3Credentials:
-        accessKeyId:
-          name: matrix-pg-secret
-          key: AWS_ACCESS_KEY_ID
-        secretAccessKey:
-          name: matrix-pg-secret
-          key: AWS_SECRET_ACCESS_KEY
-
   bootstrap:
     # initdb:
     #   database: synapse
@@ -42,18 +26,17 @@ spec:
       database: synapse
       owner: matrix
 
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: pg-matrix-store
+        serverName: pg-matrix
+
   externalClusters:
-    - name: source
-      barmanObjectStore:
-        wal:
-          compression: zstd
-        serverName: pg-matrix-v1
-        destinationPath: s3://cnpg-backups/
-        endpointURL: "https://s3.${CLUSTER_DOMAIN}"
-        s3Credentials:
-          accessKeyId:
-            name: matrix-pg-secret
-            key: AWS_ACCESS_KEY_ID
-          secretAccessKey:
-            name: matrix-pg-secret
-            key: AWS_SECRET_ACCESS_KEY
+    - name: pg-matrix-restore
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: pg-matrix-store
+          serverName: pg-matrix

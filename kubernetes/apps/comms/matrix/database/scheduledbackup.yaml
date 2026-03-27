@@ -4,8 +4,11 @@ kind: ScheduledBackup
 metadata:
   name: pg-matrix-backup
 spec:
+  cluster:
+    name: pg-matrix
   schedule: "@weekly"
   immediate: true
   backupOwnerReference: self
-  cluster:
-    name: pg-matrix
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
