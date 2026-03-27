@@ -5,7 +5,7 @@ kind: ObjectStore
 metadata:
   name: pg-matrix-store
 spec:
-  retentionPolicy: 7d
+  retentionPolicy: 30d
   configuration:
     destinationPath: s3://cnpg-backups/
     endpointURL: "https://s3.${CLUSTER_DOMAIN}"
