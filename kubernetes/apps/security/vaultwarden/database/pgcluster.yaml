@@ -17,43 +17,26 @@ spec:
   monitoring:
     enablePodMonitor: true
 
-  backup:
-    retentionPolicy: 30d
-    barmanObjectStore:
-      wal:
-        compression: zstd
-      serverName: pg-vaultwarden-v4
-      destinationPath: s3://cnpg-backups/
-      endpointURL: "https://s3.${CLUSTER_DOMAIN}"
-      s3Credentials:
-        accessKeyId:
-          name: vaultwarden-pg-secret
-          key: AWS_ACCESS_KEY_ID
-        secretAccessKey:
-          name: vaultwarden-pg-secret
-          key: AWS_SECRET_ACCESS_KEY
-
   bootstrap:
     # initdb:
     #   database: vaultwarden
     #   owner: vaultwarden
     recovery:
-      source: source
+      source: pg-vaultwarden-restore
       database: vaultwarden
       owner: vaultwarden
 
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: pg-vaultwarden-store
+        serverName: pg-vaultwarden
+
   externalClusters:
-    - name: source
-      barmanObjectStore:
-        wal:
-          compression: zstd
-        serverName: pg-vaultwarden-v3
-        destinationPath: s3://cnpg-backups/
-        endpointURL: "https://s3.${CLUSTER_DOMAIN}"
-        s3Credentials:
-          accessKeyId:
-            name: vaultwarden-pg-secret
-            key: AWS_ACCESS_KEY_ID
-          secretAccessKey:
-            name: vaultwarden-pg-secret
-            key: AWS_SECRET_ACCESS_KEY
+    - name: pg-vaultwarden-restore
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: pg-vaultwarden-store
+          serverName: pg-vaultwarden
