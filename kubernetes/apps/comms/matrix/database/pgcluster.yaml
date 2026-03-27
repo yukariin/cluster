@@ -22,7 +22,7 @@ spec:
     #   database: synapse
     #   owner: matrix
     recovery:
-      source: source
+      source: pg-matrix-restore
       database: synapse
       owner: matrix
 
