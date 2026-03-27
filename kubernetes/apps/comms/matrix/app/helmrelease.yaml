@@ -48,6 +48,7 @@ spec:
         0-baseConfig:
           configSecret: matrix-secret
           configSecretKey: synapse.yaml
+
     matrixAuthenticationService:
       enabled: true
       ingress:
