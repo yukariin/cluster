@@ -24,13 +24,13 @@ spec:
         compression: zstd
       serverName: pg-vaultwarden-v4
       destinationPath: s3://cnpg-backups/
-      endpointURL: "http://192.168.1.10:9000"
+      endpointURL: "https://s3.${CLUSTER_DOMAIN}"
       s3Credentials:
         accessKeyId:
-          name: cloudnative-pg-secret
+          name: vaultwarden-pg-secret
           key: AWS_ACCESS_KEY_ID
         secretAccessKey:
-          name: cloudnative-pg-secret
+          name: vaultwarden-pg-secret
           key: AWS_SECRET_ACCESS_KEY
 
   bootstrap:
@@ -49,11 +49,11 @@ spec:
           compression: zstd
         serverName: pg-vaultwarden-v3
         destinationPath: s3://cnpg-backups/
-        endpointURL: "http://192.168.1.10:9000"
+        endpointURL: "https://s3.${CLUSTER_DOMAIN}"
         s3Credentials:
           accessKeyId:
-            name: cloudnative-pg-secret
+            name: vaultwarden-pg-secret
             key: AWS_ACCESS_KEY_ID
           secretAccessKey:
-            name: cloudnative-pg-secret
+            name: vaultwarden-pg-secret
             key: AWS_SECRET_ACCESS_KEY
