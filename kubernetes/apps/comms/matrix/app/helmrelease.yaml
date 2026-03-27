@@ -102,47 +102,8 @@ spec:
           secretKey: password
       additional:
         0-baseConfig:
-          config: |
-            branding:
-              service_name: "${CLUSTER_BRAND} Matrix"
-            passwords:
-              enabled: false
-            account:
-              email_change_allowed: true
-              displayname_change_allowed: true
-            email:
-              from: "Matrix Auth <noreply@${CLUSTER_DOMAIN}>"
-              reply_to: "No reply <noreply@${CLUSTER_DOMAIN}>"
-              transport: smtp
-              mode: plain
-              hostname: smtp-relay.network.svc.cluster.local
-              port: 25
-            upstream_oauth2:
-              providers:
-                - id: 01KH4CXFQFYXJGJ231M2FSVBGK
-                  human_name: Authentik
-                  issuer: https://authentik.${CLUSTER_DOMAIN}/application/o/matrix/
-                  client_id: matrix
-                  client_secret: ${MATRIX_CLIENT_SECRET}
-                  userinfo_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/userinfo/
-                  authorization_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/authorize/
-                  token_endpoint: https://authentik.${CLUSTER_DOMAIN}/application/o/token/
-                  jwks_uri: https://authentik.${CLUSTER_DOMAIN}/application/o/matrix/jwks/
-                  token_endpoint_auth_method: client_secret_post
-                  scope: "openid email profile"
-                  discovery_mode: oidc
-                  pkce_method: auto
-                  claims_imports:
-                    localpart:
-                      action: require
-                      template: "{{ user.preferred_username }}"
-                      on_conflict: replace
-                    displayname:
-                      action: suggest
-                      template: "{{ user.name }}"
-                    email:
-                      action: suggest
-                      template: "{{ user.email }}"
+          configSecret: matrix-secret
+          configSecretKey: mas.yaml
 
     matrixRTC:
       enabled: true
