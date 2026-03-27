@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/other/docker-compose.json
+services:
+  vault:
+    image: hashicorp/vault:1.21.4@sha256:4e33b126a59c0c333b76fb4e894722462659a6bec7c48c9ee8cea56fccfd2569
+    container_name: vault
+    restart: unless-stopped
+    command: server
+    configs:
+      - source: vault-config
+        target: /vault/config/config.hcl
+    volumes:
+      - ./data:/vault/data
+    networks:
+      - proxy_network
+    environment:
+      VAULT_ADDR: http://127.0.0.1:8200
+    # ports:
+    #   - 8200:8200
+    # security
+    cap_add:
+      - IPC_LOCK
+    # traefik
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: proxy_network
+      # Vault
+      traefik.http.services.vault.loadbalancer.server.port: "8200"
+      traefik.http.routers.vault.entrypoints: websecure
+      traefik.http.routers.vault.rule: Host(`vault.${ROOT_DOMAIN}`)
+      traefik.http.routers.vault.service: vault
+      traefik.http.routers.vault.tls: true
+      traefik.http.routers.vault.tls.certresolver: letsencrypt
+
+configs:
+  vault-config:
+    file: ./config/config.hcl
+
+networks:
+  proxy_network:
+    external: true
