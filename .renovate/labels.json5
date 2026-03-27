@@ -30,8 +30,12 @@
       addLabels: ["renovate/github-action"],
     },
     {
-      matchDatasources: ["github-releases"],
+      matchDatasources: ["github-releases", "github-tags"],
       addLabels: ["renovate/github-release"],
+    },
+    {
+      matchDatasources: ["terraform-provider", "terraform-module"],
+      addLabels: ["renovate/container"],
     },
   ],
 }
