@@ -2,7 +2,7 @@
 name = "Sync Repositories"
 config.webhook_enabled = false
 config.schedule_format = "Cron"
-config.schedule = "0 */5 * * * *"
+config.schedule = "0 * * * * *"
 
 [[procedure.config.stage]]
 name = "Sync"
