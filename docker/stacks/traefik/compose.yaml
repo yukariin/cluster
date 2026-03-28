@@ -11,8 +11,6 @@ services:
       - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53,9.9.9.9:53
-    environment:
-      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
     configs:
       - source: traefik-config
         target: /etc/traefik/traefik.yml
