@@ -8,6 +8,7 @@ services:
     environment:
       TRAEFIK_CERTIFICATESRESOLVERS_LETSENCRYPT_ACME_EMAIL: ${ACME_EMAIL}
       CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
+      ROOT_DOMAIN: ${ROOT_DOMAIN}
     configs:
       - source: traefik-config
         target: /etc/traefik/traefik.yml
