@@ -1,0 +1,5 @@
+[[server]]
+name = "nas"
+[server.config]
+address = "https://periphery:8120"
+enabled = true
