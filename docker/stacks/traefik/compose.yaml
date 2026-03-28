@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/other/docker-compose.json
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: always
+    command:
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/letsencrypt.json
+      - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53,9.9.9.9:53
+    environment:
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
+    configs:
+      - source: traefik-config
+        target: /etc/traefik/traefik.yml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/extra:/config
+      - ${APPS_DATASET:-/mnt/data_pool/app}/traefik/acme:/etc/traefik/acme
+    networks:
+      - default
+      - proxy_network
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    # security
+    cap_drop:
+      - all
+    security_opt:
+      - no-new-privileges
+    read_only: true
+
+configs:
+  traefik-config:
+    file: ./config/traefik.yaml
+
+networks:
+  proxy_network:
+    external: true

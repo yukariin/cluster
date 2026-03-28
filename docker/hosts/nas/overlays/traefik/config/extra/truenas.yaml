@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/traefik-v3.json
+http:
+  routers:
+    truenas:
+      rule: 'Host(`nas.{{ env "ROOT_DOMAIN" }}`)'
+      entryPoints:
+        - websecure
+      service: truenas
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    truenas:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.10:444"
+        passHostHeader: true
+        serversTransport: insecureSkipVerifyTransport
+
+  serversTransports:
+    insecureSkipVerifyTransport:
+      insecureSkipVerify: true

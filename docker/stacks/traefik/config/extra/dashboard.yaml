@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/traefik-v3.json
+http:
+  routers:
+    dashboard:
+      rule: 'Host(`traefik.{{ env "ROOT_DOMAIN" }}`)'
+      service: api@internal
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt
+    metrics:
+      rule: 'Host(`traefik.{{ env "ROOT_DOMAIN" }}`) && PathPrefix(`/metrics`)'
+      service: prometheus@internal
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt

@@ -1,0 +1,16 @@
+[[stack]]
+name = "traefik"
+[stack.config]
+server = "nas"
+auto_update = true
+repo = "yukariin/cluster"
+webhook_enabled = false
+run_directory = "docker/stacks/traefik"
+environment = """
+ROOT_DOMAIN="[[ROOT_DOMAIN]]"
+ACME_EMAIL="[[ACME_EMAIL]]"
+CF_DNS_API_TOKEN="[[CF_DNS_API_TOKEN]]"
+"""
+pre_deploy.command = """
+cp -r "../../hosts/nas/overlays/traefik/"* .
+"""
