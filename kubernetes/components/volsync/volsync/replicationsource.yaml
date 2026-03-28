@@ -13,6 +13,7 @@ spec:
     compression: zstd-fastest
     copyMethod: "${VOLSYNC_COPYMETHOD:=Snapshot}"
     moverSecurityContext:
+      runAsNonRoot: true
       runAsUser: ${VOLSYNC_PUID:=568}
       runAsGroup: ${VOLSYNC_PGID:=568}
       fsGroup: ${VOLSYNC_PGID:=568}
