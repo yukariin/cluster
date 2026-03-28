@@ -1,0 +1,10 @@
+[[stack]]
+name = "vault"
+[stack.config]
+server = "nas"
+repo = "yukariin/cluster"
+webhook_enabled = false
+run_directory = "docker/stacks/vault"
+environment = """
+ROOT_DOMAIN="[[ROOT_DOMAIN]]"
+"""
