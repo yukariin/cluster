@@ -10,7 +10,7 @@ services:
       - source: vault-config
         target: /vault/config/config.hcl
     volumes:
-      - ./data:/vault/data
+      - ${APPS_DATASET:-/mnt/data_pool/app}/vault/data:/vault/data
     networks:
       - proxy_network
     environment:
