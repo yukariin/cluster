@@ -35,7 +35,16 @@ entryPoints:
       tls:
         certResolver: letsencrypt
 
-# certificatesResolvers configured via CLI args in compose.yaml
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      storage: /etc/traefik/acme/letsencrypt.json
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+          - "9.9.9.9:53"
 
 providers:
   docker:
