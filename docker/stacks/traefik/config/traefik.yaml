@@ -53,3 +53,11 @@ providers:
   file:
     directory: /config
     watch: true
+
+metrics:
+  prometheus:
+    entryPoint: metrics
+    manualRouting: true
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
