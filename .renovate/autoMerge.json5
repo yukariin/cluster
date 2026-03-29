@@ -21,15 +21,6 @@
       ignoreTests: true,
     },
     {
-      description: "Auto-merge trusted container digests",
-      matchDatasources: ["docker"],
-      automerge: true,
-      automergeType: "pr",
-      matchUpdateTypes: ["digest"],
-      matchPackageNames: ["/home-operations/"],
-      ignoreTests: false,
-    },
-    {
       description: "Auto-merge OCI Charts",
       matchDatasources: ["docker"],
       automerge: true,
@@ -37,12 +28,6 @@
       matchUpdateTypes: ["minor", "patch"],
       matchPackageNames: ["/kube-prometheus-stack/", "/grafana/"],
       ignoreTests: false,
-    },
-    {
-      "description": "Trust flux-local docker action",
-      "matchManagers": ["github-actions"],
-      "matchPackageNames": ["ghcr.io/allenporter/flux-local"],
-      "minimumReleaseAge": "0 days"
     },
   ],
 }
