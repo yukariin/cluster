@@ -17,7 +17,6 @@ services:
       - ./config/extra:/config
       - ${APPS_DATASET:-/mnt/data_pool/app}/traefik/acme:/etc/traefik/acme
     networks:
-      - default
       - proxy_network
     ports:
       - "80:80"
