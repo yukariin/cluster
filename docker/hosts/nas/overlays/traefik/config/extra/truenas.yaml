@@ -14,7 +14,7 @@ http:
     truenas:
       loadBalancer:
         servers:
-          - url: "https://192.168.1.10:444"
+          - url: "https://host.docker.internal:444"
         passHostHeader: true
         serversTransport: insecureSkipVerifyTransport
 
