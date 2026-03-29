@@ -29,5 +29,17 @@
       matchPackageNames: ["/kube-prometheus-stack/", "/grafana/"],
       ignoreTests: false,
     },
+    {
+      description: "Do not automerge critical apps",
+      matchPackageNames: [
+        "/siderolabs/",
+        "/kube-apiserver/",
+        "/kube-controller-manager/",
+        "/kube-scheduler/",
+      ],
+      automerge: false,
+      ignoreTests: false,
+      matchUpdateTypes: ["major", "minor", "patch", "pin", "digest"],
+    },
   ],
 }
