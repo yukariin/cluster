@@ -1,0 +1,8 @@
+[[stack]]
+name = "node-exporter"
+[stack.config]
+server = "nas"
+auto_update = true
+repo = "yukariin/cluster"
+webhook_enabled = false
+run_directory = "docker/stacks/node-exporter"
