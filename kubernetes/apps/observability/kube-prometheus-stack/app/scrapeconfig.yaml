@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: node-exporter
+spec:
+  scheme: HTTP
+  staticConfigs:
+    - targets:
+        - nas.local:9100
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: node-exporter
+    - action: replace
+      targetLabel: node
+      replacement: nas
+
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: traefik
+spec:
+  scheme: HTTPS
+  staticConfigs:
+    - targets:
+        - "traefik.${CLUSTER_DOMAIN}"
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: traefik
+    - action: replace
+      targetLabel: node
+      replacement: nas
