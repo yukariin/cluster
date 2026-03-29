@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://schemas.ajgon.casa/volsync.backube/kopiamaintenance_v1alpha1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/volsync.backube/kopiamaintenance_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
 kind: KopiaMaintenance
 metadata:
@@ -10,3 +10,8 @@ spec:
     schedule: "30 4 * * *"
   repository:
     repository: volsync-maintenance-secret
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 568
+    runAsGroup: 568
+    seccompProfile: { type: RuntimeDefault }
