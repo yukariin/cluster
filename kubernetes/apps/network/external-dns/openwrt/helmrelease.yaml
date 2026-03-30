@@ -18,8 +18,9 @@ spec:
         initContainers:
           webhook:
             image:
-              repository: renanqts/external-dns-openwrt-webhook
-              tag: v0.1.0
+              repository: ghcr.io/yukariin/external-dns-openwrt-webhook:latest
+              tag: latest
+              pullPolicy: Always
             env:
               SHUTDOWN_TIMEOUT_SECONDS: "5"
               LOG_LEVEL: info
