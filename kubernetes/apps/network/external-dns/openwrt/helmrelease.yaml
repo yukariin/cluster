@@ -19,7 +19,7 @@ spec:
           webhook:
             image:
               repository: ghcr.io/yukariin/external-dns-openwrt-webhook
-              tag: 0.2.1@sha256:dd0df00c6c8746ee5d2af58885f1db93e45dc3ae99fba08c06ce97858f5cce47
+              tag: 0.2.2@sha256:ed21a8c8d57cc4a0e5c02ec6f65149af3529d50b280dcabbeb4d2ff86509d95e
             env:
               SHUTDOWN_TIMEOUT_SECONDS: "5"
               LOG_LEVEL: info
