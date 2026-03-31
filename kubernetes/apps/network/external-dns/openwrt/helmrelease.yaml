@@ -61,7 +61,7 @@ spec:
               - --gateway-name=internal
               - --interval=1m
               - --log-format=text
-              - --log-level=debug
+              - --log-level=info
               - --policy=sync
               - --provider=webhook
               - --registry=txt
