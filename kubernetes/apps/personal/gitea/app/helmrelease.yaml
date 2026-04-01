@@ -83,7 +83,7 @@ spec:
     persistence:
       enabled: true
       create: false
-      claimName: "{{ .Release.Name }}"
+      claimName: *app
     service:
       ssh:
         type: LoadBalancer
