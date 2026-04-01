@@ -62,7 +62,7 @@ spec:
           FROM: "Gitea <gitea@${CLUSTER_DOMAIN}>"
         cache:
           ADAPTER: redis
-          HOST: &redis_url "redis://rsshub-gitea.personal.svc.cluster.local:6379"
+          HOST: &redis_url "redis://gitea-dragonfly.personal.svc.cluster.local:6379"
         queue:
           TYPE: redis
           CONN_STR: *redis_url
