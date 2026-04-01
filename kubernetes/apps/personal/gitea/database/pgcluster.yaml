@@ -18,13 +18,13 @@ spec:
     enablePodMonitor: true
 
   bootstrap:
-    initdb:
-      database: gitea
-      owner: gitea
-    # recovery:
-    #   source: pg-gitea-restore
+    # initdb:
     #   database: gitea
     #   owner: gitea
+    recovery:
+      source: pg-gitea-restore
+      database: gitea
+      owner: gitea
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
@@ -32,3 +32,11 @@ spec:
       parameters:
         barmanObjectName: pg-gitea-store
         serverName: pg-gitea
+
+  externalClusters:
+    - name: pg-gitea-restore
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: pg-gitea-store
+          serverName: pg-gitea
