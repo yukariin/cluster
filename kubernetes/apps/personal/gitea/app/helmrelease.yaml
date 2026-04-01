@@ -69,12 +69,30 @@ spec:
         session:
           PROVIDER: redis
           PROVIDER_CONFIG: *redis_url
+        openid:
+          ENABLE_OPENID_SIGNIN: false
+          ENABLE_OPENID_SIGNUP: true
+          WHITELISTED_URIS: "authentik.${CLUSTER_DOMAIN}"
+        oauth2_client:
+          ENABLE_AUTO_REGISTRATION: true
+          ACCOUNT_LINKING: auto
+          USERNAME: preferred_username
+          UPDATE_AVATAR: true
+          OPENID_CONNECT_SCOPES: openid email profile groups
         other:
           SHOW_FOOTER_TEMPLATE_LOAD_TIME: false
         ui:
           SHOW_USER_EMAIL: false
         webhook:
           ALLOWED_HOST_LIST: "*.${CLUSTER_DOMAIN}"
+      oauth:
+        - name: Authentik
+          provider: openidConnect
+          existingSecret: *secret
+          autoDiscoverUrl: "https://authentik.${CLUSTER_DOMAIN}/application/o/gitea/.well-known/openid-configuration"
+          groupClaimName: groups
+          adminGroup: admins
+          iconUrl: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/authentik.png
     postgresql:
       enabled: false
     postgresql-ha:
