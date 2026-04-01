@@ -1,0 +1,34 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-gitea
+spec:
+  instances: 1
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+  postgresql:
+    parameters:
+      timezone: ${CLUSTER_TZ}
+  storage:
+    size: 1G
+    storageClass: democratic-csi-hostpath
+  monitoring:
+    enablePodMonitor: true
+
+  bootstrap:
+    initdb:
+      database: gitea
+      owner: gitea
+    # recovery:
+    #   source: pg-gitea-restore
+    #   database: gitea
+    #   owner: gitea
+
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: pg-gitea-store
+        serverName: pg-gitea

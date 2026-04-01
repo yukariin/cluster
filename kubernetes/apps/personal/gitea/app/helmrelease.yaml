@@ -1,0 +1,129 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: gitea
+spec:
+  interval: 15m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 12.5.0
+  url: oci://docker.gitea.com/charts/gitea
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app gitea
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: gitea
+  interval: 1h
+  values:
+    gitea:
+      admin:
+        existingSecret: &secret gitea-secret
+      config:
+        database:
+          DB_TYPE: postgres
+        server:
+          SSH_DOMAIN: "git.${CLUSTER_DOMAIN}"
+          ROOT_URL: "https://gitea.${CLUSTER_DOMAIN}"
+          LANDING_PAGE: explore
+        respository:
+          DEFAULT_BRANCH: main
+          DEFAULT_PRIVATE: true
+        admin:
+          DISABLE_REGULAR_ORG_CREATION: true
+        service:
+          ALLOW_ONLY_EXTERNAL_REGISTRATION: true
+          DEFAULT_KEEP_EMAIL_PRIVATE: true
+          DISABLE_REGISTRATION: false
+          ENABLE_PASSKEY_AUTHENTICATION: false
+          SHOW_REGISTRATION_BUTTON: false
+        cron:
+          ENABLED: true
+        storage:
+          STORAGE_TYPE: minio
+          MINIO_ENDPOINT: "s3.${CLUSTER_DOMAIN}"
+          MINIO_BUCKET: gitea
+          MINIO_USE_SSL: true
+        mailer:
+          ENABLED: true
+          PROTOCOL: smtp
+          SMTP_ADDR: smtp-relay.network.svc.cluster.local
+          SMTP_PORT: 25
+          FROM: "Gitea <gitea@${CLUSTER_DOMAIN}>"
+        cache:
+          ADAPTER: redis
+          HOST: &redis_url "redis://rsshub-gitea.personal.svc.cluster.local:6379"
+        queue:
+          TYPE: redis
+          CONN_STR: *redis_url
+        session:
+          PROVIDER: redis
+          PROVIDER_CONFIG: *redis_url
+        other:
+          SHOW_FOOTER_TEMPLATE_LOAD_TIME: false
+        ui:
+          SHOW_USER_EMAIL: false
+        webhook:
+          ALLOWED_HOST_LIST: "*.${CLUSTER_DOMAIN}"
+    postgresql:
+      enabled: false
+    postgresql-ha:
+      enabled: false
+    valkey-cluster:
+      enabled: false
+    persistence:
+      enabled: true
+      create: false
+      claimName: "{{ .Release.Name }}"
+    service:
+      ssh:
+        type: LoadBalancer
+        port: 22
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: "git.${CLUSTER_DOMAIN}"
+          lbipam.cilium.io/ips: "${CLUSTER_GIT_SSH}"
+  valuesFrom:
+    # Security
+    - kind: Secret
+      name: *secret
+      targetPath: gitea.config.security.SECRET_KEY
+      valuesKey: GITEA_SECRET_KEY
+    - kind: Secret
+      name: *secret
+      targetPath: gitea.config.security.INTERNAL_TOKEN
+      valuesKey: GITEA_INTERNAL_TOKEN
+    # DB
+    - kind: Secret
+      name: pg-gitea-app
+      targetPath: gitea.config.database.HOST
+      valuesKey: host
+    - kind: Secret
+      name: pg-gitea-app
+      targetPath: gitea.config.database.NAME
+      valuesKey: username
+    - kind: Secret
+      name: pg-gitea-app
+      targetPath: gitea.config.database.USER
+      valuesKey: username
+    - kind: Secret
+      name: pg-gitea-app
+      targetPath: gitea.config.database.PASSWD
+      valuesKey: password
+    # S3
+    - kind: Secret
+      name: *secret
+      targetPath: gitea.config.storage.MINIO_ACCESS_KEY_ID
+      valuesKey: GITEA_AWS_ACCESS_KEY_ID
+    - kind: Secret
+      name: *secret
+      targetPath: gitea.config.storage.MINIO_SECRET_ACCESS_KEY
+      valuesKey: GITEA_AWS_SECRET_ACCESS_KEY
