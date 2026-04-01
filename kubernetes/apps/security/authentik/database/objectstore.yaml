@@ -11,7 +11,7 @@ spec:
     endpointURL: "https://s3.${CLUSTER_DOMAIN}"
     s3Credentials:
       region:
-        name: pg-gitea-store-secret
+        name: pg-authentik-store-secret
         key: AWS_REGION
       accessKeyId:
         name: pg-authentik-store-secret
