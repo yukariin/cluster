@@ -53,6 +53,7 @@ spec:
           MINIO_ENDPOINT: "s3.${CLUSTER_DOMAIN}"
           MINIO_BUCKET: gitea
           MINIO_USE_SSL: true
+          MINIO_LOCATION: eu-central-1
         mailer:
           ENABLED: true
           PROTOCOL: smtp
