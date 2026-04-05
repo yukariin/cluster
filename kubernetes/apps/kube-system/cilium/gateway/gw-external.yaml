@@ -14,21 +14,17 @@ spec:
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
-  addresses:
-    - type: IPAddress
-      value: ${CLUSTER_LB_EXT_GATEWAY}
+      lbipam.cilium.io/ips: "${CLUSTER_LB_EXT_GATEWAY}"
   listeners:
     - name: http
       port: 80
       protocol: HTTP
-      hostname: "*.${CLUSTER_DOMAIN}"
       allowedRoutes:
         namespaces:
           from: All
     - name: https
       port: 443
       protocol: HTTPS
-      hostname: "*.${CLUSTER_DOMAIN}"
       allowedRoutes:
         namespaces:
           from: All
