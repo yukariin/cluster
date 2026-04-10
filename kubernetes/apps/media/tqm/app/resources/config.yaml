@@ -22,7 +22,7 @@ filters:
       # Don't touch very recently added torrents
       - SeedingHours < 26 && !IsUnregistered()
       # Don't touch perma-seeded torrents
-      - HasTag("permaseed") && !IsUnregistered()
+      - HasAnyTag("permaseed") && !IsUnregistered()
 
     remove:
       # Remove unregistered torrents (after 1 day grace period)
