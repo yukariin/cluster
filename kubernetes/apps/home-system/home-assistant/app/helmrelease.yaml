@@ -90,6 +90,7 @@ spec:
         ports:
           http:
             appProtocol: kubernetes.io/ws
+            port: 80
             targetPort: 8123
     serviceMonitor:
       app:
