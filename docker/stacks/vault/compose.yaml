@@ -20,6 +20,7 @@ services:
     # security
     cap_add:
       - IPC_LOCK
+      - SETFCAP
     # traefik
     labels:
       traefik.enable: "true"
