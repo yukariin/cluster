@@ -74,6 +74,11 @@ spec:
             subPath: media/youtube
       tmp:
         type: emptyDir
+        globalMounts:
+          - subPath: tmp
+            path: /tmp
+          - subPath: yt-dlp
+            path: /etc/yt-dlp
     route:
       app:
         hostnames:
