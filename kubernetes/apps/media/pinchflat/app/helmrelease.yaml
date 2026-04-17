@@ -79,7 +79,7 @@ spec:
       media:
         type: nfs
         server: nas.lan
-        path: /mnt/cache/merger/data
+        path: /mnt/data_pool/data
         advancedMounts:
           *app :
             app:
