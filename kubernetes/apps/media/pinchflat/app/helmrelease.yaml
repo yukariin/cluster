@@ -82,9 +82,11 @@ spec:
         type: nfs
         server: nas.lan
         path: /mnt/cache/merger/data
-        globalMounts:
-          - path: /downloads
-            subPath: media/youtube
+        advancedMounts:
+          *app :
+            app:
+              - path: /downloads
+                subPath: media/youtube
       tmp:
         type: emptyDir
         advancedMounts:
