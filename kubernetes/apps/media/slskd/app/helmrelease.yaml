@@ -86,7 +86,7 @@ spec:
       media:
         type: nfs
         server: nas.lan
-        path: /mnt/data_pool/data
+        path: /mnt/cache/merger/data
       tmpfs:
         type: emptyDir
         globalMounts:
