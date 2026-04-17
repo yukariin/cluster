@@ -15,7 +15,7 @@ spec:
       *app :
         containers:
           app:
-            image:
+            image: &img
               repository: ghcr.io/kieraneglin/pinchflat
               tag: latest@sha256:01b4f98aabaf3f5fe394213f7a32578c9e84e42080f52e2f8334021a4473b202
             env:
@@ -41,7 +41,7 @@ spec:
                 spec:
                   periodSeconds: 10
                   failureThreshold: 30
-            securityContext:
+            securityContext: &sc
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: { drop: ["ALL"] }
@@ -53,6 +53,19 @@ spec:
               limits:
                 memory: 512Mi
                 gpu.intel.com/i915: 1
+        initContainers:
+          ytdlp-updates:
+            image: *img
+            command:
+              - "/bin/sh"
+              - "-c"
+              - |
+                cp -r /usr/local/bin/* /local/
+            securityContext: *sc
+            resources:
+              requests:
+                cpu: 5m
+                memory: 10M
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -74,11 +87,19 @@ spec:
             subPath: media/youtube
       tmp:
         type: emptyDir
-        globalMounts:
-          - subPath: tmp
-            path: /tmp
-          - subPath: yt-dlp
-            path: /etc/yt-dlp
+        advancedMounts:
+          *app :
+            app:
+              - subPath: tmp
+                path: /tmp
+              - subPath: yt-dlp
+                path: /etc/yt-dlp
+              # ytdlp update
+              - subPath: local
+                path: /usr/local/bin
+            ytdlp-updates:
+              - subPath: local
+                path: /local
     route:
       app:
         hostnames:
