@@ -68,7 +68,7 @@ spec:
       media:
         type: nfs
         server: nas.lan
-        path: /mnt/data_pool/data
+        path: /mnt/cache/merger/data
         globalMounts:
           - path: /downloads
             subPath: media/youtube
