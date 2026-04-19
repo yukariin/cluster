@@ -94,6 +94,9 @@ spec:
             subPath: logs
           - path: /tmp
             subPath: tmp
+          # HACK: https://github.com/slskd/slskd/issues/1706
+          - path: /app
+            subPath: app
     route:
       app:
         hostnames:
