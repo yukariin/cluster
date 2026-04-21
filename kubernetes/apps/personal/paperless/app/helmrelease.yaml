@@ -87,7 +87,7 @@ spec:
           - path: /usr/src/paperless/data
       data:
         type: nfs
-        server: nas.lan
+        server: nas.internal
         path: /mnt/data_pool/documents
     route:
       app:

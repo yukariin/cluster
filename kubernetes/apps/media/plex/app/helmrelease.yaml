@@ -70,7 +70,7 @@ spec:
           - path: "/config/Library/Application Support/Plex Media Server/Cache"
       media:
         type: nfs
-        server: nas.lan
+        server: nas.internal
         path: /mnt/data_pool/data
         globalMounts:
           - readOnly: true

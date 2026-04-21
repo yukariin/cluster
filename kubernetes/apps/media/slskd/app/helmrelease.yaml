@@ -85,7 +85,7 @@ spec:
             readOnly: true
       media:
         type: nfs
-        server: nas.lan
+        server: nas.internal
         path: /mnt/data_pool/data
       tmpfs:
         type: emptyDir

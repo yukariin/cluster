@@ -31,7 +31,7 @@ spec:
               DANBOORU_CANONICAL_URL: &appUrl "https://booru.${CLUSTER_DOMAIN}"
               DANBOORU_REDIS_URL: "redis://danbooru-dragonfly.image.svc.cluster.local:6379"
               DANBOORU_IQDB_URL: "http://iqdb.image.svc.cluster.local:5588"
-              DANBOORU_AUTOTAGGER_URL: "http://nas.lan:5000"
+              DANBOORU_AUTOTAGGER_URL: "http://nas.internal:5000"
               DANBOORU_MAIL_DELIVERY_URL: "smtp://smtp-relay.network.svc.cluster.local:25?openssl_verify_mode=none"
               DANBOORU_IMAGE_STORAGE_PATH: /images
               K8S_NODE_NAME:
@@ -158,7 +158,7 @@ spec:
             readOnly: true
       images:
         type: nfs
-        server: nas.lan
+        server: nas.internal
         path: /mnt/data_pool/danbooru
       tmp:
         type: emptyDir
