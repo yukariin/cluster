@@ -1,0 +1,105 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app external-dns-unifi
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    controllers:
+      *app :
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          webhook:
+            image:
+              repository: ghcr.io/kashalls/external-dns-unifi-webhook
+              tag: v0.8.2@sha256:7f0ddbbc83a36a2a9d762e25eef9cafcb3adf0493068a27d72ae71087eafe6f0
+            env:
+              UNIFI_HOST: https://unifi.internal
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: &port 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /readyz
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+            restartPolicy: Always
+            securityContext: &sc
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+        containers:
+          app:
+            image:
+              repository: registry.k8s.io/external-dns/external-dns
+              tag: v0.21.0@sha256:f53faaf71cb270d1ca9dce6ea0c94bfebf1a18696263487f0fbc74b9bf2bd7ff
+            args:
+              - --domain-filter=${CLUSTER_DOMAIN}
+              - --events
+              - --gateway-name=internal
+              - --interval=1m
+              - --log-format=text
+              - --log-level=info
+              - --policy=sync
+              - --provider=webhook
+              - --registry=txt
+              - --source=gateway-httproute
+              - --source=service
+              - --txt-owner-id=k8s
+              - --txt-prefix=k8s.
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /healthz
+                    port: &port 7979
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+            securityContext: *sc
+        serviceAccount:
+          name: *app
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        seccompProfile: { type: RuntimeDefault }
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: http
