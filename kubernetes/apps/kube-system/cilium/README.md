@@ -1,8 +1,28 @@
 # Cilium
 
+## UniFi (FRR)
+
+```shell
+router bgp 64512
+  bgp router-id 192.168.1.1 # UDM Pro's BGP router ID (its LAN IP)
+  no bgp ebgp-requires-policy # Standard practice for eBGP
+
+  neighbor k8s peer-group # Using a peer-group for organization
+  neighbor k8s remote-as 64513 # ASN of the Cilium BGP (must match localASN in CiliumBGPClusterConfig)
+
+  neighbor 192.168.1.100 peer-group k8s # control-lane
+  neighbor 192.168.1.110 peer-group k8s # worker
+
+  address-family ipv4 unicast
+    neighbor k8s next-hop-self # Important: UDM advertises itself as the next hop
+    neighbor k8s soft-reconfiguration inbound # Allows policy changes without session reset
+  exit-address-family
+exit
+```
+
 ## Old (BIRD2)
 
-```conf
+```shell
 log syslog all;
 log stderr all;
 
