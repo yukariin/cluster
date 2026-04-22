@@ -10,8 +10,8 @@ spec:
       rules:
         - alert: ExternalDNSCloudflareStale
           expr: |-
-            time() - external_dns_controller_last_sync_timestamp_seconds{job="external-dns-cloudflare"} > 60
-          for: 5m
+            time() - external_dns_controller_last_sync_timestamp_seconds{job="external-dns-cloudflare"} > 300
+          for: 10m
           annotations:
             summary: >-
               ExternalDNS ({{ $labels.job }}) has not synced successfully in the last five minutes
