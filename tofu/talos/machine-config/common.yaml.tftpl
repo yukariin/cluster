@@ -2,6 +2,8 @@
 machine:
   kubelet:
     ${indent(4, kubelet)}
+  nodeAnnotations:
+    tuppr.home-operations.com/schematic: ${schematic_id}
   nodeLabels:
     topology.kubernetes.io/region: ${cluster_name}
     topology.kubernetes.io/zone: ${node_name}
