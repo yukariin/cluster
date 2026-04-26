@@ -75,6 +75,7 @@ data "talos_machine_configuration" "this" {
       vip                = var.cluster.vip
       kubelet            = var.cluster.kubelet
       datastore_size     = each.value.datastore != null ? each.value.datastore.size : null
+      schematic_id       = each.value.update == true ? local.update_schematic_id : local.schematic_id
     }),
     each.value.machine_type == "controlplane" ?
     templatefile("${path.module}/machine-config/control-plane.yaml.tftpl", {
