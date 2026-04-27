@@ -15,11 +15,6 @@ spec:
     namespace: flux-system
   targetNamespace: rss
   wait: true
-  healthChecks:
-    - apiVersion: postgresql.cnpg.io/v1
-      kind: Cluster
-      name: pg-miniflux
-      namespace: rss
   dependsOn:
     - name: cloudnative-pg
     - name: democratic-csi
