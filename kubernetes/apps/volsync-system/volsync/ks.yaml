@@ -34,6 +34,5 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: volsync-system
-  wait: true
   dependsOn:
     - name: volsync
