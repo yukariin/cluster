@@ -21,3 +21,4 @@ resources:
   - slskd/ks.yaml
   - sonarr/ks.yaml
   - tqm/ks.yaml
+  - unpackerr/ks.yaml
