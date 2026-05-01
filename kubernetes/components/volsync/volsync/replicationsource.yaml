@@ -9,7 +9,8 @@ spec:
   trigger:
     schedule: "15 */8 * * *"
   kopia:
-    accessModes: ["${VOLSYNC_SNAP_ACCESSMODES:=ReadWriteOnce}"]
+    accessModes:
+      - "${VOLSYNC_SNAP_ACCESSMODES:=ReadWriteOnce}"
     compression: zstd-fastest
     copyMethod: "${VOLSYNC_COPYMETHOD:=Snapshot}"
     moverSecurityContext:
@@ -18,7 +19,7 @@ spec:
       runAsGroup: ${VOLSYNC_PGID:=568}
       fsGroup: ${VOLSYNC_PGID:=568}
       fsGroupChangePolicy: OnRootMismatch
-      seccompProfile: { type: RuntimeDefault }
+      seccompProfile: {type: RuntimeDefault}
     parallelism: 2
     repository: "${APP}-volsync-secret"
     retain:

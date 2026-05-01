@@ -10,8 +10,9 @@ spec:
   trigger:
     manual: restore-once
   kopia:
-    accessModes: ["${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"]
-    capacity: "${VOLSYNC_CAPACITY:=1Gi}"
+    accessModes:
+      - "${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"
+    capacity: "${VOLSYNC_CAPACITY:=5Gi}"
     cleanupCachePVC: true
     cleanupTempPVC: true
     copyMethod: Snapshot
@@ -22,7 +23,7 @@ spec:
       runAsGroup: ${VOLSYNC_PGID:=568}
       fsGroup: ${VOLSYNC_PGID:=568}
       fsGroupChangePolicy: OnRootMismatch
-      seccompProfile: { type: RuntimeDefault }
+      seccompProfile: {type: RuntimeDefault}
     repository: "${APP}-volsync-secret"
     sourceIdentity:
       sourceName: "${APP}"
