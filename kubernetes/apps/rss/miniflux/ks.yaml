@@ -4,8 +4,10 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: miniflux-database
-  namespace: flux-system
 spec:
+  dependsOn:
+    - name: cloudnative-pg
+    - name: democratic-csi
   interval: 1h
   path: kubernetes/apps/rss/miniflux/database
   prune: true
@@ -15,9 +17,6 @@ spec:
     namespace: flux-system
   targetNamespace: rss
   wait: true
-  dependsOn:
-    - name: cloudnative-pg
-    - name: democratic-csi
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -25,8 +24,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: miniflux
-  namespace: flux-system
 spec:
+  dependsOn:
+    - name: miniflux-database
   interval: 1h
   path: kubernetes/apps/rss/miniflux/app
   prune: true
@@ -35,5 +35,3 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: rss
-  dependsOn:
-    - name: miniflux-database
