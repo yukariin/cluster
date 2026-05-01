@@ -82,7 +82,7 @@ spec:
           - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
           - "st.${CLUSTER_DOMAIN}"
         parentRefs:
-          - {name: internal, namespace: kube-system}
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app
