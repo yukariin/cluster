@@ -4,20 +4,14 @@ MINIJINJA_CONFIG_FILE = "{{config_root | canonicalize}}/.minijinja.toml"
 TALOSCONFIG = "{{config_root | canonicalize}}/talosconfig"
 LEFTHOOK_OUTPUT = "false"
 
+_.file = [
+  "{{config_root}}/.secrets.env",
+]
+
 [hooks]
 enter = "just doctor"
 
 [tools]
-"just" = "1.50.0"
-"kubectl" = "1.36.0"
-"flux2" = "2.8.6"
-"talosctl" = "1.13.0"
-"helm" = "4.1.4"
-"helmfile" = "1.4.4"
-"kustomize" = "5.8.1"
-"cargo:minijinja-cli" = "2.19.0"
-"gum" = "0.17.0"
-"yq" = "4.53.2"
-"jq" = "1.8.1"
-"uv" = "0.11.8"
-"pipx:flux-local" = "8.2.0"
+"just" = "latest"
+"uv" = "latest"
+"pipx:flux-local" = "latest"

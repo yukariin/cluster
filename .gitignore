@@ -75,6 +75,7 @@ talosconfig
 *.decrypted~*
 *.raw.*
 sealed-secrets.*
+.secrets.env
 
 # Charts
 charts
