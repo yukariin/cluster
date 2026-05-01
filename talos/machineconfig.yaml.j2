@@ -3,9 +3,9 @@
 version: v1alpha1
 machine:
   ca:
-    crt: '{{ ENV[".machine.ca.crt"] }}'
+    crt: '{{ ENV.MACHINE_CA_CRT }}'
     {% if ENV.IS_CONTROLLER %}
-    key: '{{ ENV[".machine.ca.key"] }}'
+    key: '{{ ENV.MACHINE_CA_KEY }}'
     {% endif %}
 
   features:
@@ -53,7 +53,7 @@ machine:
   install:
     diskSelector:
       model: Samsung SSD 870
-    image: factory.talos.dev/installer/cfd2afa428fa5a48f71d9c0583c2fd870ce72d610861bc6f051bc55abf6c65b2:v1.13.0
+    image: factory.talos.dev/installer/25fe611b44c192926d877f38683bcf87215ca12f5e08fbc4637cd51171e1c963:v1.13.0
     wipe: false
 
   kernel:
@@ -105,7 +105,7 @@ machine:
     net.ipv4.tcp_rmem: 4096 87380 33554432 # Performant receive buffer tuning (min, default, max in bytes)
     net.ipv4.tcp_wmem: 4096 65536 33554432 # Performant send buffer tuning (min, default, max in bytes)
 
-  token: '{{ ENV[".machine.token"] }}'
+  token: '{{ ENV.MACHINE_TOKEN }}'
 
   udev:
     rules:
@@ -118,9 +118,9 @@ machine:
 
 cluster:
   ca:
-    crt: '{{ ENV[".cluster.ca.crt"] }}'
+    crt: '{{ ENV.CLUSTER_CA_CRT }}'
     {% if ENV.IS_CONTROLLER %}
-    key: '{{ ENV[".cluster.ca.key"] }}'
+    key: '{{ ENV.CLUSTER_CA_KEY }}'
     {% endif %}
 
   clusterName: k8s
@@ -136,7 +136,7 @@ cluster:
       service:
         disabled: false
 
-  id: '{{ ENV[".cluster.id"] }}'
+  id: '{{ ENV.CLUSTER_ID }}'
 
   network:
     cni:
@@ -147,13 +147,13 @@ cluster:
     serviceSubnets:
       - 10.43.0.0/16
 
-  secret: '{{ ENV[".cluster.secret"] }}'
-  token: '{{ ENV[".cluster.token"] }}'
+  secret: '{{ ENV.CLUSTER_SECRET }}'
+  token: '{{ ENV.CLUSTER_TOKEN }}'
 
   {% if ENV.IS_CONTROLLER %}
   aggregatorCA:
-    crt: '{{ ENV[".cluster.aggregatorCA.crt"] }}'
-    key: '{{ ENV[".cluster.aggregatorCA.key"] }}'
+    crt: '{{ ENV.CLUSTER_AGGREGATOR_CA_CRT }}'
+    key: '{{ ENV.CLUSTER_AGGREGATOR_CA_KEY }}'
 
   allowSchedulingOnControlPlanes: true
 
@@ -187,8 +187,8 @@ cluster:
     advertisedSubnets:
       - 192.168.30.0/24
     ca:
-      crt: '{{ ENV[".cluster.etcd.ca.crt"] }}'
-      key: '{{ ENV[".cluster.etcd.ca.key"] }}'
+      crt: '{{ ENV.CLUSTER_ETCD_CA_CRT }}'
+      key: '{{ ENV.CLUSTER_ETCD_CA_KEY }}'
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
 
@@ -218,10 +218,10 @@ cluster:
       bind-address: 0.0.0.0
     image: registry.k8s.io/kube-scheduler:v1.36.0
 
-  secretboxEncryptionSecret: '{{ ENV[".cluster.secretboxEncryptionSecret"] }}'
+  secretboxEncryptionSecret: '{{ ENV.CLUSTER_SECRETBOX_ENCRYPTION_SECRET }}'
 
   serviceAccount:
-    key: '{{ ENV[".cluster.serviceAccount.key"] }}'
+    key: '{{ ENV.CLUSTER_SERVICE_ACCOUNT_KEY }}'
   {% endif %}
 
 ---
