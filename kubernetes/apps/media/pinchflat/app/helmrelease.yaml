@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         containers:
           app:
             image: &img
@@ -44,7 +44,7 @@ spec:
             securityContext: &sc
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -71,8 +71,9 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [65537]
-        seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 65537
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
@@ -81,14 +82,14 @@ spec:
         server: nas.internal
         path: /mnt/data_pool/data
         advancedMounts:
-          *app :
+          *app:
             app:
               - path: /downloads
                 subPath: media/youtube
       tmp:
         type: emptyDir
         advancedMounts:
-          *app :
+          *app:
             app:
               - subPath: tmp
                 path: /tmp
@@ -105,7 +106,7 @@ spec:
         hostnames:
           - "pinchflat.${CLUSTER_DOMAIN}"
         parentRefs:
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app
