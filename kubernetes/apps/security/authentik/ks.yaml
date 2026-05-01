@@ -4,8 +4,10 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: authentik-database
-  namespace: flux-system
 spec:
+  dependsOn:
+    - name: cloudnative-pg
+    - name: democratic-csi
   interval: 1h
   path: kubernetes/apps/security/authentik/database
   prune: true
@@ -15,9 +17,6 @@ spec:
     namespace: flux-system
   targetNamespace: security
   wait: true
-  dependsOn:
-    - name: cloudnative-pg
-    - name: democratic-csi
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -25,8 +24,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: authentik
-  namespace: flux-system
 spec:
+  dependsOn:
+    - name: authentik-database
   interval: 1h
   path: kubernetes/apps/security/authentik/app
   prune: true
@@ -36,8 +36,6 @@ spec:
     namespace: flux-system
   targetNamespace: security
   wait: true
-  dependsOn:
-    - name: authentik-database
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -45,8 +43,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: authentik-provision
-  namespace: flux-system
 spec:
+  dependsOn:
+    - name: authentik
   interval: 1h
   path: kubernetes/apps/security/authentik/provision
   prune: true
@@ -55,5 +54,4 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: security
-  dependsOn:
-    - name: authentik
+  wait: true
