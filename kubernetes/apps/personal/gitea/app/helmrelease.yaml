@@ -109,7 +109,7 @@ spec:
         port: 22
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "git.${CLUSTER_DOMAIN}"
-          lbipam.cilium.io/ips: "${CLUSTER_GIT_SSH}"
+          lbipam.cilium.io/ips: 192.168.100.125
   valuesFrom:
     # Security
     - kind: Secret

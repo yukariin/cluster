@@ -19,7 +19,7 @@ spec:
               repository: ghcr.io/home-operations/plex
               tag: 1.43.1.10611@sha256:a9c3723cb31cc9621df27cf5801184c290293adf1df2bfaea4b8b6fc01dbfd96
             env:
-              PLEX_ADVERTISE_URL: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}:443,http://${CLUSTER_LB_PLEX}:32400"
+              PLEX_ADVERTISE_URL: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}:443,http://192.168.100.99:32400"
               PLEX_NO_AUTH_NETWORKS: 192.168.1.0/24
               TZ: ${CLUSTER_TZ}
             probes:
@@ -110,7 +110,7 @@ spec:
       direct:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: ${CLUSTER_LB_PLEX}
+          lbipam.cilium.io/ips: 192.168.100.99
         externalTrafficPolicy: Local
         ports:
           http:

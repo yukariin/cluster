@@ -118,7 +118,7 @@ spec:
       soulseek:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: ${CLUSTER_LB_SOULSEEK}
+          lbipam.cilium.io/ips: 192.168.100.100
         externalTrafficPolicy: Local
         ports:
           soulseek:
