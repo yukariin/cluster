@@ -20,4 +20,4 @@ log lvl msg *args:
 
 [private]
 template context file *args:
-    envconsul -secret="homelab/{{ context }}" -once -no-prefix minijinja-cli --strict "{{ file }}" {{ args }} 2> /dev/null
+    envconsul -secret="homelab/{{ context }}" -once -no-prefix minijinja-cli --strict "{{ file }}" {{ args }}
