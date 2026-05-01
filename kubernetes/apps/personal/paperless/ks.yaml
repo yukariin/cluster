@@ -11,7 +11,9 @@ spec:
     - ../../../../components/volsync
   dependsOn:
     - name: democratic-csi
+      namespace: democratic-csi
     - name: dragonfly
+      namespace: database
   interval: 1h
   path: kubernetes/apps/personal/paperless/app
   prune: true

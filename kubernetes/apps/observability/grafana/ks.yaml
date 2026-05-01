@@ -25,6 +25,7 @@ spec:
   dependsOn:
     - name: grafana
     - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/observability/grafana/instance
   prune: true

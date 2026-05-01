@@ -9,6 +9,7 @@ spec:
     - ../../../../components/dragonfly
   dependsOn:
     - name: dragonfly
+      namespace: database
   interval: 1h
   path: kubernetes/apps/rss/rsshub/app
   prune: true

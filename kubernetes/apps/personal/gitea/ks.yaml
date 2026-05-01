@@ -7,7 +7,9 @@ metadata:
 spec:
   dependsOn:
     - name: cloudnative-pg
+      namespace: database
     - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/personal/gitea/database
   prune: true
@@ -31,6 +33,7 @@ spec:
   dependsOn:
     - name: gitea-database
     - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/personal/gitea/app
   prune: true

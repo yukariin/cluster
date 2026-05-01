@@ -24,6 +24,7 @@ metadata:
 spec:
   dependsOn:
     - name: cloudnative-pg
+      namespace: database
   interval: 1h
   path: kubernetes/apps/database/cloudnative-pg/plugin-barman-cloud
   prune: true

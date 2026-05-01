@@ -9,6 +9,7 @@ spec:
     - ../../../../components/volsync
   dependsOn:
     - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/media/jellyseerr/app
   prune: true

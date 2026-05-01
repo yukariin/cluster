@@ -7,7 +7,9 @@ metadata:
 spec:
   dependsOn:
     - name: cloudnative-pg
+      namespace: database
     - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/rss/miniflux/database
   prune: true
