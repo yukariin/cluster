@@ -4,8 +4,11 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: kopia
-  namespace: flux-system
 spec:
+  components:
+    - ../../../../components/keda
+  dependsOn:
+    - name: volsync
   interval: 1h
   path: kubernetes/apps/volsync-system/kopia/app
   prune: true
@@ -14,5 +17,3 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: volsync-system
-  dependsOn:
-    - name: volsync
