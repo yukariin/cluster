@@ -1,18 +1,31 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumloadbalancerippool_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: pool
+spec:
+  allowFirstLastIPs: "No"
+  blocks:
+    - cidr: 192.168.100.0/24
+
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgpadvertisement_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
-  name: advertise-service-ips
+  name: l3-bgp-advertisement
   labels:
     advertise: bgp
 spec:
   advertisements:
     - advertisementType: Service
-      service: { addresses: ["LoadBalancerIP"] }
+      service:
+        addresses:
+          - LoadBalancerIP
       selector:
         matchExpressions:
-          - { key: somekey, operator: NotIn, values: ["never-used-value"] }
+          - {key: somekey, operator: NotIn, values: ["never-used-value"],}
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumbgppeerconfig_v2.json
@@ -39,10 +52,10 @@ spec:
     matchLabels:
       kubernetes.io/os: linux
   bgpInstances:
-    - name: cilium-instance
+    - name: cilium
       localASN: 64513
       peers:
-        - name: bpi-r4
+        - name: unifi
           peerASN: 64512
           peerAddress: 192.168.1.1
           peerConfigRef:
