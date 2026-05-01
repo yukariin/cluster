@@ -8,8 +8,8 @@ metadata:
       url: "https://matrix.${CLUSTER_DOMAIN}/.well-known/matrix/client"
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   hostnames:
     - "matrix.${CLUSTER_DOMAIN}"
   rules:
@@ -48,8 +48,8 @@ metadata:
   name: matrix-auth-service
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   hostnames:
     - "matrix-auth.${CLUSTER_DOMAIN}"
   rules:
@@ -69,8 +69,8 @@ metadata:
   name: matrix-element
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   hostnames:
     - "element.${CLUSTER_DOMAIN}"
   rules:
@@ -90,8 +90,8 @@ metadata:
   name: matrix-rtc
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   hostnames:
     - "rtc.${CLUSTER_DOMAIN}"
   rules:
@@ -122,7 +122,7 @@ metadata:
   name: matrix-admin
 spec:
   parentRefs:
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-internal, namespace: network}
   hostnames:
     - "matrix-admin.${CLUSTER_DOMAIN}"
   rules:
