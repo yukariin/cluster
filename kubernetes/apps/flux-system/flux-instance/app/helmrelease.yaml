@@ -88,6 +88,14 @@ spec:
             target:
               kind: Deployment
               name: source-controller
+          - # Cache Secrets and ConfigMaps
+            patch: |-
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --feature-gates=CacheSecretsAndConfigMaps=true
+            target:
+              kind: Deployment
+              name: source-controller
           - # Flux near OOM detection for Helm
             patch: |-
               - op: add
@@ -110,36 +118,6 @@ spec:
             target:
               kind: Deployment
               name: helm-controller
-          # KustomizeController SOPS decryption for all Kustomizations
-          - patch: |-
-              apiVersion: kustomize.toolkit.fluxcd.io/v1
-              kind: Kustomization
-              metadata:
-                name: flux-system
-                namespace: flux-system
-              spec:
-                decryption:
-                  provider: sops
-                  secretRef:
-                    name: sops-age
-                postBuild:
-                  substitute: {}
-                  substituteFrom:
-                    - kind: ConfigMap
-                      name: cluster-config
-                    - kind: Secret
-                      name: cluster-secret
-            target:
-              kind: Kustomization
-              name: flux-system
-          - # Controller-level SOPS decryption
-            patch: |-
-              - op: add
-                path: /spec/template/spec/containers/0/args/-
-                value: --sops-age-secret=sops-age
-            target:
-              kind: Deployment
-              name: kustomize-controller
           - # Watch ConfigMaps and Secrets attached to HelmReleases and Kustomizations
             patch: |-
               - op: add
