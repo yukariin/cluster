@@ -23,7 +23,7 @@ spec:
               pullPolicy: Always
             env:
               NODE_ENV: production
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
               SILLYTAVERN_PORT: &port 80
               SILLYTAVERN_WHITELIST: '["10.244.0.0/16", "192.168.10.0/24"]'
             probes:
@@ -79,8 +79,8 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
-          - "st.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
+          - "st.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

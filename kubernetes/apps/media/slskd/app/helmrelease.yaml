@@ -21,7 +21,7 @@ spec:
               repository: ghcr.io/slskd/slskd
               tag: 0.25.1@sha256:ab9ed50e028b524cefdb7c1dd8ebca368a076e18441ee8ac2326473eb850b4c3
             env:
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
               DOTNET_BUNDLE_EXTRACT_BASE_DIR: /tmp/.net
               SLSKD_APP_DIR: /config
               SLSKD_REMOTE_CONFIGURATION: false
@@ -101,7 +101,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

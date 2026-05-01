@@ -21,7 +21,7 @@ spec:
               repository: ghcr.io/home-operations/kopia
               tag: 0.22.3@sha256:17ab64542280197a5368247deaefadc3e3bbe15714ab666c2455a06824e86efd
             env:
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
               KOPIA_WEB_ENABLED: "true"
               KOPIA_WEB_PORT: &port 8080
             envFrom:
@@ -77,7 +77,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

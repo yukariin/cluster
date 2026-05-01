@@ -28,7 +28,7 @@ spec:
               RACK_REQUEST_TIMEOUT: "120"
               # App settings
               DANBOORU_APP_NAME: Booru
-              DANBOORU_CANONICAL_URL: &appUrl "https://booru.${CLUSTER_DOMAIN}"
+              DANBOORU_CANONICAL_URL: &appUrl "https://booru.mistelinn.org"
               DANBOORU_REDIS_URL: "redis://danbooru-dragonfly.image.svc.cluster.local:6379"
               DANBOORU_IQDB_URL: "http://iqdb.image.svc.cluster.local:5588"
               DANBOORU_AUTOTAGGER_URL: "http://nas.internal:5000"
@@ -179,7 +179,7 @@ spec:
     route:
       app:
         hostnames:
-          - "booru.${CLUSTER_DOMAIN}"
+          - "booru.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

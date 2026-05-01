@@ -28,7 +28,7 @@ spec:
   scheme: HTTPS
   staticConfigs:
     - targets:
-        - "traefik.${CLUSTER_DOMAIN}"
+        - "traefik.mistelinn.org"
   metricsPath: /metrics
   relabelings:
     - action: replace

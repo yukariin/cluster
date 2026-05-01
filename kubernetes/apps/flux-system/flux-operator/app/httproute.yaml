@@ -7,7 +7,7 @@ spec:
   parentRefs:
     - {name: envoy-internal, namespace: network}
   hostnames:
-    - "flux.${CLUSTER_DOMAIN}"
+    - "flux.mistelinn.org"
   rules:
     - backendRefs:
         - name: flux-operator

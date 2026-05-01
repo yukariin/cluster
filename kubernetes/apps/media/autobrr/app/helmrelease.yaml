@@ -28,7 +28,7 @@ spec:
               AUTOBRR__METRICS_PORT: &metricsPort 8080
               AUTOBRR__CHECK_FOR_UPDATES: false
               AUTOBRR__LOG_LEVEL: INFO
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
@@ -87,7 +87,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

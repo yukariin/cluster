@@ -5,13 +5,13 @@ metadata:
   name: matrix-synapse
   annotations:
     gatus.home-operations.com/endpoint: |-
-      url: "https://matrix.${CLUSTER_DOMAIN}/.well-known/matrix/client"
+      url: "https://matrix.mistelinn.org/.well-known/matrix/client"
 spec:
   parentRefs:
     - {name: envoy-external, namespace: network}
     - {name: envoy-internal, namespace: network}
   hostnames:
-    - "matrix.${CLUSTER_DOMAIN}"
+    - "matrix.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-well-known
@@ -51,7 +51,7 @@ spec:
     - {name: envoy-external, namespace: network}
     - {name: envoy-internal, namespace: network}
   hostnames:
-    - "matrix-auth.${CLUSTER_DOMAIN}"
+    - "matrix-auth.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-matrix-authentication-service
@@ -72,7 +72,7 @@ spec:
     - {name: envoy-external, namespace: network}
     - {name: envoy-internal, namespace: network}
   hostnames:
-    - "element.${CLUSTER_DOMAIN}"
+    - "element.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-element-web
@@ -93,7 +93,7 @@ spec:
     - {name: envoy-external, namespace: network}
     - {name: envoy-internal, namespace: network}
   hostnames:
-    - "rtc.${CLUSTER_DOMAIN}"
+    - "rtc.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-matrix-rtc-authorisation-service
@@ -124,7 +124,7 @@ spec:
   parentRefs:
     - {name: envoy-internal, namespace: network}
   hostnames:
-    - "matrix-admin.${CLUSTER_DOMAIN}"
+    - "matrix-admin.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-element-admin

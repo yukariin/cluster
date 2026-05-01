@@ -21,14 +21,14 @@ spec:
               repository: vaultwarden/server
               tag: 1.36.0@sha256:d626d04934cd1192ad8ced1adb975099fca78cec33ab467d2d3c923cde7f3b0c
             env:
-              TZ: ${CLUSTER_TZ}
-              DOMAIN: "https://passwords.${CLUSTER_DOMAIN}"
+              TZ: Europe/Moscow
+              DOMAIN: "https://passwords.mistelinn.org"
               ROCKET_PORT: &port 80
               ICON_CACHE_FOLDER: "icons"
               TMP_FOLDER: "/tmp"
               SIGNUPS_ALLOWED: "false"
               SMTP_FROM_NAME: vaultwarden
-              SMTP_FROM: "vaultwarden@${CLUSTER_DOMAIN}"
+              SMTP_FROM: "vaultwarden@mistelinn.org"
               SMTP_HOST: smtp-relay.network.svc.cluster.local
               SMTP_PORT: 25
               SMTP_SECURITY: "off"
@@ -77,9 +77,9 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://passwords.${CLUSTER_DOMAIN}/alive"
+            url: "https://passwords.mistelinn.org/alive"
         hostnames:
-          - "passwords.${CLUSTER_DOMAIN}"
+          - "passwords.mistelinn.org"
         parentRefs:
           - {name: envoy-external, namespace: network}
           - {name: envoy-internal, namespace: network}

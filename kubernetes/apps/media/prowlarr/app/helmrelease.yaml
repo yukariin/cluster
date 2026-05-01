@@ -28,7 +28,7 @@ spec:
               PROWLARR__LOG__LEVEL: info
               PROWLARR__SERVER__PORT: &port 80
               PROWLARR__UPDATE__BRANCH: develop
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
@@ -78,7 +78,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

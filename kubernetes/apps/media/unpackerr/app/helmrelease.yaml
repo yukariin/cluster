@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         annotations:
           reloader.stakater.com/auto: 'true'
         containers:
@@ -21,7 +21,7 @@ spec:
               repository: docker.io/golift/unpackerr
               tag: 0.15.2@sha256:057e34740d26c34d81ec8e2faf8ec11f8dbfc77489b7a42826f52b37e5ee1b6c
             env:
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
               UN_SONARR_0_URL: http://sonarr.media.svc.cluster.local
               UN_SONARR_0_PATHS_0: /media/torrents/complete/tv-sonarr
               UN_RADARR_0_URL: http://radarr.media.svc.cluster.local
@@ -32,7 +32,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -46,7 +46,7 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       media:
         type: nfs

@@ -23,7 +23,7 @@ spec:
             env:
               LOG_LEVEL: info
               PORT: &port 80
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
@@ -74,10 +74,10 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://jellyseerr.${CLUSTER_DOMAIN}/api/v1/status"
+            url: "https://jellyseerr.mistelinn.org/api/v1/status"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
-          - "requests.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
+          - "requests.mistelinn.org"
         parentRefs:
           - {name: envoy-external, namespace: network}
           - {name: envoy-internal, namespace: network}

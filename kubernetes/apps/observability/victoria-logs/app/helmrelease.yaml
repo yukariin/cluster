@@ -36,7 +36,7 @@ spec:
       route:
         enabled: true
         hostnames:
-          - "logs.${CLUSTER_DOMAIN}"
+          - "logs.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         extraRules:

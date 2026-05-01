@@ -21,7 +21,7 @@ spec:
               repository: ghcr.io/autobrr/qui
               tag: v1.18.0@sha256:2e768c8509831afd1f606d27d9aa8e5f3fc722fac4ea88acfdc4fa3b0e9b13ae
             env:
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
               QUI__HOST: 0.0.0.0
               QUI__PORT: &port 80
               QUI__LOG_LEVEL: INFO
@@ -65,7 +65,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

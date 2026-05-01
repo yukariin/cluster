@@ -7,7 +7,7 @@ spec:
   parentRefs:
     - {name: envoy-internal, namespace: network}
   hostnames:
-    - "gitea.${CLUSTER_DOMAIN}"
+    - "gitea.mistelinn.org"
   rules:
     - backendRefs:
         - name: gitea-http

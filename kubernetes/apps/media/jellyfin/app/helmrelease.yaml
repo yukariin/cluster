@@ -19,8 +19,8 @@ spec:
               repository: ghcr.io/jellyfin/jellyfin
               tag: 10.11.8@sha256:93227545077893cc9516f28b3adb733b67bc4691f41b6167428a2a0e3220b81c
             env:
-              JELLYFIN_PublishedServerUrl: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}"
-              TZ: ${CLUSTER_TZ}
+              JELLYFIN_PublishedServerUrl: "https://{{ .Release.Name }}.mistelinn.org"
+              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
@@ -87,9 +87,9 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://jellyfin.${CLUSTER_DOMAIN}/health"
+            url: "https://jellyfin.mistelinn.org/health"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-external, namespace: network}
           - {name: envoy-internal, namespace: network}

@@ -9,10 +9,12 @@ spec:
   instances: 1
   managed:
     services:
-      disabledDefaultServices: ["ro", "r"]
+      disabledDefaultServices:
+        - "ro"
+        - "r"
   postgresql:
     parameters:
-      timezone: ${CLUSTER_TZ}
+      timezone: Europe/Moscow
   storage:
     size: 10G
     storageClass: democratic-csi-hostpath

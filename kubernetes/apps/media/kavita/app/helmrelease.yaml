@@ -19,7 +19,7 @@ spec:
               repository: ghcr.io/kareadita/kavita
               tag: 0.9.0@sha256:36aab0c578d488f8b10bd33910953b50965aff9ac6adc476ef4692c38c60427e
             env:
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
@@ -82,7 +82,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

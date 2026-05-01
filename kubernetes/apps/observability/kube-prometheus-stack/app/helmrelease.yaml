@@ -32,11 +32,11 @@ spec:
         main:
           enabled: true
           hostnames:
-            - "alertmanager.${CLUSTER_DOMAIN}"
+            - "alertmanager.mistelinn.org"
           parentRefs:
             - {name: envoy-internal, namespace: network}
       alertmanagerSpec:
-        externalUrl: "https://alertmanager.${CLUSTER_DOMAIN}"
+        externalUrl: "https://alertmanager.mistelinn.org"
         alertmanagerConfiguration:
           name: alertmanager
           global:
@@ -62,11 +62,11 @@ spec:
         main:
           enabled: true
           hostnames:
-            - "prometheus.${CLUSTER_DOMAIN}"
+            - "prometheus.mistelinn.org"
           parentRefs:
             - {name: envoy-internal, namespace: network}
       prometheusSpec:
-        externalUrl: "https://prometheus.${CLUSTER_DOMAIN}"
+        externalUrl: "https://prometheus.mistelinn.org"
         version: v2.55.1 # override 'unsupported Prometheus version' error
         image:
           registry: mirror.gcr.io

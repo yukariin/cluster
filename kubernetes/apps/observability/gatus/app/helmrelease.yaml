@@ -33,7 +33,7 @@ spec:
               GATUS_DELAY_START_SECONDS: 5
               GATUS_WEB_PORT: &port 80
               GATUS_CONFIG_PATH: /config
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
@@ -74,8 +74,8 @@ spec:
         annotations:
           gatus.home-operations.com/enabled: "false"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
-          - "status.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
+          - "status.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

@@ -19,7 +19,7 @@ spec:
               repository: ghcr.io/home-operations/qbittorrent
               tag: 5.2.0@sha256:08eb7ed4c7fe70425064d58154c35fccc89fafffd64ce9d1affed399e173ff20
             env:
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
               QBT_TORRENTING_PORT: &bittorrentPort 50413
               QBT_WEBUI_PORT: &port 80
             probes:
@@ -86,8 +86,8 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
-          - "qb.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
+          - "qb.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

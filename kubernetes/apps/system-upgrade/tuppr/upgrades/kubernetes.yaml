@@ -10,7 +10,7 @@ spec:
     windows:
       - start: "0 4 * * 0"
         duration: "4h"
-        timezone: "${CLUSTER_TZ}"
+        timezone: "Europe/Moscow"
   healthChecks:
     - apiVersion: volsync.backube/v1alpha1
       kind: ReplicationSource

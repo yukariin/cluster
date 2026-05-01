@@ -23,9 +23,9 @@ spec:
             env:
               # Application
               PAPERLESS_PORT: &port 80
-              PAPERLESS_TIME_ZONE: "${CLUSTER_TZ}"
+              PAPERLESS_TIME_ZONE: "Europe/Moscow"
               PAPERLESS_DATE_ORDER: MDY
-              PAPERLESS_URL: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+              PAPERLESS_URL: "https://{{ .Release.Name }}.mistelinn.org"
               # Encoding
               # WARNING: for German / Russian PDFs it is required to set "PDF" renderer instead of "PDF/A" in paperless-ngx settings
               # See: https://github.com/ocrmypdf/OCRmyPDF/issues/1297
@@ -92,7 +92,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:

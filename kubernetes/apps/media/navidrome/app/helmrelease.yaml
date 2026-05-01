@@ -19,8 +19,8 @@ spec:
               repository: ghcr.io/navidrome/navidrome
               tag: 0.61.2@sha256:9fa40b3d8dec43ceb2213d1fa551da3dcfef6ac6d19c2e534efb92527c2bafd2
             env:
-              TZ: ${CLUSTER_TZ}
-              ND_BASEURL: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+              TZ: Europe/Moscow
+              ND_BASEURL: "https://{{ .Release.Name }}.mistelinn.org"
               ND_DATAFOLDER: /config
               ND_CACHEFOLDER: /config/cache
               ND_MUSICFOLDER: /music
@@ -88,9 +88,9 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://navidrome.${CLUSTER_DOMAIN}/ping"
+            url: "https://navidrome.mistelinn.org/ping"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
           - {name: envoy-external, namespace: network}
           - {name: envoy-internal, namespace: network}
