@@ -55,6 +55,11 @@ machine:
       model: Samsung SSD 870
     image: factory.talos.dev/installer-secureboot/c2608fc6180b97b3ac51873f9d0de0bf61e48ff13e53d38a303bb73f9079b4f8:v1.13.0
     wipe: false
+  
+  time:
+    servers:
+      - 192.168.90.1    # UDM-P gateway on homelab VLAN - prefer local over internet
+      - time.cloudflare.com
 
   kernel:
     modules:
@@ -77,7 +82,7 @@ machine:
 
   nodeLabels:
     node.kubernetes.io/gpu: "true"
-    topology.kubernetes.io/region: main
+    topology.kubernetes.io/region: homelab
 
   sysctls:
     fs.inotify.max_user_instances: "8192" # More inotify events
@@ -103,6 +108,26 @@ machine:
     # net.ipv4.tcp_wmem: 4096 65536 8388608  # Conservative send buffer tuning (min, default, max in bytes)
     net.ipv4.tcp_rmem: 4096 87380 33554432 # Performant receive buffer tuning (min, default, max in bytes)
     net.ipv4.tcp_wmem: 4096 65536 33554432 # Performant send buffer tuning (min, default, max in bytes)
+
+  sysfs:
+    devices.system.cpu.intel_pstate.hwp_dynamic_boost: 1
+
+  systemDiskEncryption:
+    state:
+      provider: luks2
+      keys:
+        - slot: 0
+          tpm: {}
+    ephemeral:
+      provider: luks2
+      keys:
+        - slot: 0
+          tpm: {}
+
+  network:
+    nameservers:
+      - 192.168.90.1    # UDM-P gateway on homelab VLAN - prefer local over internet
+      - 1.1.1.1
 
   token: '{{ ENV.MACHINE_TOKEN }}'
 
