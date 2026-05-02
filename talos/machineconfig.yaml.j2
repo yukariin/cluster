@@ -110,7 +110,10 @@ machine:
     net.ipv4.tcp_wmem: 4096 65536 33554432 # Performant send buffer tuning (min, default, max in bytes)
 
   sysfs:
-    devices.system.cpu.intel_pstate.hwp_dynamic_boost: 1
+    devices.system.cpu.intel_pstate.hwp_dynamic_boost: "1"
+    {% for i in range(22) %}
+    devices.system.cpu.cpu{{ i }}.cpufreq.energy_performance_preference: balance_performance
+    {% endfor %}
 
   systemDiskEncryption:
     state:

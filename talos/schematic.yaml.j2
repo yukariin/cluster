@@ -13,7 +13,7 @@ customization:
     - talos.auditd.disabled=1       # Disable Linux audit daemon (too much noise)
 
     # Hardware
-    - i915.enable_guc=3                     # Alder Lake CPU / iGPU, hw transcoding
+    - i915.enable_guc=3                     # Meteor Lake CPU / iGPU, hw transcoding
     - intel_iommu=on                        # Enable IOMMU
     - iommu=pt                              # Use passthrough mode for IOMMU
     - sysctl.kernel.kexec_load_disabled=1   # Security hardening (kexec makes SecureBoot pointless)
