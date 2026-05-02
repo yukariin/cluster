@@ -11,7 +11,7 @@ item shell                Drop to iPXE shell
 item reboot               Reboot computer
 item
 item --key x exit         Exit iPXE and continue BIOS boot
-choose --timeout ${menu-timeout} --default alpine selected || goto cancel
+choose --timeout ${menu-timeout} --default talos selected || goto cancel
 set menu-timeout 0
 goto ${selected}
 
