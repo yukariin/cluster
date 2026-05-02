@@ -73,7 +73,7 @@ machine:
     image: ghcr.io/siderolabs/kubelet:v1.36.0
     nodeIP:
       validSubnets:
-        - 192.168.30.0/24
+        - 192.168.90.0/24
 
   nodeLabels:
     node.kubernetes.io/gpu: "true"
@@ -184,7 +184,7 @@ cluster:
 
   etcd:
     advertisedSubnets:
-      - 192.168.30.0/24
+      - 192.168.90.0/24
     ca:
       crt: '{{ ENV.CLUSTER_ETCD_CA_CRT }}'
       key: '{{ ENV.CLUSTER_ETCD_CA_KEY }}'
