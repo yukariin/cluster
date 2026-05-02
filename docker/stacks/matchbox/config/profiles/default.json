@@ -1,0 +1,7 @@
+{
+  "id": "default",
+  "name": "default",
+  "boot": {
+    "kernel": "https://matchbox.mistelinn.org/assets/default.ipxe"
+  }
+}
