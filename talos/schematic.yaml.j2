@@ -13,13 +13,16 @@ customization:
     - talos.auditd.disabled=1       # Disable Linux audit daemon (too much noise)
 
     # Hardware
-    - amd_iommu=on                          # Enable IOMMU
+    - i915.enable_guc=3                     # Alder Lake CPU / iGPU, hw transcoding
+    - intel_iommu=on                        # Enable IOMMU
     - iommu=pt                              # Use passthrough mode for IOMMU
-    - amd_pstate=active                     # Better CPU frequency scaling for Zen 4
-    - amd_pstate.shared_mem=1               # Shared memory for P-State driver
-    - initcall_blacklist=acpi_cpufreq_init  # Prevent conflict with amd_pstate
-    - amdgpu.ppfeaturemask=0xffffffff       # Enable all AMD GPU features
     - sysctl.kernel.kexec_load_disabled=1   # Security hardening (kexec makes SecureBoot pointless)
+    - thunderbolt.force_power=1             # Thunderbolt NICs
+
+    # in secureboot, talos locks down to "confidentiality" mode by default, which may break cilium
+    # more info: https://github.com/siderolabs/talos/pull/8535
+    - -lockdown
+    - lockdown=integrity
 
     # System
     - net.ifnames=0                 # Classic ethernet names
@@ -30,9 +33,10 @@ customization:
 
   systemExtensions:
     officialExtensions:
-      - siderolabs/amd-ucode            # AMD CPU microcode
-      - siderolabs/amdgpu               # AMD GPU drivers
-      - siderolabs/thunderbolt          # Thunderbolt NICs
+      - siderolabs/i915                 # Intel GPU drivers
+      - siderolabs/intel-ucode          # Intel CPU microcode
+      - siderolabs/mei                  # Intel iGPU
       - siderolabs/nfsrahead            # NFS Performance
       - siderolabs/nvme-cli             # NVMe command line tools
+      - siderolabs/thunderbolt          # Thunderbolt NICs
       - siderolabs/util-linux-tools     # Useful Linux tools

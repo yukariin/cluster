@@ -53,7 +53,7 @@ machine:
   install:
     diskSelector:
       model: Samsung SSD 870
-    image: factory.talos.dev/installer/25fe611b44c192926d877f38683bcf87215ca12f5e08fbc4637cd51171e1c963:v1.13.0
+    image: factory.talos.dev/installer-secureboot/c2608fc6180b97b3ac51873f9d0de0bf61e48ff13e53d38a303bb73f9079b4f8:v1.13.0
     wipe: false
 
   kernel:
@@ -94,7 +94,6 @@ machine:
     net.ipv4.tcp_mtu_probing: "1" # Enable MTU probing in case of ICMP blackholes
     net.ipv4.tcp_slow_start_after_idle: "0" # Handle traffic bursts better
     net.ipv4.tcp_window_scaling: "1" # Enable TCP window scaling to go beyond 64KB receive windows
-    # net.ipv6.conf.all.disable_ipv6: "1" # Not used, causes lot of headaches
     sunrpc.tcp_max_slot_table_entries: "128" # Faster NFS
     sunrpc.tcp_slot_table_entries: "128" # Faster NFS
     user.max_user_namespaces: "11255" # User Namespaces
