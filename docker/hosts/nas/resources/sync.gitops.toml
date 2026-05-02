@@ -1,7 +1,0 @@
-[[resource_sync]]
-name = "gitops"
-[resource_sync.config]
-repo = "yukariin/cluster"
-webhook_enabled = false
-delete = true
-resource_path = ["docker/hosts/nas/resources"]
