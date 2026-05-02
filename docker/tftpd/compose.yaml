@@ -6,8 +6,8 @@ services:
     container_name: tftpd
     restart: unless-stopped
     environment:
-      TFTPD_BIND_ADDRESSi: "0.0.0.0:1069"
-      TFTPD_EXTRA_ARGSi: "--blocksize 1468"
+      TFTPD_BIND_ADDRESS: "0.0.0.0:1069"
+      TFTPD_EXTRA_ARGS: "--blocksize 1468"
     volumes:
       - ${APPS_DATASET:-/mnt/data_pool/app}/tftpd/data:/tftpboot
     ports:
