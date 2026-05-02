@@ -21,7 +21,6 @@ machine:
     {% if ENV.IS_CONTROLLER %}
     kubernetesTalosAPIAccess:
       allowedKubernetesNamespaces:
-        - actions-runner-system
         - system-upgrade
       allowedRoles:
         - os:admin
