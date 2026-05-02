@@ -16,13 +16,8 @@ customization:
     - i915.enable_guc=3                     # Meteor Lake CPU / iGPU, hw transcoding
     - intel_iommu=on                        # Enable IOMMU
     - iommu=pt                              # Use passthrough mode for IOMMU
-    - sysctl.kernel.kexec_load_disabled=1   # Security hardening (kexec makes SecureBoot pointless)
+    - sysctl.kernel.kexec_load_disabled=1   # Security hardening
     - thunderbolt.force_power=1             # Thunderbolt NICs
-
-    # in secureboot, talos locks down to "confidentiality" mode by default, which may break cilium
-    # more info: https://github.com/siderolabs/talos/pull/8535
-    - -lockdown
-    - lockdown=integrity
 
     # System
     - net.ifnames=0                 # Classic ethernet names

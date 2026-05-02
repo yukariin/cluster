@@ -53,7 +53,7 @@ machine:
   install:
     diskSelector:
       model: Samsung SSD 870
-    image: factory.talos.dev/installer-secureboot/c2608fc6180b97b3ac51873f9d0de0bf61e48ff13e53d38a303bb73f9079b4f8:v1.13.0
+    image: factory.talos.dev/metal-installer/c2608fc6180b97b3ac51873f9d0de0bf61e48ff13e53d38a303bb73f9079b4f8:v1.13.0
     wipe: false
   
   time:
@@ -114,18 +114,6 @@ machine:
     {% for i in range(22) %}
     devices.system.cpu.cpu{{ i }}.cpufreq.energy_performance_preference: balance_performance
     {% endfor %}
-
-  systemDiskEncryption:
-    state:
-      provider: luks2
-      keys:
-        - slot: 0
-          tpm: {}
-    ephemeral:
-      provider: luks2
-      keys:
-        - slot: 0
-          tpm: {}
 
   network:
     nameservers:
