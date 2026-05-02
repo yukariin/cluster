@@ -12,10 +12,16 @@ services:
     configs:
       - source: groups-default
         target: /var/lib/matchbox/groups/default.json
+      - source: groups-test-vm
+        target: /var/lib/matchbox/groups/test-vm.json
       - source: profiles-default
         target: /var/lib/matchbox/profiles/default.json
+      - source: profiles-talos-nuc
+        target: /var/lib/matchbox/profiles/talos-nuc.json
       - source: assets-default-ipxe
         target: /var/lib/matchbox/assets/default.ipxe
+      - source: assets-talos-nuc-ipxe
+        target: /var/lib/matchbox/assets/talos-nuc.ipxe
     volumes:
       - ${APPS_DATASET:-/mnt/data_pool/app}/matchbox/config:/var/lib/matchbox
       - ${APPS_DATASET:-/mnt/data_pool/app}/matchbox/assets:/var/lib/matchbox/assets
@@ -42,10 +48,16 @@ services:
 configs:
   groups-default:
     file: ./config/groups/default.json
+  groups-test-vm:
+    file: ./config/groups/test-vm.json
   profiles-default:
     file: ./config/profiles/default.json
+  profiles-talos-nuc:
+    file: ./config/profiles/talos-nuc.json
   assets-default-ipxe:
     file: ./config/assets/default.ipxe
+  assets-talos-nuc-ipxe:
+    file: ./config/assets/talos-nuc.ipxe
 
 networks:
   proxy_network:

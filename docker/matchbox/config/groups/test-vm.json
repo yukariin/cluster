@@ -1,0 +1,8 @@
+{
+  "id": "test-vm",
+  "name": "test-vm",
+  "profile": "talos-nuc",
+  "selector": {
+    "mac": "BC:24:11:AA:CA:E3"
+  }
+}
