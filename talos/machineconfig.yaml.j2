@@ -111,9 +111,6 @@ machine:
 
   sysfs:
     devices.system.cpu.intel_pstate.hwp_dynamic_boost: "1"
-    {% for i in range(22) %}
-    devices.system.cpu.cpu{{ i }}.cpufreq.energy_performance_preference: balance_performance
-    {% endfor %}
 
   systemDiskEncryption:
     ephemeral:
