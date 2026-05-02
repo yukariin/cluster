@@ -13,7 +13,10 @@ customization:
     - talos.auditd.disabled=1       # Disable Linux audit daemon (too much noise)
 
     # Hardware
-    - i915.enable_guc=3                     # Meteor Lake CPU / iGPU, hw transcoding
+    - i915.enable_dc=0                      # Prevents random hard freezes on newer Intel chips
+    - i915.enable_guc=3                     # Enable GuC and HuC for better graphics performance and stability
+    - i915.force_probe=!7d55                # Disable iGPU deviceID for i915
+    - xe.force_probe=7d55                   # Enable iGPU deviceID for xe
     - intel_iommu=on                        # Enable IOMMU
     - iommu=pt                              # Use passthrough mode for IOMMU
     - sysctl.kernel.kexec_load_disabled=1   # Security hardening
@@ -34,6 +37,7 @@ customization:
   systemExtensions:
     officialExtensions:
       - siderolabs/i915                 # Intel GPU drivers
+      - siderolabs/xe                   # Intel GPU drivers
       - siderolabs/intel-ucode          # Intel CPU microcode
       - siderolabs/mei                  # Intel iGPU
       - siderolabs/nfsrahead            # NFS Performance
