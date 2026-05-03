@@ -31,7 +31,7 @@ spec:
       sync:
         kind: GitRepository
         url: https://github.com/yukariin/cluster
-        ref: refs/heads/main
+        ref: refs/heads/baremetal
         path: kubernetes/flux/cluster
       kustomize:
         patches:
