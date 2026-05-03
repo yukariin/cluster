@@ -3,11 +3,8 @@
 set quiet
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-# bootstrap new cluster from scratch
 mod bootstrap "bootstrap"
-# manage talos cluster
 mod talos "talos"
-# manage kubernetes cluster
 mod kube "kubernetes"
 
 [private]
