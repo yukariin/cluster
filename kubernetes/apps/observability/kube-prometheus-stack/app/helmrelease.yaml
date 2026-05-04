@@ -36,11 +36,11 @@ spec:
           parentRefs:
             - {name: envoy-internal, namespace: network}
       alertmanagerSpec:
-        externalUrl: "https://alertmanager.mistelinn.org"
         alertmanagerConfiguration:
           name: alertmanager
           global:
             resolveTimeout: 5m
+        externalUrl: "https://alertmanager.mistelinn.org"
         storage:
           volumeClaimTemplate:
             spec:
