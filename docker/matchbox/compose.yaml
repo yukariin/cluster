@@ -14,6 +14,8 @@ services:
         target: /var/lib/matchbox/groups/default.json
       - source: groups-test-vm
         target: /var/lib/matchbox/groups/test-vm.json
+      - source: groups-sakuya
+        target: /var/lib/matchbox/groups/sakuya.json
       - source: profiles-default
         target: /var/lib/matchbox/profiles/default.json
       - source: profiles-talos-nuc
@@ -50,6 +52,8 @@ configs:
     file: ./config/groups/default.json
   groups-test-vm:
     file: ./config/groups/test-vm.json
+  groups-sakuya:
+    file: ./config/groups/sakuya.json
   profiles-default:
     file: ./config/profiles/default.json
   profiles-talos-nuc:
