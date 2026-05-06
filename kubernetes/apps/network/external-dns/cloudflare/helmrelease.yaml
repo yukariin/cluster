@@ -25,13 +25,14 @@ spec:
               - --cloudflare-proxied
               - --domain-filter=mistelinn.org
               - --events
-              - --gateway-name=external
+              - --gateway-name=envoy-external
               - --interval=1m
               - --log-format=text
               - --log-level=info
               - --policy=sync
               - --provider=cloudflare
               - --registry=txt
+              - --source=crd
               - --source=gateway-httproute
               - --txt-owner-id=k8s
               - --txt-prefix=k8s.
