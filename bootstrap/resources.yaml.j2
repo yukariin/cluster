@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-secret
+  namespace: external-secrets
+stringData:
+  secretId: "{{ ENV.VAULT_APPROLE_SECRET }}"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloudflare-tunnel-id-secret
+  namespace: network
+stringData:
+  CLOUDFLARE_TUNNEL_ID: "{{ ENV.CLOUDFLARE_TUNNEL_ID }}"

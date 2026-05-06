@@ -53,7 +53,7 @@ spec:
         host: "smtp-relay.network.svc.cluster.local"
         port: 25
         use_tls: false
-        from: "Authentik <noreply@${CLUSTER_DOMAIN}>"
+        from: "Authentik <noreply@mistelinn.org>"
       postgresql:
         host: pg-authentik-rw
 
@@ -64,9 +64,9 @@ spec:
           annotations:
             gatus.home-operations.com/endpoint: |-
               name: authentik
-              url: "https://authentik.${CLUSTER_DOMAIN}/-/health/live/"
+              url: "https://authentik.mistelinn.org/-/health/live/"
           hostnames:
-            - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+            - "{{ .Release.Name }}.mistelinn.org"
           parentRefs:
-            - { name: external, namespace: kube-system }
-            - { name: internal, namespace: kube-system }
+            - {name: envoy-external, namespace: network}
+            - {name: envoy-internal, namespace: network}

@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -26,7 +26,7 @@ spec:
               BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
               BAZARR__LOG_LEVEL: info
               BAZARR__PORT: &port 80
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
@@ -55,7 +55,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -69,7 +69,7 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
@@ -80,7 +80,7 @@ spec:
       tmpfs:
         type: emptyDir
         advancedMounts:
-          *app :
+          *app:
             app:
               - path: /config/cache
                 subPath: cache
@@ -91,9 +91,9 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app

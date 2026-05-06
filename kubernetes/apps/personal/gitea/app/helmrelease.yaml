@@ -32,8 +32,8 @@ spec:
         database:
           DB_TYPE: postgres
         server:
-          SSH_DOMAIN: "git.${CLUSTER_DOMAIN}"
-          ROOT_URL: "https://gitea.${CLUSTER_DOMAIN}"
+          SSH_DOMAIN: "git.mistelinn.org"
+          ROOT_URL: "https://gitea.mistelinn.org"
           LANDING_PAGE: explore
         respository:
           DEFAULT_BRANCH: main
@@ -50,7 +50,7 @@ spec:
           ENABLED: true
         storage:
           STORAGE_TYPE: minio
-          MINIO_ENDPOINT: "s3.${CLUSTER_DOMAIN}"
+          MINIO_ENDPOINT: "s3.mistelinn.org"
           MINIO_BUCKET: gitea
           MINIO_USE_SSL: true
           MINIO_LOCATION: eu-central-1
@@ -59,7 +59,7 @@ spec:
           PROTOCOL: smtp
           SMTP_ADDR: smtp-relay.network.svc.cluster.local
           SMTP_PORT: 25
-          FROM: "Gitea <gitea@${CLUSTER_DOMAIN}>"
+          FROM: "Gitea <gitea@mistelinn.org>"
         cache:
           ADAPTER: redis
           HOST: &redis_url "redis://gitea-dragonfly.personal.svc.cluster.local:6379"
@@ -72,7 +72,7 @@ spec:
         openid:
           ENABLE_OPENID_SIGNIN: false
           ENABLE_OPENID_SIGNUP: true
-          WHITELISTED_URIS: "authentik.${CLUSTER_DOMAIN}"
+          WHITELISTED_URIS: "authentik.mistelinn.org"
         oauth2_client:
           ENABLE_AUTO_REGISTRATION: true
           ACCOUNT_LINKING: auto
@@ -84,12 +84,12 @@ spec:
         ui:
           SHOW_USER_EMAIL: false
         webhook:
-          ALLOWED_HOST_LIST: "*.${CLUSTER_DOMAIN}"
+          ALLOWED_HOST_LIST: "*.mistelinn.org"
       oauth:
         - name: Authentik
           provider: openidConnect
           existingSecret: *secret
-          autoDiscoverUrl: "https://authentik.${CLUSTER_DOMAIN}/application/o/gitea/.well-known/openid-configuration"
+          autoDiscoverUrl: "https://authentik.mistelinn.org/application/o/gitea/.well-known/openid-configuration"
           groupClaimName: groups
           adminGroup: admins
           iconUrl: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/authentik.png
@@ -108,8 +108,8 @@ spec:
         type: LoadBalancer
         port: 22
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "git.${CLUSTER_DOMAIN}"
-          lbipam.cilium.io/ips: "${CLUSTER_GIT_SSH}"
+          external-dns.alpha.kubernetes.io/hostname: "git.mistelinn.org"
+          lbipam.cilium.io/ips: 192.168.100.125
   valuesFrom:
     # Security
     - kind: Secret

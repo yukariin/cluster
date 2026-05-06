@@ -5,13 +5,13 @@ metadata:
   name: matrix-synapse
   annotations:
     gatus.home-operations.com/endpoint: |-
-      url: "https://matrix.${CLUSTER_DOMAIN}/.well-known/matrix/client"
+      url: "https://matrix.mistelinn.org/.well-known/matrix/client"
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   hostnames:
-    - "matrix.${CLUSTER_DOMAIN}"
+    - "matrix.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-well-known
@@ -48,10 +48,10 @@ metadata:
   name: matrix-auth-service
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   hostnames:
-    - "matrix-auth.${CLUSTER_DOMAIN}"
+    - "matrix-auth.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-matrix-authentication-service
@@ -69,10 +69,10 @@ metadata:
   name: matrix-element
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   hostnames:
-    - "element.${CLUSTER_DOMAIN}"
+    - "element.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-element-web
@@ -90,10 +90,10 @@ metadata:
   name: matrix-rtc
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   hostnames:
-    - "rtc.${CLUSTER_DOMAIN}"
+    - "rtc.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-matrix-rtc-authorisation-service
@@ -122,9 +122,9 @@ metadata:
   name: matrix-admin
 spec:
   parentRefs:
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-internal, namespace: network}
   hostnames:
-    - "matrix-admin.${CLUSTER_DOMAIN}"
+    - "matrix-admin.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-element-admin

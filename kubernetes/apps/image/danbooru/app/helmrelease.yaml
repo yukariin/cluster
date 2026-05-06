@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         strategy: RollingUpdate
         annotations: &annotations
           reloader.stakater.com/auto: "true"
@@ -28,7 +28,7 @@ spec:
               RACK_REQUEST_TIMEOUT: "120"
               # App settings
               DANBOORU_APP_NAME: Booru
-              DANBOORU_CANONICAL_URL: &appUrl "https://booru.${CLUSTER_DOMAIN}"
+              DANBOORU_CANONICAL_URL: &appUrl "https://booru.mistelinn.org"
               DANBOORU_REDIS_URL: "redis://danbooru-dragonfly.image.svc.cluster.local:6379"
               DANBOORU_IQDB_URL: "http://iqdb.image.svc.cluster.local:5588"
               DANBOORU_AUTOTAGGER_URL: "http://nas.internal:5000"
@@ -64,14 +64,17 @@ spec:
                   failureThreshold: 3
               readiness: *appProbes
             lifecycle: &lifecycle
-              preStop: { exec: { command: ["sleep", "15"] }}
+              preStop: {exec: {command: ["sleep", "15"]}}
             securityContext: &containerSec
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
           openresty:
             image: *image
-            args: ["openresty", "-e", "/dev/stderr"]
+            args:
+              - "openresty"
+              - "-e"
+              - "/dev/stderr"
             env:
               DANBOORU_CANONICAL_URL: *appUrl
             probes:
@@ -98,7 +101,9 @@ spec:
         containers:
           db-migrate-job:
             image: *image
-            args: ["bin/rails", "db:migrate"]
+            args:
+              - "bin/rails"
+              - "db:migrate"
             env: *env
             envFrom: *envFrom
             securityContext: *containerSec
@@ -106,7 +111,9 @@ spec:
         containers:
           app:
             image: *image
-            args: ["bin/rails", "danbooru:cron"]
+            args:
+              - "bin/rails"
+              - "danbooru:cron"
             env: *env
             envFrom: *envFrom
             securityContext: *containerSec
@@ -115,7 +122,12 @@ spec:
         containers:
           app:
             image: *image
-            args: ["bin/good_job", "start", "--poll-interval=60", "--max-threads=4", "--probe-port=7001"]
+            args:
+              - "bin/good_job"
+              - "start"
+              - "--poll-interval=60"
+              - "--max-threads=4"
+              - "--probe-port=7001"
             env: *env
             envFrom: *envFrom
             probes:
@@ -147,7 +159,7 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       nginx-config:
         type: configMap
@@ -167,9 +179,9 @@ spec:
     route:
       app:
         hostnames:
-          - "booru.${CLUSTER_DOMAIN}"
+          - "booru.mistelinn.org"
         parentRefs:
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app

@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
@@ -52,16 +52,16 @@ spec:
             securityContext: &sc
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
         containers:
           app:
             image:
               repository: registry.k8s.io/external-dns/external-dns
               tag: v0.21.0@sha256:f53faaf71cb270d1ca9dce6ea0c94bfebf1a18696263487f0fbc74b9bf2bd7ff
             args:
-              - --domain-filter=${CLUSTER_DOMAIN}
+              - --domain-filter=mistelinn.org
               - --events
-              - --gateway-name=internal
+              - --gateway-name=envoy-internal
               - --interval=1m
               - --log-format=text
               - --log-level=info
@@ -93,7 +93,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 568
         runAsGroup: 568
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       app:
         ports:

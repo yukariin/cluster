@@ -12,16 +12,16 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         containers:
           app:
             image:
               repository: ghcr.io/home-operations/plex
               tag: 1.43.1.10611@sha256:a9c3723cb31cc9621df27cf5801184c290293adf1df2bfaea4b8b6fc01dbfd96
             env:
-              PLEX_ADVERTISE_URL: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}:443,http://${CLUSTER_LB_PLEX}:32400"
+              PLEX_ADVERTISE_URL: "https://{{ .Release.Name }}.mistelinn.org:443,http://192.168.100.99:32400"
               PLEX_NO_AUTH_NETWORKS: 192.168.1.0/24
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
@@ -51,7 +51,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -59,8 +59,9 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [65537]
-        seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 65537
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
@@ -89,12 +90,12 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://plex.${CLUSTER_DOMAIN}/identity"
+            url: "https://plex.mistelinn.org/identity"
         hostnames:
-          - "plex.${CLUSTER_DOMAIN}"
+          - "plex.mistelinn.org"
         parentRefs:
-          - { name: external, namespace: kube-system }
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-external, namespace: network}
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app
@@ -109,7 +110,7 @@ spec:
       direct:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: ${CLUSTER_LB_PLEX}
+          lbipam.cilium.io/ips: 192.168.100.99
         externalTrafficPolicy: Local
         ports:
           http:

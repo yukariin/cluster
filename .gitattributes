@@ -1,3 +1,12 @@
+# Force LF on everything.
 * text=auto eol=lf
-.secrets/git-crypt/** filter=git-crypt diff=git-crypt
+
+# SOPS Differ
 *.sops.yaml diff=sopsdiffer
+
+.secrets/git-crypt/** filter=git-crypt diff=git-crypt
+
+# Exclude meta-files from release archives
+.gitignore export-ignore
+.gitattributes export-ignore
+.editorconfig export-ignore

@@ -4,8 +4,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: danbooru-database
-  namespace: flux-system
 spec:
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: database
+    - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/image/danbooru/database
   prune: true
@@ -15,9 +19,6 @@ spec:
     namespace: flux-system
   targetNamespace: image
   wait: true
-  dependsOn:
-    - name: cloudnative-pg
-    - name: democratic-csi
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -25,11 +26,14 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app danbooru
-  namespace: flux-system
 spec:
   components:
     - ../../../../components/dragonfly
     - ../../../../components/keda
+  dependsOn:
+    - name: danbooru-database
+    - name: dragonfly
+      namespace: database
   interval: 1h
   path: kubernetes/apps/image/danbooru/app
   prune: true
@@ -42,9 +46,6 @@ spec:
     namespace: flux-system
   targetNamespace: image
   wait: true
-  dependsOn:
-    - name: danbooru-database
-    - name: dragonfly
 
 # ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -52,7 +53,6 @@ spec:
 # kind: Kustomization
 # metadata:
 #   name: autotagger
-#   namespace: flux-system
 # spec:
 #   interval: 1h
 #   path: kubernetes/apps/image/danbooru/autotagger
@@ -69,10 +69,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app iqdb
-  namespace: flux-system
 spec:
   components:
     - ../../../../components/volsync
+  dependsOn:
+    - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/image/danbooru/iqdb
   prune: true
@@ -85,5 +87,3 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: image
-  dependsOn:
-    - name: democratic-csi

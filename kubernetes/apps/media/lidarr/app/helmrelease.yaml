@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -28,7 +28,7 @@ spec:
               LIDARR__LOG__LEVEL: info
               LIDARR__SERVER__PORT: &port 80
               LIDARR__UPDATE__BRANCH: develop
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
@@ -48,7 +48,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -61,9 +61,10 @@ spec:
         runAsUser: 568
         runAsGroup: 568
         fsGroup: 568
-        supplementalGroups: [65536]
+        supplementalGroups:
+          - 65536
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
@@ -85,9 +86,9 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app

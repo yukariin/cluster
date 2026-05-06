@@ -1,0 +1,46 @@
+---
+customization:
+  extraKernelArgs:
+    # trade security for performance and power saving
+    - -init_on_alloc                # Less security, faster puter
+    - -init_on_free                 # Less security, faster puter
+    - -selinux                      # Less security, faster puter
+    - mitigations=off               # Disables CPU speculative execution mitigations
+    - apparmor=0                    # Disable AppArmor LSM
+    - security=none                 # Disable default security profile
+    - init_on_alloc=0               # Disable zeroing memory on allocation
+    - init_on_free=0                # Disable zeroing memory on free
+    - talos.auditd.disabled=1       # Disable Linux audit daemon (too much noise)
+
+    # Hardware
+    - i915.enable_dc=0                      # Prevents random hard freezes on newer Intel chips
+    - i915.enable_guc=3                     # Enable GuC and HuC for better graphics performance and stability
+    - i915.force_probe=!7dd5                # Disable iGPU deviceID for i915
+    - xe.force_probe=7dd5                   # Enable iGPU deviceID for xe
+    - intel_iommu=on                        # Enable IOMMU
+    - iommu=pt                              # Use passthrough mode for IOMMU
+    - sysctl.kernel.kexec_load_disabled=1   # Security hardening
+    - thunderbolt.force_power=1             # Thunderbolt NICs
+
+    # in secureboot, talos locks down to "confidentiality" mode by default, which may break cilium
+    # more info: https://github.com/siderolabs/talos/pull/8535
+    - -lockdown
+    - lockdown=integrity
+
+    # System
+    - net.ifnames=0                 # Classic ethernet names
+
+    # ASPM breaks NICs
+    - pcie_aspm=off
+    - pcie_port_pm=off
+
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/i915                 # Intel GPU drivers
+      - siderolabs/xe                   # Intel GPU drivers
+      - siderolabs/intel-ucode          # Intel CPU microcode
+      - siderolabs/mei                  # Intel iGPU
+      - siderolabs/nfsrahead            # NFS Performance
+      - siderolabs/nvme-cli             # NVMe command line tools
+      - siderolabs/thunderbolt          # Thunderbolt NICs
+      - siderolabs/util-linux-tools     # Useful Linux tools

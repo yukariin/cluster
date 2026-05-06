@@ -3,26 +3,25 @@
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
-  name: "${APP}"
-  labels:
-    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+  name: "${APP}-dst"
+  # labels:
+  #   kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
 spec:
   trigger:
     manual: restore-once
   kopia:
-    accessModes: ["${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"]
-    capacity: "${VOLSYNC_CAPACITY:=1Gi}"
+    accessModes:
+      - "${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"
+    capacity: "${VOLSYNC_CAPACITY:=5Gi}"
     cleanupCachePVC: true
     cleanupTempPVC: true
-    copyMethod: Snapshot
+    copyMethod: "${VOLSYNC_COPYMETHOD:=Snapshot}"
     enableFileDeletion: true
     moverSecurityContext:
       runAsNonRoot: true
       runAsUser: ${VOLSYNC_PUID:=568}
       runAsGroup: ${VOLSYNC_PGID:=568}
       fsGroup: ${VOLSYNC_PGID:=568}
-      fsGroupChangePolicy: OnRootMismatch
-      seccompProfile: { type: RuntimeDefault }
     repository: "${APP}-volsync-secret"
     sourceIdentity:
       sourceName: "${APP}"

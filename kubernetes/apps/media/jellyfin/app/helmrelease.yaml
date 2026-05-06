@@ -12,15 +12,15 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         containers:
           app:
             image:
               repository: ghcr.io/jellyfin/jellyfin
               tag: 10.11.8@sha256:93227545077893cc9516f28b3adb733b67bc4691f41b6167428a2a0e3220b81c
             env:
-              JELLYFIN_PublishedServerUrl: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}"
-              TZ: ${CLUSTER_TZ}
+              JELLYFIN_PublishedServerUrl: "https://{{ .Release.Name }}.mistelinn.org"
+              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
@@ -42,15 +42,13 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 100m
                 memory: 512Mi
-                gpu.intel.com/i915: 1
               limits:
                 memory: 2Gi
-                gpu.intel.com/i915: 1
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -58,8 +56,9 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [65537]
-        seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 65537
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
@@ -86,12 +85,12 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://jellyfin.${CLUSTER_DOMAIN}/health"
+            url: "https://jellyfin.mistelinn.org/health"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
-          - { name: external, namespace: kube-system }
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-external, namespace: network}
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app

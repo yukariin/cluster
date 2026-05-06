@@ -12,14 +12,14 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         containers:
           app:
             image: &img
               repository: ghcr.io/kieraneglin/pinchflat
               tag: latest@sha256:01b4f98aabaf3f5fe394213f7a32578c9e84e42080f52e2f8334021a4473b202
             env:
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
               TZ_DATA_DIR: /tmp/elixir_tzdata_data
               LOG_LEVEL: info
               PORT: &port 80
@@ -44,13 +44,10 @@ spec:
             securityContext: &sc
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
-                gpu.intel.com/i915: 1
-              limits:
-                gpu.intel.com/i915: 1
         initContainers:
           ytdlp-updates:
             image: *img
@@ -71,8 +68,9 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [65537]
-        seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 65537
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
@@ -81,14 +79,14 @@ spec:
         server: nas.internal
         path: /mnt/data_pool/data
         advancedMounts:
-          *app :
+          *app:
             app:
               - path: /downloads
                 subPath: media/youtube
       tmp:
         type: emptyDir
         advancedMounts:
-          *app :
+          *app:
             app:
               - subPath: tmp
                 path: /tmp
@@ -103,9 +101,9 @@ spec:
     route:
       app:
         hostnames:
-          - "pinchflat.${CLUSTER_DOMAIN}"
+          - "pinchflat.mistelinn.org"
         parentRefs:
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app

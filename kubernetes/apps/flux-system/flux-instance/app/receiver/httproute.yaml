@@ -8,9 +8,9 @@ metadata:
       conditions: ["[STATUS] == 404"]
 spec:
   parentRefs:
-    - { name: external, namespace: kube-system }
+    - {name: envoy-external, namespace: network}
   hostnames:
-    - "flux-receiver.${CLUSTER_DOMAIN}"
+    - "flux-receiver.mistelinn.org"
   rules:
     - backendRefs:
         - name: webhook-receiver

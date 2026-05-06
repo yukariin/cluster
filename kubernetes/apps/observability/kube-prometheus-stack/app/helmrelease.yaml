@@ -32,15 +32,15 @@ spec:
         main:
           enabled: true
           hostnames:
-            - "alertmanager.${CLUSTER_DOMAIN}"
+            - "alertmanager.mistelinn.org"
           parentRefs:
-            - { name: internal, namespace: kube-system }
+            - {name: envoy-internal, namespace: network}
       alertmanagerSpec:
-        externalUrl: "https://alertmanager.${CLUSTER_DOMAIN}"
         alertmanagerConfiguration:
           name: alertmanager
           global:
             resolveTimeout: 5m
+        externalUrl: "https://alertmanager.mistelinn.org"
         storage:
           volumeClaimTemplate:
             spec:
@@ -62,11 +62,11 @@ spec:
         main:
           enabled: true
           hostnames:
-            - "prometheus.${CLUSTER_DOMAIN}"
+            - "prometheus.mistelinn.org"
           parentRefs:
-            - { name: internal, namespace: kube-system }
+            - {name: envoy-internal, namespace: network}
       prometheusSpec:
-        externalUrl: "https://prometheus.${CLUSTER_DOMAIN}"
+        externalUrl: "https://prometheus.mistelinn.org"
         version: v2.55.1 # override 'unsupported Prometheus version' error
         image:
           registry: mirror.gcr.io

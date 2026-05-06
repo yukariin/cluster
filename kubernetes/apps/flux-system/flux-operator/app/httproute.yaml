@@ -5,9 +5,9 @@ metadata:
   name: flux
 spec:
   parentRefs:
-    - { name: internal, namespace: kube-system }
+    - {name: envoy-internal, namespace: network}
   hostnames:
-    - "flux.${CLUSTER_DOMAIN}"
+    - "flux.mistelinn.org"
   rules:
     - backendRefs:
         - name: flux-operator

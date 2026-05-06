@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/volsync.backube/replicationdestination_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: "${APP}-dst"
+  # labels:
+  #   kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  trigger:
+    manual: restore-once
+  kopia:
+    accessModes:
+      - "${VOLSYNC_ACCESSMODES:=ReadWriteOnce}"
+    capacity: "${VOLSYNC_CAPACITY:=5Gi}"
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    copyMethod: "${VOLSYNC_COPYMETHOD:=Snapshot}"
+    enableFileDeletion: true
+    moverSecurityContext:
+      runAsNonRoot: true
+      runAsUser: ${VOLSYNC_PUID:=568}
+      runAsGroup: ${VOLSYNC_PGID:=568}
+      fsGroup: ${VOLSYNC_PGID:=568}
+    moverVolumes:
+      - mountPath: repository
+        volumeSource:
+          nfs:
+            path: /mnt/data_pool/kopia
+            server: nas.internal
+    repository: "${APP}-volsync-secret"
+    sourceIdentity:
+      sourceName: "${APP}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:=democratic-csi-hostpath}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:=csi-democratic-csi-hostpath}"

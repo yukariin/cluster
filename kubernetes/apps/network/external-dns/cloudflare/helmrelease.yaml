@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -23,9 +23,9 @@ spec:
             args:
               - --cloudflare-dns-records-per-page=1000
               - --cloudflare-proxied
-              - --domain-filter=${CLUSTER_DOMAIN}
+              - --domain-filter=mistelinn.org
               - --events
-              - --gateway-name=external
+              - --gateway-name=envoy-external
               - --interval=1m
               - --log-format=text
               - --log-level=info
@@ -55,7 +55,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
         serviceAccount:
           name: *app
     defaultPodOptions:
@@ -63,7 +63,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 568
         runAsGroup: 568
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     service:
       app:
         ports:

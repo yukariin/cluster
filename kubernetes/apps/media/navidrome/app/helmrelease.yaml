@@ -12,15 +12,15 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         containers:
           app:
             image:
               repository: ghcr.io/navidrome/navidrome
               tag: 0.61.2@sha256:9fa40b3d8dec43ceb2213d1fa551da3dcfef6ac6d19c2e534efb92527c2bafd2
             env:
-              TZ: ${CLUSTER_TZ}
-              ND_BASEURL: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+              TZ: Europe/Moscow
+              ND_BASEURL: "https://{{ .Release.Name }}.mistelinn.org"
               ND_DATAFOLDER: /config
               ND_CACHEFOLDER: /config/cache
               ND_MUSICFOLDER: /music
@@ -50,7 +50,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
             resources:
               requests:
                 cpu: 10m
@@ -64,8 +64,9 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups: [65537]
-        seccompProfile: { type: RuntimeDefault }
+        supplementalGroups:
+          - 65537
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
@@ -87,12 +88,12 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://navidrome.${CLUSTER_DOMAIN}/ping"
+            url: "https://navidrome.mistelinn.org/ping"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
-          - { name: external, namespace: kube-system }
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-external, namespace: network}
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app

@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         annotations:
           reloader.stakater.com/auto: "true"
         strategy: RollingUpdate
@@ -23,17 +23,17 @@ spec:
               tag: 2.2.19-distroless@sha256:c752402519127b6eb4081bace4bea3ca89465b2c7e3f354b7be020a822e3d8a3
             env:
               FETCHER_ALLOW_PRIVATE_NETWORKS: "1"
-              BASE_URL: "https://{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+              BASE_URL: "https://{{ .Release.Name }}.mistelinn.org"
               LOG_DATE_TIME: "1"
               POLLING_SCHEDULER: entry_frequency
               POLLING_FREQUENCY: "15"
               PORT: &port 80
               OAUTH2_PROVIDER: oidc
               OAUTH2_OIDC_PROVIDER_NAME: Authentik
-              OAUTH2_OIDC_DISCOVERY_ENDPOINT: "https://authentik.${CLUSTER_DOMAIN}/application/o/miniflux/"
-              OAUTH2_REDIRECT_URL: "https://miniflux.${CLUSTER_DOMAIN}/oauth2/oidc/callback"
+              OAUTH2_OIDC_DISCOVERY_ENDPOINT: "https://authentik.mistelinn.org/application/o/miniflux/"
+              OAUTH2_REDIRECT_URL: "https://miniflux.mistelinn.org/oauth2/oidc/callback"
               OAUTH2_USER_CREATION: "1"
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
               RUN_MIGRATIONS: "1"
               DATABASE_URL:
                 valueFrom:
@@ -65,23 +65,23 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
         runAsGroup: 568
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     route:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://miniflux.${CLUSTER_DOMAIN}/healthcheck"
+            url: "https://miniflux.mistelinn.org/healthcheck"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
-          - { name: external, namespace: kube-system }
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-external, namespace: network}
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app

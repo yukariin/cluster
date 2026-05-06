@@ -1,19 +1,4 @@
 ---
-# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
-metadata:
-  name: flux-instance
-spec:
-  interval: 15m
-  layerSelector:
-    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
-    operation: copy
-  ref:
-    tag: 0.48.0
-  url: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-
----
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -26,6 +11,8 @@ spec:
   interval: 1h
   values:
     instance:
+      cluster:
+        networkPolicy: false
       distribution:
         artifact: oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:v0.48.0
       sync:
@@ -88,6 +75,14 @@ spec:
             target:
               kind: Deployment
               name: source-controller
+          - # Cache Secrets and ConfigMaps
+            patch: |-
+              - op: add
+                path: /spec/template/spec/containers/0/args/-
+                value: --feature-gates=CacheSecretsAndConfigMaps=true
+            target:
+              kind: Deployment
+              name: source-controller
           - # Flux near OOM detection for Helm
             patch: |-
               - op: add
@@ -110,36 +105,6 @@ spec:
             target:
               kind: Deployment
               name: helm-controller
-          # KustomizeController SOPS decryption for all Kustomizations
-          - patch: |-
-              apiVersion: kustomize.toolkit.fluxcd.io/v1
-              kind: Kustomization
-              metadata:
-                name: flux-system
-                namespace: flux-system
-              spec:
-                decryption:
-                  provider: sops
-                  secretRef:
-                    name: sops-age
-                postBuild:
-                  substitute: {}
-                  substituteFrom:
-                    - kind: ConfigMap
-                      name: cluster-config
-                    - kind: Secret
-                      name: cluster-secret
-            target:
-              kind: Kustomization
-              name: flux-system
-          - # Controller-level SOPS decryption
-            patch: |-
-              - op: add
-                path: /spec/template/spec/containers/0/args/-
-                value: --sops-age-secret=sops-age
-            target:
-              kind: Deployment
-              name: kustomize-controller
           - # Watch ConfigMaps and Secrets attached to HelmReleases and Kustomizations
             patch: |-
               - op: add

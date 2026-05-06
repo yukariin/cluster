@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
+      *app:
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
@@ -33,7 +33,7 @@ spec:
               GATUS_DELAY_START_SECONDS: 5
               GATUS_WEB_PORT: &port 80
               GATUS_CONFIG_PATH: /config
-              TZ: ${CLUSTER_TZ}
+              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
@@ -50,7 +50,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
         serviceAccount:
           name: *app
     defaultPodOptions:
@@ -58,7 +58,7 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
         runAsGroup: 1000
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         type: emptyDir
@@ -74,10 +74,10 @@ spec:
         annotations:
           gatus.home-operations.com/enabled: "false"
         hostnames:
-          - "{{ .Release.Name }}.${CLUSTER_DOMAIN}"
-          - "status.${CLUSTER_DOMAIN}"
+          - "{{ .Release.Name }}.mistelinn.org"
+          - "status.mistelinn.org"
         parentRefs:
-          - { name: internal, namespace: kube-system }
+          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app

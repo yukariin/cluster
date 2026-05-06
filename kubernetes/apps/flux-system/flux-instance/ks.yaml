@@ -4,8 +4,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: flux-instance
-  namespace: flux-system
 spec:
+  dependsOn:
+    - name: flux-operator
   interval: 1h
   path: kubernetes/apps/flux-system/flux-instance/app
   prune: true
@@ -15,5 +16,3 @@ spec:
     namespace: flux-system
   targetNamespace: flux-system
   wait: true
-  dependsOn:
-    - name: flux-operator

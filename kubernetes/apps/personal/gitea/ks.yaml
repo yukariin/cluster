@@ -4,8 +4,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: gitea-database
-  namespace: flux-system
 spec:
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: database
+    - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/personal/gitea/database
   prune: true
@@ -15,9 +19,6 @@ spec:
     namespace: flux-system
   targetNamespace: personal
   wait: true
-  dependsOn:
-    - name: cloudnative-pg
-    - name: democratic-csi
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -25,11 +26,14 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app gitea
-  namespace: flux-system
 spec:
   components:
     - ../../../../components/dragonfly
     - ../../../../components/volsync
+  dependsOn:
+    - name: gitea-database
+    - name: democratic-csi
+      namespace: democratic-csi
   interval: 1h
   path: kubernetes/apps/personal/gitea/app
   prune: true
@@ -44,6 +48,3 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: personal
-  dependsOn:
-    - name: gitea-database
-    - name: democratic-csi

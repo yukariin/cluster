@@ -8,7 +8,7 @@ spec:
   retentionPolicy: 30d
   configuration:
     destinationPath: s3://cnpg-backups/
-    endpointURL: "https://s3.${CLUSTER_DOMAIN}"
+    endpointURL: "https://s3.mistelinn.org"
     s3Credentials:
       region:
         name: pg-gitea-store-secret

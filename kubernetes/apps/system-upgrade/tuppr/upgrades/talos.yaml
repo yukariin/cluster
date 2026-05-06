@@ -5,14 +5,14 @@ metadata:
   name: talos
 spec:
   talos:
-    version: v1.13.0 # renovate: docker=ghcr.io/siderolabs/installer
+    # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+    version: v1.13.0
   policy:
     rebootMode: powercycle
   maintenance:
     windows:
       - start: "0 4 * * 0"
         duration: "4h"
-        timezone: "${CLUSTER_TZ}"
   healthChecks:
     - apiVersion: volsync.backube/v1alpha1
       kind: ReplicationSource
