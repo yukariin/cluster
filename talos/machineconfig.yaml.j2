@@ -249,27 +249,25 @@ cluster:
 
 ---
 apiVersion: v1alpha1
-kind: BondConfig
-name: bond0
-links:
-  - eth0
-  - eth1
-bondMode: active-backup
-mtu: 9000
+kind: LinkConfig
+name: eth0
+mtu: 1500
+up: true
+addresses: []
 
 ---
 apiVersion: v1alpha1
 kind: DHCPv4Config
-name: bond0
+name: eth0
 clientIdentifier: mac
 
 ---
 apiVersion: v1alpha1
 kind: VLANConfig
-name: bond0.30
+name: eth0.30
 vlanID: 30
-parent: bond0
-mtu: 9000
+parent: eth0
+mtu: 1500
 
 ---
 apiVersion: v1alpha1
