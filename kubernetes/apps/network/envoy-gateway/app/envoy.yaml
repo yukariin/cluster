@@ -15,6 +15,12 @@ spec:
         replicas: 2
         container:
           image: mirror.gcr.io/envoyproxy/envoy:v1.38.0
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 2Gi
       envoyService:
         externalTrafficPolicy: Local
   shutdown:
