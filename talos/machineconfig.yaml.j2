@@ -51,7 +51,7 @@ machine:
 
   install:
     diskSelector:
-      model: Samsung SSD 870
+      model: Micron MTFDKCD256TFK
     image: factory.talos.dev/metal-installer-secureboot/c2608fc6180b97b3ac51873f9d0de0bf61e48ff13e53d38a303bb73f9079b4f8:v1.13.0
     wipe: false
   
@@ -249,17 +249,11 @@ cluster:
 
 ---
 apiVersion: v1alpha1
-kind: LinkAliasConfig
-name: net0
-selector:
-  match: glob("48:21:0b:51:*", mac(link.permanent_addr))
-
----
-apiVersion: v1alpha1
 kind: BondConfig
 name: bond0
 links:
-  - net0
+  - eth0
+  - eth1
 bondMode: active-backup
 mtu: 9000
 
@@ -276,15 +270,6 @@ name: bond0.30
 vlanID: 30
 parent: bond0
 mtu: 9000
-
----
-apiVersion: v1alpha1
-kind: UserVolumeConfig
-name: local-hostpath
-provisioning:
-  diskSelector:
-    match: disk.model == "NT-128 2242" && !system_disk
-  minSize: 800GB
 
 ---
 apiVersion: v1alpha1
