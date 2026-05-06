@@ -48,9 +48,6 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                gpu.intel.com/i915: 1
-              limits:
-                gpu.intel.com/i915: 1
         initContainers:
           ytdlp-updates:
             image: *img
