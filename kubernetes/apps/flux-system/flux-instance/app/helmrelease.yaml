@@ -16,7 +16,7 @@ spec:
       sync:
         kind: GitRepository
         url: https://github.com/yukariin/cluster
-        ref: refs/heads/baremtal
+        ref: refs/heads/baremteal
         path: kubernetes/flux/cluster
       kustomize:
         patches:
