@@ -1,7 +1,7 @@
 ---
 ingress:
   - hostname: "*.mistelinn.org"
-    service: https://cilium-gateway-external.kube-system.svc.cluster.local:443
+    service: https://envoy-external.network.svc.cluster.local:443
     originRequest:
       http2Origin: true
       originServerName: "external.mistelinn.org"
