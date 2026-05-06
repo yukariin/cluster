@@ -37,10 +37,10 @@ releases:
           - --namespace=kube-system
           - --server-side
           - --field-manager=kustomize-controller
-          - --kustomize
+          - --filename
           - ../../kubernetes/apps/kube-system/cilium/app/networking.yaml
         events:
-          - cleanup
+          - postsync
         showlogs: true
 
   - name: coredns
