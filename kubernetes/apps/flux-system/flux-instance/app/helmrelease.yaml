@@ -20,6 +20,7 @@ spec:
         url: https://github.com/yukariin/cluster
         ref: refs/heads/main
         path: kubernetes/flux/cluster
+        interval: 1h
       kustomize:
         patches:
           - # Increase the number of workers
