@@ -24,6 +24,7 @@ spec:
     kind: OCIRepository
     name: matrix
   interval: 1h
+  timeout: 15m
   values:
     serverName: "matrix.mistelinn.org"
 
@@ -48,6 +49,12 @@ spec:
         0-baseConfig:
           configSecret: matrix-secret
           configSecretKey: synapse.yaml
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          cpu: 100m
+          memory: 100Mi
 
     matrixAuthenticationService:
       enabled: true
@@ -74,6 +81,12 @@ spec:
         className: disabled
         tlsEnabled: false
       sfu:
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 150Mi
         useStunToDiscoverPublicIP: false
 
     elementAdmin:
