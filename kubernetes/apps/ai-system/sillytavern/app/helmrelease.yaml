@@ -25,7 +25,7 @@ spec:
               NODE_ENV: production
               TZ: Europe/Moscow
               SILLYTAVERN_PORT: &port 80
-              SILLYTAVERN_WHITELIST: '["10.244.0.0/16", "192.168.10.0/24"]'
+              SILLYTAVERN_WHITELIST: '["10.42.0.0/16", "192.168.10.0/24"]'
             probes:
               liveness: &probes
                 enabled: true
