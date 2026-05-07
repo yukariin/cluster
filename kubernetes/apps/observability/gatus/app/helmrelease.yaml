@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app gatus
+  name: gatus
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      gatus:
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
@@ -23,6 +23,7 @@ spec:
             args:
               - --auto-httproute
               - --enable-httproute
+              - --enable-service
             restartPolicy: Always
         containers:
           app:
@@ -51,9 +52,8 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
-        serviceAccount:
-          name: *app
     defaultPodOptions:
+      automountServiceAccountToken: true # gatus-sidecar
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
@@ -91,3 +91,26 @@ spec:
       app:
         endpoints:
           - port: http
+    rbac:
+      roles:
+        gatus:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - "gateway.networking.k8s.io"
+              resources:
+                - "gateways"
+                - "httproutes"
+              verbs:
+                - "get"
+                - "watch"
+                - "list"
+      bindings:
+        gatus:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: gatus
+          subjects:
+            - identifier: gatus
+    serviceAccount:
+      gatus: {}

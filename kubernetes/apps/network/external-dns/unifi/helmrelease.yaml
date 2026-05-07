@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app external-dns-unifi
+  name: external-dns-unifi
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      external-dns-unifi:
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
@@ -86,9 +86,8 @@ spec:
                   failureThreshold: 3
               readiness: *probes
             securityContext: *sc
-        serviceAccount:
-          name: *app
     defaultPodOptions:
+      automountServiceAccountToken: true
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
@@ -103,3 +102,51 @@ spec:
       app:
         endpoints:
           - port: http
+    rbac:
+      roles:
+        external-dns-unifi:
+          type: ClusterRole
+          rules:
+            - apiGroups:
+                - ""
+              resources:
+                - "nodes"
+              verbs:
+                - "list"
+                - "watch"
+            - apiGroups:
+                - ""
+              resources:
+                - "namespaces"
+                - "pods"
+                - "services"
+              verbs:
+                - "get"
+                - "watch"
+                - "list"
+            - apiGroups:
+                - "discovery.k8s.io"
+              resources:
+                - "endpointslices"
+              verbs:
+                - "get"
+                - "watch"
+                - "list"
+            - apiGroups:
+                - "gateway.networking.k8s.io"
+              resources:
+                - "httproutes"
+                - "gateways"
+              verbs:
+                - "get"
+                - "watch"
+                - "list"
+      bindings:
+        external-dns-unifi:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: external-dns-unifi
+          subjects:
+            - identifier: external-dns-unifi
+    serviceAccount:
+      external-dns-unifi: {}
