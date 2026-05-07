@@ -13,6 +13,10 @@ spec:
   values:
     controllers:
       *app:
+        pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: plex-gpu
         containers:
           app:
             image:
@@ -41,13 +45,13 @@ spec:
                   periodSeconds: 10
                   failureThreshold: 30
             resources:
+              claims:
+                - name: gpu
               requests:
                 cpu: 100m
                 memory: 512Mi
-                gpu.intel.com/i915: 1
               limits:
                 memory: 2Gi
-                gpu.intel.com/i915: 1
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
