@@ -13,6 +13,10 @@ spec:
   values:
     controllers:
       *app:
+        pod:
+          resourceClaims:
+            - name: gpu
+              resourceClaimTemplateName: pinchflat-gpu
         containers:
           app:
             image: &img
@@ -46,6 +50,8 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
             resources:
+              claims:
+                - name: gpu
               requests:
                 cpu: 10m
         initContainers:
