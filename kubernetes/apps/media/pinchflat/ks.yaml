@@ -11,8 +11,6 @@ spec:
   dependsOn:
     - name: democratic-csi
       namespace: democratic-csi
-    - name: intel-gpu-resource-driver
-      namespace: kube-system
   interval: 1h
   path: kubernetes/apps/media/pinchflat/app
   prune: true
