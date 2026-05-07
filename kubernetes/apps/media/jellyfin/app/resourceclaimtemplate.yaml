@@ -10,6 +10,3 @@ spec:
         - name: gpu
           exactly:
             deviceClassName: gpu.intel.com
-            selectors:
-              - cel:
-                  expression: device.attributes["gpu.intel.com"].driver == "xe"
