@@ -71,8 +71,6 @@ spec:
       tmp:
         type: emptyDir
         globalMounts:
-          - subPath: certs
-            path: /certs
           - subPath: logs
             path: /config/logs
           - subPath: tts
