@@ -23,6 +23,8 @@ spec:
             args:
               - --cloudflare-dns-records-per-page=1000
               - --cloudflare-proxied
+              - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
+              - --crd-source-kind=DNSEndpoint
               - --domain-filter=mistelinn.org
               - --events
               - --gateway-name=envoy-external
@@ -32,6 +34,7 @@ spec:
               - --policy=sync
               - --provider=cloudflare
               - --registry=txt
+              - --source=crd
               - --source=gateway-httproute
               - --txt-owner-id=k8s
               - --txt-prefix=k8s.
