@@ -63,7 +63,7 @@ spec:
     configMaps:
       config:
         data:
-          repository.config: |
+          repository.config: |-
             {
               "storage": {
                 "type": "filesystem",
@@ -71,7 +71,7 @@ spec:
                   "path": "/repository"
                 }
               },
-              "hostname": "volsync.volsync-system.svc.cluster.local",
+              "hostname": "volsync.{{ .Release.Namespace }}.svc.cluster.local",
               "username": "volsync",
               "description": "volsync",
               "enableActions": false
