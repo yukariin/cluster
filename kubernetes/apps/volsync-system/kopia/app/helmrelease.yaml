@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      main:
+      kopia:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -91,13 +91,15 @@ spec:
           - path: /repository
       tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /config/cache
-            subPath: cache
-          - path: /config/logs
-            subPath: logs
-          - path: /tmp
-            subPath: tmp
+        advancedMounts:
+          kopia:
+            app:
+              - path: /config/cache
+                subPath: cache
+              - path: /config/logs
+                subPath: logs
+              - path: /tmp
+                subPath: tmp
     route:
       app:
         hostnames:
