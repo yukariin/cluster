@@ -7,11 +7,12 @@ metadata:
 spec:
   enabled: true
   trigger:
-    schedule: "30 4 * * *"
-  podSecurityContext:
-    runAsNonRoot: true
-    runAsUser: 568
-    runAsGroup: 568
-    seccompProfile: {type: RuntimeDefault}
+    schedule: "30 4,16 * * *"
+  moverVolumes:
+    - mountPath: repository
+      volumeSource:
+        nfs:
+          path: /mnt/data_pool/kopia
+          server: nas.internal
   repository:
     repository: volsync-maintenance-secret
