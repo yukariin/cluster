@@ -6,7 +6,7 @@ metadata:
   name: &app autobrr
 spec:
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync-migrate
   dependsOn:
     - name: democratic-csi
       namespace: democratic-csi

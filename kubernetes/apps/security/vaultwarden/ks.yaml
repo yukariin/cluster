@@ -28,7 +28,7 @@ metadata:
   name: &app vaultwarden
 spec:
   components:
-    - ../../../../components/volsync
+    - ../../../../components/volsync-migrate
   dependsOn:
     - name: vaultwarden-database
   interval: 1h

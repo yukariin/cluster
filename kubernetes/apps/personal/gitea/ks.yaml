@@ -29,7 +29,7 @@ metadata:
 spec:
   components:
     - ../../../../components/dragonfly
-    - ../../../../components/volsync
+    - ../../../../components/volsync-migrate
   dependsOn:
     - name: gitea-database
     - name: democratic-csi
