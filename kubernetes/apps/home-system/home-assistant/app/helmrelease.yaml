@@ -58,6 +58,14 @@ spec:
                 app:
                   - path: /config/.venv
     defaultPodOptions:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |
+          [{
+            "name": "iot",
+            "namespace": "kube-system",
+            "ips": ["192.168.30.10/24"],
+            "mac": "02:00:f1:18:a2:4b"
+          }]
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
