@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app qbittorrent
+  name: qbittorrent
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      qbittorrent:
         containers:
           app:
             image:
@@ -46,10 +46,10 @@ spec:
               capabilities: {drop: ["ALL"]}
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
                 memory: 256Mi
               limits:
-                memory: 1390Mi
+                memory: 2Gi
     defaultPodOptions:
       dnsConfig:
         options:
@@ -61,8 +61,6 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 65536
         seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
@@ -76,13 +74,11 @@ spec:
             subPath: torrents
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            app:
-              - path: /config/qBittorrent/logs
-                subPath: logs
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /config/qBittorrent/logs
+            subPath: logs
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         hostnames:
