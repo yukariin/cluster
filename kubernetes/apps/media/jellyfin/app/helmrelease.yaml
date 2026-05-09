@@ -12,11 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
-        pod:
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: jellyfin-gpu
+      jellyfin:
         containers:
           app:
             image:
@@ -56,14 +52,15 @@ spec:
               limits:
                 memory: 2Gi
     defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: jellyfin-gpu
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 65537
         seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
@@ -78,15 +75,13 @@ spec:
           - readOnly: true
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          jellyfin:
-            app:
-              - path: /config/log
-                subPath: logs
-              - path: /transcode
-                subPath: transcode
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /config/log
+            subPath: logs
+          - path: /transcode
+            subPath: transcode
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         annotations:

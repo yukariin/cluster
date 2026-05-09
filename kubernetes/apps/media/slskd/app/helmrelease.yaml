@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app slskd
+  name: slskd
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      slskd:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -21,21 +21,21 @@ spec:
               repository: ghcr.io/slskd/slskd
               tag: 0.25.1@sha256:ab9ed50e028b524cefdb7c1dd8ebca368a076e18441ee8ac2326473eb850b4c3
             env:
-              TZ: Europe/Moscow
               DOTNET_BUNDLE_EXTRACT_BASE_DIR: /tmp/.net
               SLSKD_APP_DIR: /config
-              SLSKD_REMOTE_CONFIGURATION: false
+              SLSKD_DOWNLOADS_DIR: /media/soulseek/complete
+              SLSKD_FILE_PERMISSION_MODE: 664
               SLSKD_HTTP_PORT: &port 80
+              SLSKD_INCOMPLETE_DIR: /media/soulseek/incomplete
+              SLSKD_METRICS_NO_AUTH: true
+              SLSKD_METRICS_URL: /metrics
+              SLSKD_METRICS: true
               SLSKD_NO_HTTPS: true
               SLSKD_NO_VERSION_CHECK: true
+              SLSKD_REMOTE_CONFIGURATION: false
               SLSKD_SLSK_LISTEN_PORT: &soulseekPort 50300
               SLSKD_UMASK: "002"
-              SLSKD_FILE_PERMISSION_MODE: 664
-              SLSKD_DOWNLOADS_DIR: /media/soulseek/complete
-              SLSKD_INCOMPLETE_DIR: /media/soulseek/incomplete
-              SLSKD_METRICS: true
-              SLSKD_METRICS_URL: /metrics
-              SLSKD_METRICS_NO_AUTH: true
+              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
@@ -71,8 +71,6 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 65536
         seccompProfile: {type: RuntimeDefault}
     persistence:
       config:

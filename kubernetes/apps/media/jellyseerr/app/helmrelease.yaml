@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app jellyseerr
+  name: jellyseerr
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      jellyseerr:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -63,13 +63,11 @@ spec:
           - path: /app/config/cache
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          jellyseerr:
-            app:
-              - path: /app/config/logs
-                subPath: logs
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /app/config/logs
+            subPath: logs
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         annotations:

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app plex
+  name: plex
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,19 +12,15 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
-        pod:
-          resourceClaims:
-            - name: gpu
-              resourceClaimTemplateName: plex-gpu
+      plex:
         containers:
           app:
             image:
               repository: ghcr.io/home-operations/plex
               tag: 1.43.1.10611@sha256:a9c3723cb31cc9621df27cf5801184c290293adf1df2bfaea4b8b6fc01dbfd96
             env:
-              PLEX_ADVERTISE_URL: "https://{{ .Release.Name }}.mistelinn.org:443,http://192.168.100.99:32400"
-              PLEX_NO_AUTH_NETWORKS: 192.168.1.0/24
+              PLEX_ADVERTISE_URL: "https://plex.mistelinn.org:443,http://192.168.100.99:32400"
+              PLEX_NO_AUTH_NETWORKS: 192.168.10.0/24
               TZ: Europe/Moscow
             probes:
               liveness: &probes
@@ -45,8 +41,8 @@ spec:
                   periodSeconds: 10
                   failureThreshold: 30
             resources:
-              claims:
-                - name: gpu
+              # claims:
+              #   - name: gpu
               requests:
                 cpu: 100m
                 memory: 512Mi
@@ -57,14 +53,15 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
     defaultPodOptions:
+      # resourceClaims:
+      #   - name: gpu
+      #     resourceClaimTemplateName: plex-gpu
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 65537
         seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
@@ -81,15 +78,13 @@ spec:
           - readOnly: true
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          plex:
-            app:
-              - path: "/config/Library/Application Support/Plex Media Server/Logs"
-                subPath: logs
-              - path: /transcode
-                subPath: transcode
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: "/config/Library/Application Support/Plex Media Server/Logs"
+            subPath: logs
+          - path: /transcode
+            subPath: transcode
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         annotations:
@@ -101,17 +96,24 @@ spec:
           - {name: envoy-external, namespace: network}
           - {name: envoy-internal, namespace: network}
         rules:
+          # https://forums.plex.tv/t/external-srt-subtitles-are-not-working-w-reverse-proxy/886540
+          - backendRefs:
+              - identifier: app
+                port: *port
+            filters:
+              - type: RequestHeaderModifier
+                requestHeaderModifier:
+                  remove:
+                    - Range
+            matches:
+              - path:
+                  type: PathPrefix
+                  value: /library/streams
           - backendRefs:
               - identifier: app
                 port: *port
     service:
       app:
-        forceRename: "{{ .Release.Name }}"
-        primary: true
-        ports:
-          http:
-            port: *port
-      direct:
         type: LoadBalancer
         annotations:
           lbipam.cilium.io/ips: 192.168.100.99

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app unpackerr
+  name: unpackerr
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      unpackerr:
         annotations:
           reloader.stakater.com/auto: 'true'
         containers:
@@ -22,10 +22,10 @@ spec:
               tag: 0.15.2@sha256:057e34740d26c34d81ec8e2faf8ec11f8dbfc77489b7a42826f52b37e5ee1b6c
             env:
               TZ: Europe/Moscow
-              UN_SONARR_0_URL: http://sonarr.media.svc.cluster.local
-              UN_SONARR_0_PATHS_0: /media/torrents/complete/tv-sonarr
-              UN_RADARR_0_URL: http://radarr.media.svc.cluster.local
               UN_RADARR_0_PATHS_0: /media/torrents/complete/radarr
+              UN_RADARR_0_URL: http://radarr.media.svc.cluster.local
+              UN_SONARR_0_PATHS_0: /media/torrents/complete/tv-sonarr
+              UN_SONARR_0_URL: http://sonarr.media.svc.cluster.local
             envFrom:
               - secretRef:
                   name: unpackerr-secret

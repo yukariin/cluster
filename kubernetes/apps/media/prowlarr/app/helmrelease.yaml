@@ -68,13 +68,11 @@ spec:
         existingClaim: "{{ .Release.Name }}"
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          prowlarr:
-            app:
-              - path: /config/logs
-                subPath: logs
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /config/logs
+            subPath: logs
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         hostnames:

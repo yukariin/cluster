@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      lidarr:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -61,8 +61,6 @@ spec:
         runAsUser: 568
         runAsGroup: 568
         fsGroup: 568
-        supplementalGroups:
-          - 65536
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: {type: RuntimeDefault}
     persistence:

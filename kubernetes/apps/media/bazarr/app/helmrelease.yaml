@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app bazarr
+  name: bazarr
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      bazarr:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -21,9 +21,9 @@ spec:
               repository: ghcr.io/home-operations/bazarr
               tag: 1.5.6@sha256:79fc37491f55c7e24427bcd669bce3df2d7415ca432a47ce9d53cc5988af8411
             env:
-              BAZARR__INSTANCE_NAME: Bazarr
               BAZARR__AUTH__METHOD: External
               BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              BAZARR__INSTANCE_NAME: Bazarr
               BAZARR__LOG_LEVEL: info
               BAZARR__PORT: &port 80
               TZ: Europe/Moscow
@@ -79,15 +79,13 @@ spec:
         path: /mnt/data_pool/data
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          *app:
-            app:
-              - path: /config/cache
-                subPath: cache
-              - path: /config/log
-                subPath: log
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /config/cache
+            subPath: cache
+          - path: /config/log
+            subPath: log
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         hostnames:

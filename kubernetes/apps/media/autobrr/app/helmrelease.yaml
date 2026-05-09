@@ -21,13 +21,13 @@ spec:
               repository: ghcr.io/autobrr/autobrr
               tag: v1.77.1@sha256:26796bb64ad4cd5956def3e171d485daf7353e952b603f9602d44836e4c9b314
             env:
+              AUTOBRR__CHECK_FOR_UPDATES: false
               AUTOBRR__HOST: 0.0.0.0
-              AUTOBRR__PORT: &port 80
+              AUTOBRR__LOG_LEVEL: INFO
               AUTOBRR__METRICS_ENABLED: true
               AUTOBRR__METRICS_HOST: 0.0.0.0
               AUTOBRR__METRICS_PORT: &metricsPort 8080
-              AUTOBRR__CHECK_FOR_UPDATES: false
-              AUTOBRR__LOG_LEVEL: INFO
+              AUTOBRR__PORT: &port 80
               TZ: Europe/Moscow
             envFrom:
               - secretRef:
@@ -77,13 +77,11 @@ spec:
         existingClaim: "{{ .Release.Name }}"
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          autobrr:
-            app:
-              - path: /config/log
-                subPath: log
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /config/log
+            subPath: log
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         hostnames:

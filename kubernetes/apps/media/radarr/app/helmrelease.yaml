@@ -62,8 +62,6 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 65536
         seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
@@ -78,13 +76,11 @@ spec:
         path: /mnt/data_pool/data
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          radarr:
-            app:
-              - path: /config/logs
-                subPath: logs
-              - path: /tmp
-                subPath: tmp
+        globalMounts:
+          - path: /config/logs
+            subPath: logs
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         hostnames:

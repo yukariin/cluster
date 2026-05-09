@@ -12,23 +12,23 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      navidrome:
         containers:
           app:
             image:
               repository: ghcr.io/navidrome/navidrome
               tag: 0.61.2@sha256:9fa40b3d8dec43ceb2213d1fa551da3dcfef6ac6d19c2e534efb92527c2bafd2
             env:
-              TZ: Europe/Moscow
               ND_BASEURL: "https://{{ .Release.Name }}.mistelinn.org"
-              ND_DATAFOLDER: /config
               ND_CACHEFOLDER: /config/cache
+              ND_DATAFOLDER: /config
+              ND_ENABLEINSIGHTSCOLLECTOR: false
+              ND_IMAGECACHESIZE: 500MB
               ND_MUSICFOLDER: /music
               ND_PORT: &port 80
               ND_SCANNER_SCHEDULE: "@every 1h"
-              ND_ENABLEINSIGHTSCOLLECTOR: false
-              ND_IMAGECACHESIZE: 500MB
               ND_TRANSCODINGCACHESIZE: 1GB
+              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
@@ -64,8 +64,6 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 65537
         seccompProfile: {type: RuntimeDefault}
     persistence:
       config:

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app pinchflat
+  name: pinchflat
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      pinchflat:
         containers:
           app:
             image: &img
@@ -68,8 +68,6 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        supplementalGroups:
-          - 65537
         seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
@@ -79,14 +77,14 @@ spec:
         server: nas.internal
         path: /mnt/data_pool/data
         advancedMounts:
-          *app:
+          pinchflat:
             app:
               - path: /downloads
                 subPath: media/youtube
       tmp:
         type: emptyDir
         advancedMounts:
-          *app:
+          pinchflat:
             app:
               - subPath: tmp
                 path: /tmp
