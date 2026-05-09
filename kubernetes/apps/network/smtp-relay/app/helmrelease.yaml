@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app smtp-relay
+  name: smtp-relay
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,11 +12,11 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app :
-        replicas: 2
-        strategy: RollingUpdate
+      smtp-relay:
         annotations:
           reloader.stakater.com/auto: "true"
+        replicas: 2
+        strategy: RollingUpdate
         containers:
           app:
             image:
@@ -35,13 +35,13 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+              capabilities: {drop: ["ALL"]}
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
         runAsGroup: 568
-        seccompProfile: { type: RuntimeDefault }
+        seccompProfile: {type: RuntimeDefault}
     persistence:
       cache:
         type: emptyDir
