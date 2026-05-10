@@ -16,8 +16,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/home-operations/qbittorrent
-              tag: 5.2.0@sha256:08eb7ed4c7fe70425064d58154c35fccc89fafffd64ce9d1affed399e173ff20
+              repository: ghcr.io/home-operations/qbittorrent-libtorrentv1
+              tag: 5.2.0@sha256:da73e0b5b48ee64aefeaf30d07debbb4f619bfa8eea1ed775f5932acc6c7fb7a
             env:
               TZ: Europe/Moscow
               QBT_TORRENTING_PORT: &bittorrentPort 50413
@@ -51,10 +51,7 @@ spec:
               limits:
                 memory: 2Gi
     defaultPodOptions:
-      dnsConfig:
-        options:
-          - name: ndots
-            value: "1"
+      terminationGracePeriodSeconds: 300
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
