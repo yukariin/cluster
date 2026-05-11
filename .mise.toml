@@ -12,6 +12,16 @@ _.file = [
 enter = "just doctor"
 
 [tools]
+"gum" = "latest"
 "just" = "latest"
 "uv" = "latest"
 "pipx:flux-local" = "latest"
+"aqua:cli/cli" = "latest"
+"aqua:fluxcd/flux2" = "2.8.6"
+"aqua:helm/helm" = "4.1.4"
+"aqua:helmfile/helmfile" = "1.5.0"
+"aqua:jqlang/jq" = "latest"
+"aqua:kubernetes-sigs/kustomize" = "5.8.1"
+"aqua:kubernetes/kubectl" = "1.36.0"
+"aqua:siderolabs/talos" = "1.13.0"
+"github:mitsuhiko/minijinja" = "latest"
