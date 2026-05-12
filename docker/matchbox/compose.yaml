@@ -12,8 +12,6 @@ services:
     configs:
       - source: groups-default
         target: /var/lib/matchbox/groups/default.json
-      - source: groups-test-vm
-        target: /var/lib/matchbox/groups/test-vm.json
       - source: groups-sakuya
         target: /var/lib/matchbox/groups/sakuya.json
       - source: profiles-default
@@ -50,8 +48,6 @@ services:
 configs:
   groups-default:
     file: ./config/groups/default.json
-  groups-test-vm:
-    file: ./config/groups/test-vm.json
   groups-sakuya:
     file: ./config/groups/sakuya.json
   profiles-default:
