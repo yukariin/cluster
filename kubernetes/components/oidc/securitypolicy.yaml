@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.envoyproxy.io/securitypolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: ${APP}-oidc
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: ${APP}
+  oidc:
+    provider:
+      issuer: "https://authentik.mistelinn.org/application/o/${APP}/"
+    clientIDRef:
+      group: ""
+      kind: Secret
+      name: ${APP}-secret
+    clientSecret:
+      group: ""
+      kind: Secret
+      name: ${APP}-secret
+    redirectURL: "https://${APP}.mistelinn.org/oauth2/callback"
+    logoutPath: "/logout"
