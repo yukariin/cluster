@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/other/talos.config.json
+version: v1alpha1
+machine:
+  type: controlplane
+  # install:
+  #   diskSelector:
+  #     model: Micron MTFDKCD256TFK
+  nodeLabels:
+    topology.kubernetes.io/zone: sdm
+
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/other/talos.config.json
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: flandre
