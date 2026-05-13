@@ -72,7 +72,7 @@ spec:
             memory: 8Gi # Required for bootstrap
       storage:
         useAllNodes: false
-        # useAllDevices: false
+        useAllDevices: false
         nodes:
           - name: "sakuya"
             devicePathFilter: /dev/disk/by-id/nvme-Phison_1TB_ESR01TBTCCZ-27J-2MS_*
