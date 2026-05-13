@@ -65,6 +65,10 @@ spec:
         sysctls:
           - name: net.ipv4.ping_group_range
             value: "568 568"
+    podDisruptionBudget:
+      cloudflared:
+        controller: cloudflared
+        minAvailable: 1
     persistence:
       config:
         type: configMap
