@@ -74,7 +74,7 @@ machine:
       imageGCHighThresholdPercent: 65
       imageGCLowThresholdPercent: 50
       serializeImagePulls: false
-    image: ghcr.io/siderolabs/kubelet:v1.36.0
+    image: ghcr.io/siderolabs/kubelet:v1.36.1
     nodeIP:
       validSubnets:
         - 192.168.90.0/24
@@ -204,12 +204,12 @@ cluster:
       feature-gates: MutatingAdmissionPolicy=true
       runtime-config: admissionregistration.k8s.io/v1beta1=true
 
-    image: registry.k8s.io/kube-apiserver:v1.36.0
+    image: registry.k8s.io/kube-apiserver:v1.36.1
 
   controllerManager:
     extraArgs:
       bind-address: 0.0.0.0
-    image: registry.k8s.io/kube-controller-manager:v1.36.0
+    image: registry.k8s.io/kube-controller-manager:v1.36.1
 
   coreDNS:
     disabled: true
@@ -225,7 +225,7 @@ cluster:
 
   proxy:
     disabled: true
-    image: registry.k8s.io/kube-proxy:v1.36.0
+    image: registry.k8s.io/kube-proxy:v1.36.1
 
   scheduler:
     config:
@@ -247,7 +247,7 @@ cluster:
                     whenUnsatisfiable: ScheduleAnyway
     extraArgs:
       bind-address: 0.0.0.0
-    image: registry.k8s.io/kube-scheduler:v1.36.0
+    image: registry.k8s.io/kube-scheduler:v1.36.1
 
   secretboxEncryptionSecret: '{{ ENV.CLUSTER_SECRETBOX_ENCRYPTION_SECRET }}'
 
