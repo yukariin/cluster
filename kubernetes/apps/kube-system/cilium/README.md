@@ -10,8 +10,9 @@ router bgp 64512
   neighbor k8s peer-group # Using a peer-group for organization
   neighbor k8s remote-as 64513 # ASN of the Cilium BGP (must match localASN in CiliumBGPClusterConfig)
 
-  neighbor 192.168.1.100 peer-group k8s # control-lane
-  neighbor 192.168.1.110 peer-group k8s # worker
+  neighbor 192.168.90.100 peer-group k8s
+  neighbor 192.168.90.110 peer-group k8s
+  neighbor 192.168.90.120 peer-group k8s
 
   address-family ipv4 unicast
     neighbor k8s next-hop-self # Important: UDM advertises itself as the next hop
