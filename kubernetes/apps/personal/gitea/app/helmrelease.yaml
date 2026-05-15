@@ -106,10 +106,13 @@ spec:
     service:
       ssh:
         type: LoadBalancer
-        port: 22
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "git.mistelinn.org"
+          gatus.home-operations.com/endpoint: |-
+            group: services
           lbipam.cilium.io/ips: 192.168.100.125
+        externalTrafficPolicy: Local
+        port: 22
   valuesFrom:
     # Security
     - kind: Secret
