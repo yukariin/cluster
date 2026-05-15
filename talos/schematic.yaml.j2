@@ -20,7 +20,6 @@ customization:
     - intel_iommu=on                        # Enable IOMMU
     - iommu=pt                              # Use passthrough mode for IOMMU
     - sysctl.kernel.kexec_load_disabled=1   # Security hardening
-    - thunderbolt.force_power=1             # Thunderbolt NICs
 
     # in secureboot, talos locks down to "confidentiality" mode by default, which may break cilium
     # more info: https://github.com/siderolabs/talos/pull/8535

@@ -36,7 +36,7 @@ reboot
 exit
 
 :talos
-kernel https://factory.talos.dev/pxe/95c3b93a44a2a167ce47eaec906c21ec241f057d8a385e7130eabcadc612e680/v1.13.0/metal-amd64-secureboot
+kernel https://factory.talos.dev/pxe/90c9690abad7aeba0fa89f22cd2511261c85a4e898ed7911583b37e02d11c575/v1.13.0/metal-amd64-secureboot
 boot || goto failed
 goto start
 
