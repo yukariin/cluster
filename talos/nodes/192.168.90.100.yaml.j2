@@ -1,5 +1,4 @@
 ---
-# yaml-language-server: $schema=https://schemas.ajgon.casa/other/talos.config.json
 version: v1alpha1
 machine:
   type: controlplane
@@ -10,7 +9,6 @@ machine:
     topology.kubernetes.io/zone: sdm
 
 ---
-# yaml-language-server: $schema=https://schemas.ajgon.casa/other/talos.config.json
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: sakuya
@@ -23,3 +21,41 @@ provisioning:
   diskSelector:
     match: disk.model == "Phison 1TB ESR01TBTCCZ-27J-2MS" # && !system_disk
   minSize: 800GB
+
+# ---
+# apiVersion: v1alpha1
+# kind: LinkAliasConfig
+# name: sakuya-remilia
+# selector:
+#   match: link.driver == "thunderbolt-net" && link.bus_path == "1-1.0"
+
+# ---
+# apiVersion: v1alpha1
+# kind: LinkConfig
+# name: sakuya-remilia
+# up: true
+# mtu: 65520
+# addresses:
+#   - address: 169.254.90.100/32
+# routes:
+#   - destination: 169.254.90.110/32
+#     metric: 2048
+
+# ---
+# apiVersion: v1alpha1
+# kind: LinkAliasConfig
+# name: sakuya-flandre
+# selector:
+#   match: link.driver == "thunderbolt-net" && link.bus_path == "0-1.0"
+
+# ---
+# apiVersion: v1alpha1
+# kind: LinkConfig
+# name: sakuya-flandre
+# up: true
+# mtu: 65520
+# addresses:
+#   - address: 169.254.90.100/32
+# routes:
+#   - destination: 169.254.90.120/32
+#     metric: 2048
