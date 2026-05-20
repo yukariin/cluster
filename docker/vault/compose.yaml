@@ -15,6 +15,9 @@ services:
       - proxy_network
     environment:
       VAULT_ADDR: http://127.0.0.1:8200
+      # https://github.com/hashicorp/vault/issues/31919
+      SKIP_SETCAP: "true"
+      SKIP_CHOWN: "true"
     # ports:
     #   - 8200:8200
     # security
