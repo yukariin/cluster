@@ -18,7 +18,6 @@ resources:
   # - lidarr/ks.yaml
   - navidrome/ks.yaml
   - pinchflat/ks.yaml
-  # - plex/ks.yaml
   - prowlarr/ks.yaml
   - qbittorrent/ks.yaml
   - qui/ks.yaml
