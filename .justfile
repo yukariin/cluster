@@ -15,7 +15,7 @@ default:
 doctor:
     #!/usr/bin/env bash
     missing=()
-    for tool in just kubectl flux talosctl helm kustomize minijinja-cli gum flux-local envconsul; do
+    for tool in just kubectl flux talosctl cilium helm kustomize minijinja-cli gum flux-local envconsul ; do
         command -v "$tool" &>/dev/null || missing+=("$tool")
     done
     if [[ ${#missing[@]} -eq 0 ]]; then
