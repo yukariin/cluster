@@ -29,8 +29,8 @@ spec:
       staticPath: /var/cdi/static
       dynamicPath: /var/cdi/dynamic
     kubeletPlugin:
+      privileged: true
       healthMonitoring:
-        # Provide -m flag to kubelet-plugin to actively monitor GPU health via xpumd.
         enabled: false
     nodeFeatureRules:
       enabled: true
