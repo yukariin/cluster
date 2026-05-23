@@ -26,7 +26,6 @@ spec:
               BAZARR__INSTANCE_NAME: Bazarr
               BAZARR__LOG_LEVEL: info
               BAZARR__PORT: &port 80
-              TZ: Europe/Moscow
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"

@@ -28,7 +28,6 @@ spec:
               ND_PORT: &port 80
               ND_SCANNER_SCHEDULE: "@every 1h"
               ND_TRANSCODINGCACHESIZE: 1GB
-              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true

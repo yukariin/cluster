@@ -20,7 +20,6 @@ spec:
               tag: 10.11.9@sha256:ef4d95143a5475d1ba4d9a6983342cac300044d676a30648b7d0e0688961712a
             env:
               JELLYFIN_PublishedServerUrl: "https://{{ .Release.Name }}.mistelinn.org"
-              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true

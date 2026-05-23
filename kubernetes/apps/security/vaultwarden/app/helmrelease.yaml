@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app vaultwarden
+  name: vaultwarden
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      vaultwarden:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -21,7 +21,6 @@ spec:
               repository: vaultwarden/server
               tag: 1.36.0@sha256:d626d04934cd1192ad8ced1adb975099fca78cec33ab467d2d3c923cde7f3b0c
             env:
-              TZ: Europe/Moscow
               DOMAIN: "https://passwords.mistelinn.org"
               ROCKET_PORT: &port 80
               ICON_CACHE_FOLDER: "icons"

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app sillytavern
+  name: sillytavern
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      sillytavern:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -23,7 +23,6 @@ spec:
               pullPolicy: Always
             env:
               NODE_ENV: production
-              TZ: Europe/Moscow
               SILLYTAVERN_PORT: &port 80
               SILLYTAVERN_WHITELIST: '["10.42.0.0/16", "192.168.10.0/24"]'
             probes:

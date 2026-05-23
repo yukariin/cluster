@@ -39,7 +39,6 @@ spec:
             env:
               GATUS_WEB_PORT: &port 80
               GATUS_CONFIG_PATH: /config
-              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true

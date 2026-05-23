@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app miniflux
+  name: miniflux
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      miniflux:
         annotations:
           reloader.stakater.com/auto: "true"
         strategy: RollingUpdate
@@ -33,7 +33,6 @@ spec:
               OAUTH2_OIDC_DISCOVERY_ENDPOINT: "https://authentik.mistelinn.org/application/o/miniflux/"
               OAUTH2_REDIRECT_URL: "https://miniflux.mistelinn.org/oauth2/oidc/callback"
               OAUTH2_USER_CREATION: "1"
-              TZ: Europe/Moscow
               RUN_MIGRATIONS: "1"
               DATABASE_URL:
                 valueFrom:

@@ -23,7 +23,6 @@ spec:
             env:
               LOG_LEVEL: info
               PORT: &port 80
-              TZ: Europe/Moscow
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"

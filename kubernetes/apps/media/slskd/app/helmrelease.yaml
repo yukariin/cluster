@@ -35,7 +35,6 @@ spec:
               SLSKD_REMOTE_CONFIGURATION: false
               SLSKD_SLSK_LISTEN_PORT: &soulseekPort 50300
               SLSKD_UMASK: "002"
-              TZ: Europe/Moscow
             probes:
               liveness: &probes
                 enabled: true
