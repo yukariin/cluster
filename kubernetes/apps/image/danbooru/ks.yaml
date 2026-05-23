@@ -71,7 +71,7 @@ metadata:
   name: &app iqdb
 spec:
   components:
-    - ../../../../components/volsync-migrate
+    - ../../../../components/volsync
   dependsOn:
     - name: democratic-csi
       namespace: democratic-csi

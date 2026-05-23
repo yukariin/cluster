@@ -28,7 +28,7 @@ metadata:
   name: &app matrix
 spec:
   components:
-    - ../../../../components/volsync-migrate
+    - ../../../../components/volsync
   dependsOn:
     - name: matrix-database
   interval: 1h
