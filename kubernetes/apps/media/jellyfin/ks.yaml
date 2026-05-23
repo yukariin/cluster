@@ -6,6 +6,7 @@ metadata:
   name: &app jellyfin
 spec:
   components:
+    - ../../../../components/gpu
     - ../../../../components/keda
     - ../../../../components/volsync-migrate
   dependsOn:
