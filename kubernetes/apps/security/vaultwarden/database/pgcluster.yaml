@@ -12,9 +12,6 @@ spec:
       disabledDefaultServices:
         - "ro"
         - "r"
-  postgresql:
-    parameters:
-      timezone: Europe/Moscow
   storage:
     size: 5G
     storageClass: democratic-csi-hostpath

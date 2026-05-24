@@ -16,7 +16,6 @@ spec:
         type: cronjob
         cronjob:
           schedule: "@hourly"
-          timeZone: Europe/Moscow
           concurrencyPolicy: Forbid
           successfulJobsHistory: 1
           failedJobsHistory: 1
