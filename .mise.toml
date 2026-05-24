@@ -10,19 +10,22 @@ _.file = [
 
 [hooks]
 enter = "just doctor"
+postinstall = "lefthook install"
 
 [tools]
 "gum" = "latest"
 "just" = "latest"
 "uv" = "latest"
+helm = "4.2.0"
+kubectl = "latest"
+kustomize = "5.8.1"
 "pipx:flux-local" = "latest"
 "aqua:cilium/cilium-cli" = "0.19.4"
 "aqua:cli/cli" = "latest"
+"aqua:evilmartians/lefthook" = "2.1.8"
 "aqua:fluxcd/flux2" = "2.8.8"
-"aqua:helm/helm" = "4.2.0"
+"aqua:google/yamlfmt" = "0.21.0"
 "aqua:helmfile/helmfile" = "1.5.2"
 "aqua:jqlang/jq" = "latest"
-"aqua:kubernetes-sigs/kustomize" = "5.8.1"
-"aqua:kubernetes/kubectl" = "1.36.0"
 "aqua:siderolabs/talos" = "1.13.2"
 "github:mitsuhiko/minijinja" = "latest"
