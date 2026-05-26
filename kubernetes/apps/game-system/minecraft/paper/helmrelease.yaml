@@ -31,7 +31,7 @@ spec:
               MODE: survival
               PAPER_CHANNEL: experimental
               PAUSE_WHEN_EMPTY_SECONDS: "600"
-              SEED: 1691256543523182218
+              SEED: "1691256543523182218"
               SERVER_NAME: Terra
               SPAWN_PROTECTION: 0
               TYPE: PAPER
