@@ -9,7 +9,6 @@ metadata:
 spec:
   parentRefs:
     - {name: envoy-external, namespace: network}
-    - {name: envoy-internal, namespace: network}
   hostnames:
     - "matrix.mistelinn.org"
   rules:
@@ -52,7 +51,6 @@ metadata:
 spec:
   parentRefs:
     - {name: envoy-external, namespace: network}
-    - {name: envoy-internal, namespace: network}
   hostnames:
     - "matrix-auth.mistelinn.org"
   rules:
@@ -73,7 +71,6 @@ metadata:
 spec:
   parentRefs:
     - {name: envoy-external, namespace: network}
-    - {name: envoy-internal, namespace: network}
   hostnames:
     - "element.mistelinn.org"
   rules:
@@ -98,7 +95,6 @@ metadata:
 spec:
   parentRefs:
     - {name: envoy-external, namespace: network}
-    - {name: envoy-internal, namespace: network}
   hostnames:
     - "rtc.mistelinn.org"
   rules:

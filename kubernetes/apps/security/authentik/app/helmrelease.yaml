@@ -69,4 +69,3 @@ spec:
             - "{{ .Release.Name }}.mistelinn.org"
           parentRefs:
             - {name: envoy-external, namespace: network}
-            - {name: envoy-internal, namespace: network}

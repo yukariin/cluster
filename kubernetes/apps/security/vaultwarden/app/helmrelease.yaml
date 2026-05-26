@@ -81,7 +81,6 @@ spec:
           - "passwords.mistelinn.org"
         parentRefs:
           - {name: envoy-external, namespace: network}
-          - {name: envoy-internal, namespace: network}
         rules:
           - backendRefs:
               - identifier: app
