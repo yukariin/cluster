@@ -61,7 +61,6 @@ spec:
             args:
               - --domain-filter=mistelinn.org
               - --events
-              - --gateway-name=envoy-internal
               - --interval=1m
               - --log-format=text
               - --log-level=info
