@@ -14,8 +14,3 @@ stage_fixed = true
 glob = ["*.yaml", "*.yml"]
 run = "yamlfmt {staged_files}"
 stage_fixed = true
-
-
-[pre-commit.commands.mise-lock]
-glob = [".mise.toml"]
-run = "mise lock && git add mise.lock"
