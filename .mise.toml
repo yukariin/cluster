@@ -14,7 +14,7 @@ postinstall = "lefthook install"
 
 [tools]
 "aqua:cilium/cilium-cli" = "0.19.4"
-"aqua:evilmartians/lefthook" = "2.1.8"
+"aqua:evilmartians/lefthook" = "2.1.9"
 "aqua:fluxcd/flux2" = "2.8.8"
 "aqua:google/yamlfmt" = "0.21.0"
 "aqua:helmfile/helmfile" = "1.5.2"
