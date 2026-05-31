@@ -10,11 +10,18 @@ spec:
     name: k8tz
   interval: 1h
   values:
-    namespace: null
+    namespace: kube-system
     createNamespace: false
     timezone: Europe/Moscow
     cronJobTimeZone: true
     webhook:
+      failurePolicy: Ignore # Don't grind the cluster to a halt when the service fails
+      ignoredNamespaces:
+        - cert-manager
+        - external-secrets
+        - kube-system
+        - network
+        - system-upgrade
       certManager:
         enabled: true
         issuerRef:
