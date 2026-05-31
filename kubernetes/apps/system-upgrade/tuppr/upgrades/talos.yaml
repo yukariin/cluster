@@ -20,6 +20,3 @@ spec:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
       expr: status.conditions.filter(c, c.type == "Ready").all(c, c.status == "True")
-    - apiVersion: dragonflydb.io/v1alpha1
-      kind: Dragonfly
-      expr: status.phase in ['Ready']
