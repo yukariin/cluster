@@ -69,9 +69,8 @@ machine:
     defaultRuntimeSeccompProfileEnabled: true
     disableManifestsDirectory: true
     extraConfig:
-      imageMaximumGCAge: 24h
-      imageGCHighThresholdPercent: 65
-      imageGCLowThresholdPercent: 50
+      featureGates:
+        UserNamespacesSupport: true
       maxPods: 250
       serializeImagePulls: false
     image: ghcr.io/siderolabs/kubelet:v1.36.1
