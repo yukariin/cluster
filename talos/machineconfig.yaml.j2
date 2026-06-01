@@ -215,6 +215,9 @@ cluster:
       key: '{{ ENV.CLUSTER_ETCD_CA_KEY }}'
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
+      # do not wake up CPU so often
+      heartbeat-interval: "500"
+      election-timeout: "5000"
 
   proxy:
     disabled: true
