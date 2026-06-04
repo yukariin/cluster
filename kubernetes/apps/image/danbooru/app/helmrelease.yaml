@@ -110,6 +110,7 @@ spec:
             envFrom: *envFrom
             securityContext: *sc
       cron:
+        annotations: *annotations
         containers:
           app:
             image: *image
@@ -143,7 +144,7 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 30
-              liveness:
+              liveness: &jobProbes
                 enabled: true
                 custom: true
                 spec:
@@ -153,6 +154,7 @@ spec:
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 3
+              readiness: *jobProbes
             securityContext: *sc
     defaultPodOptions:
       securityContext:
