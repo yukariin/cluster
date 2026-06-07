@@ -20,6 +20,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      KEDA_KIND: StatefulSet
       VOLSYNC_CAPACITY: 10Gi
   sourceRef:
     kind: GitRepository
