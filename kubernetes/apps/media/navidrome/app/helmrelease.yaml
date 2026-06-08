@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app navidrome
+  name: navidrome
 spec:
   chartRef:
     kind: OCIRepository
@@ -13,6 +13,7 @@ spec:
   values:
     controllers:
       navidrome:
+        type: statefulset
         containers:
           app:
             image:
@@ -28,6 +29,11 @@ spec:
               ND_PORT: &port 80
               ND_SCANNER_SCHEDULE: "@every 1h"
               ND_TRANSCODINGCACHESIZE: 1GB
+              ND_TRANSCODING_MAXCONCURRENT: 2
+              ND_TRANSCODING_MAXCONCURRENTPERUSER: 1
+              ND_ENFORCENONROOTUSER: true
+              ND_PLUGINS_ENABLED: true
+              ND_PLUGINS_LOGLEVEL: info
             probes:
               liveness: &probes
                 enabled: true
@@ -56,6 +62,15 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 512Mi
+        statefulset:
+          volumeClaimTemplates:
+            - name: cache
+              storageClass: democratic-csi-hostpath
+              accessMode: ReadWriteOnce
+              size: 5Gi
+              advancedMounts:
+                app:
+                  - path: /config/cache
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -63,14 +78,9 @@ spec:
         runAsGroup: 568
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: {type: RuntimeDefault}
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
-      cache:
-        existingClaim: "{{ .Release.Name }}-cache"
-        globalMounts:
-          - path: /config/cache
       media:
         type: nfs
         server: nas.internal

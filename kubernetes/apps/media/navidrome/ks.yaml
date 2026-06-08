@@ -17,6 +17,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      KEDA_KIND: StatefulSet
   sourceRef:
     kind: GitRepository
     name: flux-system
