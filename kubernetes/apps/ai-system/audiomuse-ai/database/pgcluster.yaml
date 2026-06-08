@@ -19,13 +19,13 @@ spec:
     enablePodMonitor: true
 
   bootstrap:
-    initdb:
+    # initdb:
+    #   database: audiomusedb
+    #   owner: audiomuse
+    recovery:
+      source: pg-audiomuse-ai-restore
       database: audiomusedb
       owner: audiomuse
-      # recovery:
-      #   source: pg-audiomuse-ai-restore
-      #   database: audiomusedb
-      #   owner: audiomuse
 
   plugins:
     - name: barman-cloud.cloudnative-pg.io
