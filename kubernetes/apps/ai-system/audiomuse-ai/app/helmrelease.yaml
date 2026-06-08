@@ -25,6 +25,8 @@ spec:
               SERVICE_TYPE: flask
               # General
               TEMP_DIR: /tmp
+              AUTH_ENABLED: "false"
+              CLAP_ENABLED: "true"
               ENABLE_PROXY_FIX: true
               # Backend
               MEDIASERVER_TYPE: navidrome
