@@ -1,0 +1,126 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: audiomuse-ai
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    controllers:
+      flask:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image: &image
+              repository: ghcr.io/neptunehub/audiomuse-ai
+              tag: 2.1.4@sha256:04d1c5b8c6c766a26ca2ef008c2b7e6f5f0a1e93590176f7d68ead0048d4c4dd
+            env: &env
+              # Service
+              SERVICE_TYPE: flask
+              # General
+              TEMP_DIR: /tmp
+              ENABLE_PROXY_FIX: true
+              # Backend
+              MEDIASERVER_TYPE: navidrome
+              NAVIDROME_URL: http://navidrome.media.svc.cluster.local
+              # DB
+              POSTGRES_HOST: pg-audiomuse-ai-rw
+              POSTGRES_PORT: 5432
+              POSTGRES_DB: audiomusedb
+              POSTGRES_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-audiomuse-ai-app
+                    key: username
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: pg-audiomuse-ai-app
+                    key: password
+              # Redis
+              REDIS_URL: redis://audiomuse-ai-dragonfly.ai-system.svc.cluster.local:6379/0
+              # Providers
+              AI_MODEL_PROVIDER: NONE
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/health
+                    port: &port 8000
+                  initialDelaySeconds: 0
+                  periodSeconds: 20
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext: &sc
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+      worker:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image: *image
+            env:
+              <<: *env
+              SERVICE_TYPE: worker
+            resources:
+              requests:
+                cpu: 500m
+                memory: 2Gi
+              limits:
+                cpu: "4"
+                memory: 8Gi
+            securityContext: *sc
+    defaultPodOptions:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
+    persistence:
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+          - path: /app/temp_audio
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.mistelinn.org"
+        parentRefs:
+          - {name: envoy-internal, namespace: network}
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    service:
+      app:
+        controller: flask
+        ports:
+          http:
+            port: *port

@@ -32,7 +32,9 @@ spec:
               ND_TRANSCODING_MAXCONCURRENT: 2
               ND_TRANSCODING_MAXCONCURRENTPERUSER: 1
               ND_ENFORCENONROOTUSER: true
+              ND_AGENTS: audiomuseai,lastfm,spotify,deezer
               ND_PLUGINS_ENABLED: true
+              ND_PLUGINS_AUTORELOAD: true
               ND_PLUGINS_LOGLEVEL: info
             probes:
               liveness: &probes
