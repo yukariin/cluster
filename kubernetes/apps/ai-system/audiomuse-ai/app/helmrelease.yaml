@@ -80,6 +80,7 @@ spec:
       worker:
         annotations:
           reloader.stakater.com/auto: "true"
+        type: daemonset
         containers:
           app:
             image: *image
