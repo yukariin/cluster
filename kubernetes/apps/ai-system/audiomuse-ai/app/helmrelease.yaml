@@ -113,7 +113,7 @@ spec:
     route:
       app:
         hostnames:
-          - "{{ .Release.Name }}.mistelinn.org"
+          - muse.mistelinn.org
         parentRefs:
           - {name: envoy-internal, namespace: network}
         rules:
