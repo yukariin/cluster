@@ -9,5 +9,5 @@ components:
 
 resources:
   - namespace.yaml
-  - gitea/ks.yaml
+  # - gitea/ks.yaml
   - paperless/ks.yaml
