@@ -77,6 +77,8 @@ spec:
         repository:
           DEFAULT_BRANCH: master
           DEFAULT_PRIVATE: true
+          DEFAULT_REPO_UNITS: repo.code,repo.releases,repo.issues,repo.pulls,repo.actions
+          DISABLED_REPO_UNITS: repo.ext_wiki,repo.ext_issues
           ROOT: /data/git/repositories
         repository.pull-request:
           DEFAULT_MERGE_STYLE: squash
@@ -96,6 +98,11 @@ spec:
           DISABLE_REGISTRATION: false
           ENABLE_PASSKEY_AUTHENTICATION: false
           SHOW_REGISTRATION_BUTTON: false
+        service.explore:
+          DISABLE_CODE_PAGE: false
+          DISABLE_ORGANIZATIONS_PAGE: true
+          DISABLE_USERS_PAGE: true
+          REQUIRE_SIGNIN_VIEW: false
         session:
           PROVIDER: redis
           PROVIDER_CONFIG: *redis_url
