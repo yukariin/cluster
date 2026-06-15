@@ -109,6 +109,8 @@ spec:
           SESSION_LIFE_TIME: "1209600"
         storage:
           STORAGE_TYPE: local
+        other:
+          SHOW_FOOTER_TEMPLATE_LOAD_TIME: false
         ui:
           DEFAULT_THEME: forgejo-dark
         webhook:
