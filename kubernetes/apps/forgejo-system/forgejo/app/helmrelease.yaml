@@ -109,7 +109,7 @@ spec:
       oauth:
         - name: Authentik
           adminGroup: admins
-          autoDiscoverUrl: "https://authentik.mistelinn.org/application/o/gitea/.well-known/openid-configuration"
+          autoDiscoverUrl: "https://authentik.mistelinn.org/application/o/forgejo/.well-known/openid-configuration"
           existingSecret: *secret
           groupClaimName: groups
           provider: openidConnect
