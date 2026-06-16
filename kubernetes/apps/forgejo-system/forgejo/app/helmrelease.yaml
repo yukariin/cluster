@@ -82,6 +82,15 @@ spec:
           ROOT: /data/git/repositories
         repository.pull-request:
           DEFAULT_MERGE_STYLE: squash
+        repository.signing:
+          CRUD_ACTIONS: pubkey, parentsigned
+          FORMAT: ssh
+          INITIAL_COMMIT: pubkey
+          MERGES: pubkey
+          SIGNING_EMAIL: "noreply@git.mistelinn.org"
+          SIGNING_KEY: /data/git/.ssh-signing/key.pub
+          SIGNING_NAME: "git.mistelinn.org Instance"
+          WIKI: never
         security:
           INSTALL_LOCK: true
           REVERSE_PROXY_TRUSTED_PROXIES: 10.42.0.0/16
@@ -123,6 +132,10 @@ spec:
           groupClaimName: groups
           provider: openidConnect
           scopes: profile email groups
+    signing:
+      enabled: true
+      ssh:
+        existingSecret: forgejo-signing-key-secret
     persistence:
       enabled: true
       create: false
