@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/renovate-operator.mogenius.com/renovatejob_v1alpha1.json
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: forgejo
+spec:
+  discoveryFilters:
+    - yukarin/*
+  extraEnv:
+    - name: LOG_LEVEL
+      value: debug
+    - name: RENOVATE_ALLOWED_COMMANDS
+      value: |-
+        ["pnpm run bundle"]
+  image: ghcr.io/renovatebot/renovate:43.222.1
+  parallelism: 5
+  provider:
+    name: forgejo
+    endpoint: https://git.mistelinn.org/api/v1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  schedule: 0 * * * *
+  secretRef: renovate-secret
+  # webhook:
+  #   enabled: true
+  #   authentication:
+  #     enabled: false
