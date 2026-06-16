@@ -114,7 +114,7 @@ spec:
         ui:
           DEFAULT_THEME: forgejo-dark
         webhook:
-          ALLOWED_HOST_LIST: "*.mistelinn.org"
+          ALLOWED_HOST_LIST: "*"
       oauth:
         - name: Authentik
           adminGroup: admins
