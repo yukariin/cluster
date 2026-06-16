@@ -13,9 +13,8 @@ spec:
     - name: RENOVATE_ALLOWED_COMMANDS
       value: |-
         ["pnpm run bundle"]
-    - name: RENOVATE_REPOSITORIES
-      value: |-
-        ["yukarin/cluster"]
+    - name: RENOVATE_DETECT_HOST_RULES_FROM_ENV
+      value: "true"
   image: ghcr.io/renovatebot/renovate:43.222.1
   parallelism: 5
   provider:
