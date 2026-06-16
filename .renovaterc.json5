@@ -4,8 +4,6 @@
     "config:recommended",
     "docker:enableMajor",
     "helpers:pinGitHubActionDigests",
-    ":automergeDigest",
-    ":automergePatch",
     ":automergePr",
     ":dependencyDashboard",
     ":disableRateLimiting",
