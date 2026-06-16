@@ -1,0 +1,13 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  packageRules: [
+    {
+      enabled: false,
+      description: "Ignore Talos Factory installer URLs extracted by the Kubernetes manager; custom.talos-factory handles these.",
+      matchManagers: ["kubernetes"],
+      matchDatasources: ["docker"],
+      matchFileNames: ["talos/machineconfig.yaml.j2"],
+      matchPackageNames: ["/^factory\\.talos\\.dev\\/metal-installer/"],
+    },
+  ],
+}
