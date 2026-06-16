@@ -3,7 +3,7 @@
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
-  name: forgejo
+  name: forgejo-yukarin
 spec:
   discoveryFilters:
     - yukarin/*
@@ -15,7 +15,7 @@ spec:
         ["pnpm run bundle"]
     - name: RENOVATE_DETECT_HOST_RULES_FROM_ENV
       value: "true"
-  image: ghcr.io/renovatebot/renovate:43.222.1
+  image: ghcr.io/renovatebot/renovate:43.224.1
   parallelism: 5
   provider:
     name: forgejo
