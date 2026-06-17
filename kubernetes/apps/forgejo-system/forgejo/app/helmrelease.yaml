@@ -83,6 +83,7 @@ spec:
         repository.pull-request:
           DEFAULT_MERGE_STYLE: squash
           POPULATE_SQUASH_COMMENT_WITH_COMMIT_MESSAGES: true
+          DEFAULT_DELETE_BRANCH_AFTER_MERGE: true
         repository.signing:
           CRUD_ACTIONS: pubkey, parentsigned
           FORMAT: ssh
