@@ -6,7 +6,7 @@ resources:
   - externalsecret.yaml
   - helmrelease.yaml
 configMapGenerator:
-  - name: forgejo-runner-configmap
+  - name: forgejo-runner-config
     files:
       - podspec-default.yaml=./resources/podspec-default.yaml
       - podspec-dind.yaml=./resources/podspec-dind.yaml
