@@ -22,9 +22,9 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      issues: write
     steps:
       - name: Apply Labels
         uses: https://github.com/actions/labeler@f27b608878404679385c85cfa523b85ccb86e213 # v6.1.0
         with:
-          repo-token: ${{ secrets.FORGEJO_TOKEN }}
           configuration-path: .forgejo/labeler.yaml
