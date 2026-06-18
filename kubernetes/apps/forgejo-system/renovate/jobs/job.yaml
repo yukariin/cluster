@@ -3,13 +3,15 @@
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
-  name: forgejo-yukarin
+  name: forgejo
 spec:
   discoveryFilters:
     - yukarin/*
   extraEnv:
     - name: LOG_LEVEL
       value: debug
+    - name: RENOVATE_GIT_AUTHOR
+      value: Renovate Bot <renovate@mistelinn.org>
     - name: RENOVATE_PLATFORM_COMMIT
       value: enabled
     - name: RENOVATE_REDIS_URL
