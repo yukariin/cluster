@@ -11,118 +11,6 @@ spec:
     namespace: flux-system
   interval: 1h
   values:
-    configMaps:
-      config:
-        suffix: config
-        data:
-          runner.yaml: |-
-            cache:
-              enabled: true
-              dir: /data/cache
-            container:
-              docker_host: "-"
-              workdir_parent: shared/workdir
-            host:
-              workdir_parent: /data/act
-            kubernetes:
-              namespace: forgejo-system
-              poll_timeout: 10m
-            log:
-              level: info
-            plugins:
-              k8s:
-                address: unix:///plugin/forgejo-runner-k8s.sock
-                options:
-                  namespace: forgejo-system
-                  poll_timeout: 10m
-                  labels: "app.kubernetes.io/name=forgejo-runner-instance,app.kubernetes.io/instance=env-${ENV_ID},egress.home.arpa/custom-egress=true"
-            runner:
-              capacity: 2 # 4
-              file: /persistent/.runner
-              labels:
-                - ubuntu-latest:k8s:/config/podspec-default.yaml
-                - ubuntu-24.04:k8spod:/config/podspec-default.yaml
-                - default:k8s:/config/podspec-default.yaml
-                - docker:k8s:/config/podspec-dind.yaml
-              timeout: 3h
-              shutdown_timeout: 3m
-          podspec-default.yaml: |-
-            containers:
-              - env:
-                  - name: DEBIAN_FRONTEND
-                    value: noninteractive
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:e8ac9381ca9509727cc367eefba3b1ecb10a24bc5ee0e41109da2dffc4bec448
-                imagePullPolicy: IfNotPresent
-                name: main
-                resources:
-                  limits:
-                    cpu: "2"
-                    memory: 2Gi
-                  requests:
-                    cpu: 100m
-                    memory: 256Mi
-            restartPolicy: Never
-          podspec-dind.yaml: |-
-            initContainers:
-              - name: dind
-                image: docker:29-dind
-                securityContext:
-                  privileged: true
-                restartPolicy: Always
-                env:
-                  - name: DOCKER_TLS_CERTDIR
-                    value: /certs
-                resources:
-                  requests:
-                    cpu: 100m
-                    memory: 256Mi
-                  limits:
-                    cpu: "2"
-                    memory: 4Gi
-                volumeMounts:
-                  - name: docker-storage
-                    mountPath: /var/lib/docker
-                  - name: docker-certs
-                    mountPath: /certs
-                startupProbe:
-                  exec:
-                    command:
-                      - sh
-                      - -c
-                      - docker --tlsverify --tlscacert=/certs/client/ca.pem --tlscert=/certs/client/cert.pem --tlskey=/certs/client/key.pem -H tcp://localhost:2376 info
-                  initialDelaySeconds: 5
-                  periodSeconds: 1
-                  failureThreshold: 30
-            containers:
-              - env:
-                  - name: DEBIAN_FRONTEND
-                    value: noninteractive
-                  - name: DOCKER_HOST
-                    value: tcp://localhost:2376
-                  - name: DOCKER_TLS_VERIFY
-                    value: "1"
-                  - name: DOCKER_CERT_PATH
-                    value: /certs/client
-                image: ghcr.io/bjw-s-labs/forgejo-runner:ubuntu-24.04@sha256:e8ac9381ca9509727cc367eefba3b1ecb10a24bc5ee0e41109da2dffc4bec448
-                imagePullPolicy: IfNotPresent
-                name: main
-                resources:
-                  limits:
-                    cpu: "2"
-                    memory: 4Gi
-                  requests:
-                    cpu: 100m
-                    memory: 256Mi
-                volumeMounts:
-                  - name: docker-certs
-                    mountPath: /certs
-                    readOnly: true
-            volumes:
-              - name: docker-storage
-                emptyDir: {}
-              - name: docker-certs
-                emptyDir: {}
-            restartPolicy: Never
     controllers:
       forgejo-runner:
         type: deployment
@@ -130,15 +18,14 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
-          automountServiceAccountToken: true
           labels:
             app.kubernetes.io/component: forgejo-runner
           securityContext:
+            runAsNonRoot: true
+            runAsGroup: 1000
+            runAsUser: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            runAsGroup: 1000
-            runAsNonRoot: true
-            runAsUser: 1000
           # must cover runner.shutdown_timeout plus the plugin's 60s cleanup budget
           terminationGracePeriodSeconds: 300
         initContainers:
@@ -186,16 +73,24 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
+    defaultPodOptions:
+      automountServiceAccountToken: true
     persistence:
       config:
         type: configMap
-        identifier: config
+        identifier: forgejo-runner-config
         globalMounts:
           - path: /config
       plugin:
         type: emptyDir
         globalMounts:
           - path: /plugin
+      runner-secret:
+        type: secret
+        name: forgejo-runner-secret
+        globalMounts:
+          - path: /etc/forgejo-runner-secret
+            readOnly: true
       cache:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
@@ -210,12 +105,6 @@ spec:
             subPath: data
           - path: /tmp
             subPath: tmp
-      runner-secret:
-        type: secret
-        name: forgejo-runner-secret
-        globalMounts:
-          - path: /etc/forgejo-runner-secret
-            readOnly: true
     rbac:
       bindings:
         forgejo-runner:

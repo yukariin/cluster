@@ -1,0 +1,31 @@
+---
+cache:
+  enabled: true
+  dir: /data/cache
+container:
+  docker_host: "-"
+  workdir_parent: shared/workdir
+host:
+  workdir_parent: /data/act
+kubernetes:
+  namespace: forgejo-system
+  poll_timeout: 10m
+log:
+  level: info
+plugins:
+  k8s:
+    address: unix:///plugin/forgejo-runner-k8s.sock
+    options:
+      namespace: forgejo-system
+      poll_timeout: 10m
+      labels: "app.kubernetes.io/name=forgejo-runner-instance,app.kubernetes.io/instance=env-${ENV_ID}"
+runner:
+  capacity: 2 # 4
+  file: /persistent/.runner
+  labels:
+    - ubuntu-latest:k8s:/config/podspec-default.yaml
+    - ubuntu-24.04:k8spod:/config/podspec-default.yaml
+    - default:k8s:/config/podspec-default.yaml
+    - docker:k8s:/config/podspec-dind.yaml
+  timeout: 3h
+  shutdown_timeout: 3m
