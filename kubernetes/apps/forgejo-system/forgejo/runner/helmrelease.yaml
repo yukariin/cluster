@@ -78,7 +78,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: forgejo-runner-config
+        name: forgejo-runner-configmap
         globalMounts:
           - path: /config
       plugin:
