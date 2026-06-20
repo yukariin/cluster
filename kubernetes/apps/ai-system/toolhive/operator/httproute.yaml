@@ -8,7 +8,7 @@ spec:
   hostnames:
     - "mcp.mistelinn.org"
   parentRefs:
-    - {name: envoy-external, namespace: network}
+    - {name: envoy-internal, namespace: network}
   rules:
     - backendRefs:
         - name: vmcp-mcp-gateway-internal
