@@ -22,7 +22,6 @@
     "local>yukarin/cluster//.renovate/labels.json5",
   ],
   suppressNotifications: ["prEditedNotification", "prIgnoreNotification"],
-  ignorePaths: ["**/resources/**"],
   packageRules: [
     {
       matchDatasources: ["terraform-provider", "terraform-module"],
