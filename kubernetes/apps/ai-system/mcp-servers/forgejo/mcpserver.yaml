@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: forgejo
+spec:
+  groupRef:
+    name: mcp-tools
+  image: codeberg.org/goern/forgejo-mcp:v2.30.0@sha256:d085c6b4166139e0d6b02df3f7f8665fafb950c76abbbe8e4acc2c0ba094a326
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          args:
+            - "--transport"
+            - "http"
+            - "--http-port"
+            - "8080"
+            - "--url"
+            - "http://forgejo-http.forgejo-system.svc.cluster.local:3000"
+  mcpPort: 8080
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  secrets:
+    - key: FORGEJO_ACCESS_TOKEN
+      name: forgejo-mcp-secret
+  transport: streamable-http
