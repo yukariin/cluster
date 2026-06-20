@@ -17,3 +17,7 @@ spec:
     type: anonymous
   outgoingAuth:
     source: discovered
+  sessionStorage:
+    provider: redis
+    address: toolhive-operator-dragonfly:6379
+    keyPrefix: "mcp-gateway-internal:"
