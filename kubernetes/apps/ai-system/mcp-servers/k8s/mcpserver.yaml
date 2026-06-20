@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: k8s
+spec:
+  groupRef:
+    name: mcp-tools
+  image: quay.io/containers/kubernetes_mcp_server:v0.0.62@sha256:bd7e9ff49b0941ff230508dfceb87162c4a2be67b18
+  podTemplateSpec:
+    spec:
+      containers:
+        - name: mcp
+          args:
+            - --disable-multi-cluster
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  serviceAccount: k8s-mcp
+  transport: stdio
