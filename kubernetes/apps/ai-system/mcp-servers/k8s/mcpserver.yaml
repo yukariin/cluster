@@ -7,7 +7,7 @@ metadata:
 spec:
   groupRef:
     name: mcp-tools
-  image: quay.io/containers/kubernetes_mcp_server:v0.0.62@sha256:bd7e9ff49b0941ff230508dfceb87162c4a2be67b18
+  image: quay.io/containers/kubernetes_mcp_server:v0.0.62@sha256:bd7e9ff49b0941ff230508dfceb87162c4a2be67b180c28f5d1b204fc58fa2e9
   podTemplateSpec:
     spec:
       containers:
