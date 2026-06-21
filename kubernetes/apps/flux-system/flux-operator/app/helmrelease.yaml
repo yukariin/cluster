@@ -21,5 +21,13 @@ spec:
     serviceMonitor:
       create: true
     web:
+      enabled: true
+      httpRoute:
+        enabled: true
+        hostnames:
+          - "flux.mistelinn.org"
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
       networkPolicy:
         create: false
