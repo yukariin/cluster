@@ -60,7 +60,7 @@ spec:
           enabled: true
           name: pocket-id
           parentRefs:
-            - name: envoy-internal
+            - name: envoy-external
               namespace: network
         smtp:
           host: smtp-relay.network.svc.cluster.local
