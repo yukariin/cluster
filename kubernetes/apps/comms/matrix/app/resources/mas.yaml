@@ -1,0 +1,39 @@
+---
+branding:
+  service_name: "Mistelinn Matrix"
+passwords:
+  enabled: false
+account:
+  email_change_allowed: true
+  displayname_change_allowed: true
+email:
+  from: "Matrix Auth <noreply@mistelinn.org>"
+  reply_to: "No reply <noreply@mistelinn.org>"
+  transport: smtp
+  mode: plain
+  hostname: smtp-relay.network.svc.cluster.local
+  port: 25
+upstream_oauth2:
+  providers:
+    - id: 01KVN4FHRYJ93JEV02ZJ1KGBDT
+      human_name: Pocket ID
+      issuer: https://id.mistelinn.org
+      client_id: "${OIDC_CLIENT_ID}"
+      client_secret: "${OIDC_CLIENT_SECRET}"
+      token_endpoint_auth_method: client_secret_post
+      scope: "openid email profile"
+      discovery_mode: oidc
+      pkce_method: auto
+      claims_imports:
+        localpart:
+          action: require
+          template: "{{ user.preferred_username }}"
+          # Link to an existing Matrix account with the same localpart so users
+          # migrated from Authentik keep their accounts (usernames match).
+          on_conflict: add
+        displayname:
+          action: suggest
+          template: "{{ user.name }}"
+        email:
+          action: suggest
+          template: "{{ user.email }}"

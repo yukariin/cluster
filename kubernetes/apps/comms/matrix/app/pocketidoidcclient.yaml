@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/pocketid.internal/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: matrix
+spec:
+  launchUrl: https://element.mistelinn.org
+  callbackUrls:
+    - https://matrix-auth.mistelinn.org/upstream/callback/01KVN4FHRYJ93JEV02ZJ1KGBDT
+  allowedUserGroups:
+    - name: users
+      namespace: security
+  pkceEnabled: true
+  secret:
+    keys:
+      clientID: OIDC_CLIENT_ID
+      clientSecret: OIDC_CLIENT_SECRET

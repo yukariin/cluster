@@ -1,19 +1,4 @@
 ---
-# yaml-language-server: $schema=https://kube-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1.json
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
-metadata:
-  name: matrix
-spec:
-  interval: 15m
-  layerSelector:
-    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
-    operation: copy
-  ref:
-    tag: 26.6.2
-  url: oci://ghcr.io/element-hq/ess-helm/matrix-stack
-
----
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -39,7 +24,7 @@ spec:
           existingClaim: "{{ .Release.Name }}"
         maxUploadSize: 256M
       postgres:
-        host: pg-matrix-rw.comms.svc.cluster.local
+        host: pg-matrix-rw
         user: matrix
         database: synapse
         password:
@@ -63,7 +48,7 @@ spec:
         className: disabled
         tlsEnabled: false
       postgres:
-        host: pg-matrix-rw.comms.svc.cluster.local
+        host: pg-matrix-rw
         user: matrix
         database: mas
         password:
