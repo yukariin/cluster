@@ -9,6 +9,6 @@ components:
 
 resources:
   - namespace.yaml
-  - authentik/ks.yaml
+  # - authentik/ks.yaml
   - pocket-id/ks.yaml
   - vaultwarden/ks.yaml
