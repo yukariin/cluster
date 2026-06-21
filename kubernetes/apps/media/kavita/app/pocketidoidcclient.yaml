@@ -14,4 +14,6 @@ spec:
     - name: users
       namespace: security
   secret:
-    enabled: false # OIDC settings in the UI
+    keys:
+      clientID: OAUTH_CLIENT_ID
+      clientSecret: OAUTH_CLIENT_SECRET
