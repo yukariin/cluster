@@ -29,8 +29,8 @@ spec:
               POLLING_FREQUENCY: "15"
               PORT: &port 80
               OAUTH2_PROVIDER: oidc
-              OAUTH2_OIDC_PROVIDER_NAME: Authentik
-              OAUTH2_OIDC_DISCOVERY_ENDPOINT: "https://authentik.mistelinn.org/application/o/miniflux/"
+              OAUTH2_OIDC_PROVIDER_NAME: Pocket ID
+              OAUTH2_OIDC_DISCOVERY_ENDPOINT: "https://id.mistelinn.org"
               OAUTH2_REDIRECT_URL: "https://miniflux.mistelinn.org/oauth2/oidc/callback"
               OAUTH2_USER_CREATION: "1"
               RUN_MIGRATIONS: "1"
@@ -41,7 +41,7 @@ spec:
                     key: uri
             envFrom:
               - secretRef:
-                  name: "{{ .Release.Name }}-secret"
+                  name: miniflux-oidc-credentials
             probes:
               liveness: &probes
                 enabled: true

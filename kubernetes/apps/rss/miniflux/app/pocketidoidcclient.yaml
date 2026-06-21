@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/pocketid.internal/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: miniflux
+spec:
+  launchUrl: https://miniflux.mistelinn.org
+  callbackUrls:
+    - https://miniflux.mistelinn.org/oauth2/oidc/callback
+  allowedUserGroups:
+    - name: users
+      namespace: security
+  secret:
+    keys:
+      clientID: OAUTH2_CLIENT_ID
+      clientSecret: OAUTH2_CLIENT_SECRET
