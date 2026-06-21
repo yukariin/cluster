@@ -11,13 +11,13 @@ spec:
   podTemplateSpec:
     spec:
       volumes:
-        - name: data
+        - name: tmp
           emptyDir: {}
       containers:
         - name: mcp
           volumeMounts:
-            - name: data
-              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
   mcpPort: 3000
   resources:
     requests:
