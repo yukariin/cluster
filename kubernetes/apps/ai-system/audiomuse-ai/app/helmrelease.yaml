@@ -19,7 +19,7 @@ spec:
           app:
             image: &image
               repository: ghcr.io/neptunehub/audiomuse-ai
-              tag: 2.3.0@sha256:bffb01b86a4de0cd793a3064aa7bf20f8e76b535bbb2b8facce5334a9631d807
+              tag: 2.3.1@sha256:df30e9cb9dd57e5dbda14595540a5e035e34399e82658b12e463d14a6e5e9793
             env: &env
               # Service
               SERVICE_TYPE: flask
