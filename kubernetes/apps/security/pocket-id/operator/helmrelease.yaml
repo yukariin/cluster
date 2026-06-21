@@ -89,11 +89,19 @@ spec:
     userGroups:
       - name: admins
         spec:
+          friendlyName: Administrators
           users:
             userRefs:
               - name: yukarin
       - name: users
         spec:
+          friendlyName: Users
+          users:
+            userRefs:
+              - name: yukarin
+      - name: docs
+        spec:
+          friendlyName: Documents
           users:
             userRefs:
               - name: yukarin

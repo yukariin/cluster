@@ -9,7 +9,7 @@ spec:
   callbackUrls:
     - https://paperless.mistelinn.org/accounts/oidc/pocket-id/login/callback/
   allowedUserGroups:
-    - name: admins
+    - name: docs
       namespace: security
   pkceEnabled: true
   secret:
