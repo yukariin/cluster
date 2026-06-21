@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/toolhive.stacklok.dev/mcpserver_v1alpha1.json
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: github
+spec:
+  groupRef:
+    name: mcp-tools
+  image: ghcr.io/github/github-mcp-server:v1.4.0@sha256:2afb26356481d1a350e14544a6e160f7f7ec1561a1ea309b823665abf0309036
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+  secrets:
+    - key: GITHUB_PERSONAL_ACCESS_TOKEN
+      name: github-mcp-secret
