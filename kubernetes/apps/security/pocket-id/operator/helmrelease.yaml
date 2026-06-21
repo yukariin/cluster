@@ -32,7 +32,7 @@ spec:
       spec:
         analyticsDisabled: true
         appUrl: "https://id.mistelinn.org"
-        image: ghcr.io/pocket-id/pocket-id:v2.9.0@sha256:a2a38a96699d7483d65b5849b015d954f294938306a03a9c0699bc5b79554e86
+        image: ghcr.io/pocket-id/pocket-id:v2.9.0-distroless@sha256:968866bdb73c67ce7d75baf2b992b9b33db385668822e936625dc5116f372d2c
         emailNotifications:
           apiKeyExpiration: true
           loginNotification: true
