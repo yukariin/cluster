@@ -18,28 +18,31 @@ spec:
         containers:
           app:
             image:
-              repository: vaultwarden/server
+              repository: ghcr.io/dani-garcia/vaultwarden
               tag: 1.36.0@sha256:d626d04934cd1192ad8ced1adb975099fca78cec33ab467d2d3c923cde7f3b0c
             env:
               DOMAIN: "https://passwords.mistelinn.org"
               ROCKET_PORT: &port 80
-              ICON_CACHE_FOLDER: "icons"
+              ICON_CACHE_FOLDER: "/icons"
               TMP_FOLDER: "/tmp"
               SIGNUPS_ALLOWED: "false"
-              SMTP_FROM_NAME: vaultwarden
+              SMTP_FROM_NAME: Vaultwarden
               SMTP_FROM: "vaultwarden@mistelinn.org"
               SMTP_HOST: smtp-relay.network.svc.cluster.local
               SMTP_PORT: 25
               SMTP_SECURITY: "off"
               EXPERIMENTAL_CLIENT_FEATURE_FLAGS: "ssh-key-vault-item,ssh-agent"
-              DATABASE_URL:
-                valueFrom:
-                  secretKeyRef:
-                    name: pg-vaultwarden-app
-                    key: uri
+              SSO_ENABLED: "true"
+              SSO_ONLY: "false"
+              SSO_PKCE: "true"
+              SSO_SIGNUPS_MATCH_EMAIL: "true"
+              SSO_AUTHORITY: "https://id.mistelinn.org"
+              SSO_SCOPES: "email profile groups openid offline_access"
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
+              - secretRef:
+                  name: "{{ .Release.Name }}-oidc-credentials"
             probes:
               liveness: &probes
                 enabled: true
@@ -57,7 +60,15 @@ spec:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 10m
+                memory: 64Mi
+              limits:
+                memory: 256Mi
     defaultPodOptions:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
@@ -68,10 +79,15 @@ spec:
     persistence:
       data:
         existingClaim: "{{ .Release.Name }}"
-      icons:
+        globalMounts:
+          - path: /data
+      tmpfs:
         type: emptyDir
-      tmp:
-        type: emptyDir
+        globalMounts:
+          - path: /icons
+            subPath: data
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         annotations:
