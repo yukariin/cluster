@@ -12,7 +12,3 @@ spec:
     - name: users
       namespace: security
   pkceEnabled: true
-  secret:
-    keys:
-      clientID: OIDC_CLIENT_ID
-      clientSecret: OIDC_CLIENT_SECRET
