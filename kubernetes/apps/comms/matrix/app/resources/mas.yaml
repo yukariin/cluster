@@ -27,8 +27,6 @@ upstream_oauth2:
       claims_imports:
         localpart:
           action: require
-          # Link to an existing Matrix account with the same localpart so users
-          # migrated from Authentik keep their accounts (usernames match).
           template: "{{ `{{ user.preferred_username }}` }}"
           on_conflict: add
         displayname:

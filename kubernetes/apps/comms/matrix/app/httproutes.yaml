@@ -5,7 +5,7 @@ metadata:
   name: matrix-synapse
   annotations:
     gatus.home-operations.com/endpoint: |-
-      url: "https://matrix.mistelinn.org/_matrix/client/versions"
+      path: /.well-known/matrix/client
 spec:
   parentRefs:
     - {name: envoy-external, namespace: network}
@@ -47,12 +47,12 @@ metadata:
   name: matrix-auth-service
   annotations:
     gatus.home-operations.com/endpoint: |-
-      url: "https://matrix-auth.mistelinn.org/.well-known/openid-configuration"
+      url: "https://mas.mistelinn.org/.well-known/openid-configuration"
 spec:
   parentRefs:
     - {name: envoy-external, namespace: network}
   hostnames:
-    - "matrix-auth.mistelinn.org"
+    - "mas.mistelinn.org"
   rules:
     - backendRefs:
         - name: matrix-matrix-authentication-service
