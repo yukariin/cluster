@@ -21,6 +21,10 @@ spec:
     substitute:
       APP: *app
       VOLSYNC_CAPACITY: 5Gi
+    substituteFrom:
+      - kind: Secret
+        name: paperless-oidc-credentials
+        optional: true
   sourceRef:
     kind: GitRepository
     name: flux-system

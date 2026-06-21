@@ -26,6 +26,12 @@ spec:
               PAPERLESS_TIME_ZONE: "Europe/Moscow"
               PAPERLESS_DATE_ORDER: MDY
               PAPERLESS_URL: "https://{{ .Release.Name }}.mistelinn.org"
+              # OIDC
+              PAPERLESS_ACCOUNT_EMAIL_VERIFICATION: "true"
+              PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+              PAPERLESS_SOCIAL_ACCOUNT_SYNC_GROUPS: "true"
+              PAPERLESS_SOCIAL_AUTO_SIGNUP: "true"
+              PAPERLESS_SOCIALACCOUNT_ALLOW_SIGNUPS: "true"
               # Encoding
               # WARNING: for German / Russian PDFs it is required to set "PDF" renderer instead of "PDF/A" in paperless-ngx settings
               # See: https://github.com/ocrmypdf/OCRmyPDF/issues/1297
@@ -50,7 +56,7 @@ spec:
               PAPERLESS_CONSUMER_RECURSIVE: "true"
               PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS: "true"
               # Redis
-              PAPERLESS_REDIS: "redis://paperless-dragonfly.personal.svc.cluster.local:6379"
+              PAPERLESS_REDIS: "redis://paperless-dragonfly:6379"
               # Tika/Gotenberg
               # PAPERLESS_TIKA_ENABLED: "true"
               # PAPERLESS_TIKA_ENDPOINT: "http://tika.tools.svc.cluster.local:80"
@@ -61,6 +67,8 @@ spec:
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
+              - secretRef:
+                  name: "{{ .Release.Name }}-oidc-secret"
             probes:
               liveness: &probes
                 enabled: true
