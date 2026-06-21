@@ -11,7 +11,7 @@ spec:
     - https://grafana.mistelinn.org
   allowedUserGroups:
     - name: admins
-      namespace: auth
+      namespace: security
   secret:
     keys:
       clientID: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
