@@ -69,6 +69,7 @@ spec:
           ACCOUNT_LINKING: auto
           ENABLE_AUTO_REGISTRATION: true
           OPENID_CONNECT_SCOPES: openid email profile groups
+          UPDATE_AVATAR: true
           USERNAME: preferred_username
         picture:
           DISABLE_GRAVATAR: true
