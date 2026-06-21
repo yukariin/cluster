@@ -1,0 +1,94 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pocket-id-operator
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: pocket-id-operator
+  interval: 1h
+  values:
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+      prometheusRule:
+        enabled: true
+      dashboard:
+        enabled: true
+        grafanaDashboard:
+          enabled: true
+          instanceSelector:
+            matchLabels:
+              dashboards: grafana
+
+    instance:
+      enabled: true
+      name: pocket-id
+      serviceMonitor:
+        enabled: true
+      spec:
+        analyticsDisabled: true
+        appUrl: "https://id.mistelinn.org"
+        emailNotifications:
+          apiKeyExpiration: true
+          loginNotification: true
+          oneTimeAccessAsAdmin: true
+          oneTimeAccessAsUnauthenticated: false
+          verification: true
+        encryptionKey:
+          valueFrom:
+            secretKeyRef:
+              name: pocket-id-operator-secret
+              key: ENCRYPTION_KEY
+        geoip:
+          maxmindLicenseKey:
+            valueFrom:
+              secretKeyRef:
+                name: pocket-id-operator-secret
+                key: MAXMIND_LICENSE_KEY
+        logging:
+          level: "info"
+          json: true
+        persistence:
+          enabled: true
+          existingClaim: "{{ .Release.Name }}"
+        route:
+          enabled: true
+          name: pocket-id
+          parentRefs:
+            - name: envoy-internal
+              namespace: network
+        smtp:
+          host: smtp-relay.network.svc.cluster.local
+          port: 25
+          from: pocket-id@mistelinn.org
+          tls: none
+        ui:
+          sessionDuration: 1440 # 1 day
+        userManagement:
+          allowOwnAccountEdit: true
+          allowUserSignups: "disabled"
+          emailsVerified: true
+        versionCheckDisabled: true
+
+    users:
+      - name: yukarin
+        spec:
+          admin: true
+          email:
+            value: "mistelinn@gmail.com"
+          firstName:
+            value: Yukari
+          lastName:
+            value: Yakumo
+
+    userGroups:
+      - name: admins
+        spec:
+          friendlyName: admins
+          users:
+            userRefs:
+              - name: yukarin
