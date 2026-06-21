@@ -12,7 +12,7 @@ spec:
   values:
     gitea:
       admin:
-        existingSecret: &secret forgejo-secret
+        existingSecret: forgejo-admin-secret
       additionalConfigSources:
         - secret:
             secretName: forgejo-app-secret
@@ -64,7 +64,12 @@ spec:
         openid:
           ENABLE_OPENID_SIGNIN: false
           ENABLE_OPENID_SIGNUP: true
-          WHITELISTED_URIS: "authentik.mistelinn.org"
+          WHITELISTED_URIS: "id.mistelinn.org"
+        oauth2_client:
+          ACCOUNT_LINKING: auto
+          ENABLE_AUTO_REGISTRATION: true
+          OPENID_CONNECT_SCOPES: openid email profile groups
+          USERNAME: preferred_username
         picture:
           DISABLE_GRAVATAR: true
           ENABLE_FEDERATED_AVATAR: false
@@ -127,13 +132,12 @@ spec:
         webhook:
           ALLOWED_HOST_LIST: "*"
       oauth:
-        - name: Authentik
+        - name: pocket-id
           adminGroup: admins
-          autoDiscoverUrl: "https://authentik.mistelinn.org/application/o/forgejo/.well-known/openid-configuration"
-          existingSecret: *secret
+          autoDiscoverUrl: "https://id.mistelinn.org/.well-known/openid-configuration"
+          existingSecret: forgejo-oidc-credentials
           groupClaimName: groups
           provider: openidConnect
-          scopes: profile email groups
     signing:
       enabled: true
       ssh:
