@@ -44,7 +44,7 @@ spec:
     matrixAuthenticationService:
       enabled: true
       ingress:
-        host: "matrix-auth.mistelinn.org"
+        host: "mas.mistelinn.org"
         className: disabled
         tlsEnabled: false
       postgres:
