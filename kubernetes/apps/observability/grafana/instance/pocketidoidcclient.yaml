@@ -6,7 +6,7 @@ metadata:
 spec:
   launchUrl: https://grafana.mistelinn.org
   callbackUrls:
-    - "https://grafana.mistelinn.org/login/generic_oauth"
+    - https://grafana.mistelinn.org/login/generic_oauth
   logoutCallbackUrls:
     - https://grafana.mistelinn.org
   allowedUserGroups:

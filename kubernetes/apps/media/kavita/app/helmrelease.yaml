@@ -13,6 +13,7 @@ spec:
   values:
     controllers:
       kavita:
+        type: statefulset
         containers:
           app:
             image:
@@ -45,6 +46,15 @@ spec:
                 memory: 512Mi
               limits:
                 memory: 2Gi
+        statefulset:
+          volumeClaimTemplates:
+            - name: cache
+              storageClass: democratic-csi-hostpath
+              accessMode: ReadWriteOnce
+              size: 5Gi
+              advancedMounts:
+                app:
+                  - path: /kavita/config/cache
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -58,10 +68,6 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /kavita/config
-      cache:
-        existingClaim: "{{ .Release.Name }}-cache"
-        globalMounts:
-          - path: /kavita/config/cache
       media:
         type: nfs
         server: nas.internal
