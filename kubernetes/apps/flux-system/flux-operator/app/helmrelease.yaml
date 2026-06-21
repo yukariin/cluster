@@ -20,8 +20,15 @@ spec:
 
     serviceMonitor:
       create: true
+
     web:
-      enabled: true
+      config:
+        baseURL: "https://flux.mistelinn.org"
+        authentication:
+          type: OAuth2
+          oauth2:
+            provider: OIDC
+            issuerURL: "https://id.mistelinn.org"
       httpRoute:
         enabled: true
         hostnames:
@@ -31,3 +38,13 @@ spec:
             namespace: network
       networkPolicy:
         create: false
+
+  valuesFrom:
+    - kind: Secret
+      name: flux-web-oidc-credentials
+      valuesKey: client-id
+      targetPath: web.config.authentication.oauth2.clientID
+    - kind: Secret
+      name: flux-web-oidc-credentials
+      valuesKey: client-secret
+      targetPath: web.config.authentication.oauth2.clientSecret
