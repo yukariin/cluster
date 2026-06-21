@@ -9,7 +9,7 @@ spec:
   callbackUrls:
     - https://passwords.mistelinn.org/identity/connect/oidc-signin
   allowedUserGroups:
-    - name: users
+    - name: admins
       namespace: security
   pkceEnabled: true
   secret:
