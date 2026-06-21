@@ -7,7 +7,7 @@ metadata:
 spec:
   launchUrl: https://element.mistelinn.org
   callbackUrls:
-    - https://matrix-auth.mistelinn.org/upstream/callback/01KVN4FHRYJ93JEV02ZJ1KGBDT
+    - https://mas.mistelinn.org/upstream/callback/01KVN4FHRYJ93JEV02ZJ1KGBDT
   allowedUserGroups:
     - name: users
       namespace: security
