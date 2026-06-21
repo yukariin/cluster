@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: pocket-id-operator
+  name: &app pocket-id-operator
 spec:
   chartRef:
     kind: OCIRepository
@@ -54,7 +54,7 @@ spec:
           json: true
         persistence:
           enabled: true
-          existingClaim: "{{ .Release.Name }}"
+          existingClaim: *app
         route:
           enabled: true
           name: pocket-id
