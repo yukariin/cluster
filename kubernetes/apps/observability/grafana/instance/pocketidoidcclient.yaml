@@ -12,6 +12,7 @@ spec:
   allowedUserGroups:
     - name: admins
       namespace: security
+  pkceEnabled: true
   secret:
     keys:
       clientID: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
