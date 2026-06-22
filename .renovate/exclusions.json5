@@ -3,11 +3,9 @@
   packageRules: [
     {
       enabled: false,
-      description: "Ignore Talos Factory installer URLs extracted by the Kubernetes manager; custom.talos-factory handles these.",
-      matchManagers: ["kubernetes"],
+      description: "Disable broken docker lookups for Talos Image Factory",
       matchDatasources: ["docker"],
-      matchFileNames: ["talos/machineconfig.yaml.j2"],
-      matchPackageNames: ["/^factory\\.talos\\.dev\\/metal-installer/"],
+      matchPackageNames: ["/^factory\\.talos\\.dev/"],
     },
   ],
 }
