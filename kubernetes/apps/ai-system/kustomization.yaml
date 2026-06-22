@@ -9,7 +9,4 @@ components:
 
 resources:
   - namespace.yaml
-  - audiomuse-ai/ks.yaml
-  - mcp-servers/ks.yaml
   - sillytavern/ks.yaml
-  - toolhive/ks.yaml
