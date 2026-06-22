@@ -46,10 +46,7 @@ jobs:
       - name: Install flate
         uses: https://github.com/home-operations/flate/action@a87d9ab5dc3fa376d70019549de8785f56a88069 # v0.4.8
         with:
-          # Defaults to ${{ github.token }} — a Forgejo-issued token that github.com
-          # rejects (401). flate's release is public, so force the unauthenticated path.
-          token: ""
-          cache: true
+          token: ${{ secrets.CI_TOKEN }}
 
       - name: Run flate test
         run: flate test all --base ${{ forgejo.event.repository.default_branch }} --allow-missing-secrets
