@@ -131,7 +131,7 @@ spec:
         ui:
           DEFAULT_THEME: forgejo-dark
         webhook:
-          ALLOWED_HOST_LIST: "*"
+          ALLOWED_HOST_LIST: "*.mistelinn.org"
       oauth:
         - name: pocket-id
           adminGroup: admins
