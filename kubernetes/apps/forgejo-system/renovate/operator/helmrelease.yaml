@@ -22,3 +22,10 @@ spec:
 
     webhook:
       enabled: true
+      route:
+        enabled: true
+        hostnames:
+          - renovate-webhook.mistelinn.org
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
