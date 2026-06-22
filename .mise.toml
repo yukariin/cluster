@@ -28,3 +28,4 @@ kustomize = "latest"
 lefthook = "latest"
 talos = "latest"
 yamlfmt = "latest"
+"github:elsesiy/kubectl-view-secret" = { version = "latest", rename_exe = "kubectl-view_secret" }
