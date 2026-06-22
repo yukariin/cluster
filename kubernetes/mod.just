@@ -1,4 +1,5 @@
 set quiet
+set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
 kubernetes_dir := justfile_dir() + '/kubernetes'
@@ -12,10 +13,11 @@ apply-ks ns ks:
     just kube render-local-ks "{{ ns }}" "{{ ks }}" | kubectl apply --server-side --force-conflicts --field-manager=kustomize-controller -f /dev/stdin
 
 [doc('Browse a PVC')]
-browse-pvc namespace claim:
-    kubectl browse-pvc -n {{ namespace }} -i mirror.gcr.io/alpine:latest {{ claim }}
+browse-pvc ns claim:
+    kubectl browse-pvc -n {{ ns }} -i mirror.gcr.io/alpine:latest {{ claim }}
 
 [doc('Delete local Flux Kustomization')]
+[script]
 delete-ks ns ks:
     just kube render-local-ks "{{ ns }}" "{{ ks }}" | kubectl delete -f /dev/stdin
 
@@ -25,30 +27,37 @@ node-shell node:
     kubectl delete pod -n default -l app.kubernetes.io/managed-by=kubectl-debug
 
 [doc('Prune pods in Failed, Pending, or Succeeded state')]
+[script]
 prune-pods:
-    for phase in Failed Pending Succeeded; do \
-        kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true; \
+    for phase in Failed Pending Succeeded; do
+        kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true;
     done
 
 [doc('Snapshot VolSync PVCs')]
+[script]
 snapshot:
-    kubectl get replicationsources --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" patch replicationsources "$name" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}'; \
+    kubectl get replicationsources --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" patch replicationsources "$name" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}';
     done
 
+[arg('state', pattern='suspend|resume')]
 [doc('Suspend or resume Keda ScaledObjects')]
+[script]
 keda state:
-    kubectl get scaledobjects --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite so "$name" autoscaling.keda.sh/paused{{ if state != "suspend" { "-" } else { "=true" } }}; \
+    kubectl get scaledobjects --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite so "$name" autoscaling.keda.sh/paused{{ if state != "suspend" { "-" } else { "=true" } }};
     done
 
+[arg('state', pattern='suspend|resume')]
 [doc('Suspend or resume CNPG clusters for node maintenance')]
+[script]
 cnpg state:
-    kubectl get clusters --no-headers -A | while read -r ns name _; do \
+    kubectl get clusters --no-headers -A | while read -r ns name _; do
         kubectl -n "$ns" patch cluster "$name" --type merge \
-            -p '{"spec":{"nodeMaintenanceWindow":{"inProgress":{{ if state == "suspend" { "true" } else { "false" } }},"reusePVC":true}}}'; \
+            -p '{"spec":{"nodeMaintenanceWindow":{"inProgress":{{ if state == "suspend" { "true" } else { "false" } }},"reusePVC":true}}}';
     done
 
+[arg('state', pattern='suspend|resume')]
 [doc('Suspend or resume VolSync')]
 volsync state:
     flux -n volsync-system {{ state }} kustomization volsync
@@ -56,39 +65,44 @@ volsync state:
     kubectl -n volsync-system scale deployment volsync --replicas {{ if state != "suspend" { "1" } else { "0" } }}
 
 [doc('Sync ExternalSecrets')]
+[script]
 sync-es:
-    kubectl get es --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite es "$name" force-sync="$(date +%s)"; \
+    kubectl get es --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite es "$name" force-sync="$(date +%s)";
     done
 
 [doc('Sync GitRepositories')]
+[script]
 sync-git:
-    kubectl get gitrepo --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite gitrepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"; \
+    kubectl get gitrepo --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite gitrepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)";
     done
 
 [doc('Sync HelmReleases')]
+[script]
 sync-hr:
-    kubectl get hr --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite hr "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"; \
+    kubectl get hr --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite hr "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)";
     done
 
 [doc('Sync Kustomizations')]
+[script]
 sync-ks:
-    kubectl get ks --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ks "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"; \
+    kubectl get ks --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ks "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)";
     done
 
 [doc('Sync OCIRepositories')]
+[script]
 sync-oci:
-    kubectl get ocirepo --no-headers -A | while read -r ns name _; do \
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ocirepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"; \
+    kubectl get ocirepo --no-headers -A | while read -r ns name _; do
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ocirepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)";
     done
 
 [doc('View a secret')]
-view-secret namespace secret:
-    kubectl view-secret -n {{ namespace }} {{ secret }}
+view-secret ns secret:
+    kubectl view-secret -n {{ ns }} {{ secret }}
 
 [private]
 render-local-ks ns ks:
-    fflate build ks --namespace "{{ ns }}" --path "{{ kubernetes_dir }}/flux/cluster" "{{ ks }}"  --allow-missing-secrets
+    flate build ks -n "{{ ns }}" --path "{{ kubernetes_dir }}/flux/cluster" "{{ ks }}" --allow-missing-secrets
