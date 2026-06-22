@@ -32,7 +32,7 @@ spec:
         cache:
           ENABLED: true
           ADAPTER: redis
-          HOST: "redis://forgejo-dragonfly:6379/0?pool_size=100&idle_timeout=180s"
+          HOST: "redis://forgejo-dragonfly:6379/0?pool_size=10"
         cron.archive_cleanup:
           ENABLED: true
           OLDER_THAN: 2h
@@ -76,7 +76,7 @@ spec:
           ENABLE_FEDERATED_AVATAR: false
         queue:
           TYPE: redis
-          CONN_STR: "redis://forgejo-dragonfly:6379/1?pool_size=100&idle_timeout=180s"
+          CONN_STR: "redis://forgejo-dragonfly:6379/1?pool_size=10"
         repo-avatar:
           PATH: /data/data/repo-avatars
           STORAGE_TYPE: local
@@ -122,7 +122,7 @@ spec:
           REQUIRE_SIGNIN_VIEW: false
         session:
           PROVIDER: redis
-          PROVIDER_CONFIG: "redis://forgejo-dragonfly:6379/2?pool_size=100&idle_timeout=180s"
+          PROVIDER_CONFIG: "redis://forgejo-dragonfly:6379/2?pool_size=10"
           SESSION_LIFE_TIME: "1209600"
         storage:
           STORAGE_TYPE: local
