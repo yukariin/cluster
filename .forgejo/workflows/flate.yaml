@@ -54,7 +54,7 @@ jobs:
       - name: Run flate diff
         id: diff
         run: |-
-          diff=$(flate diff all)
+          diff=$(flate diff all --allow-missing-secrets)
           echo "Changes:"
           echo "${diff}"
           {
