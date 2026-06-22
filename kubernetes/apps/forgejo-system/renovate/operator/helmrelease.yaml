@@ -11,6 +11,7 @@ spec:
   interval: 1h
   values:
     fullnameOverride: *app
+
     route:
       enabled: true
       hostnames:
@@ -18,5 +19,6 @@ spec:
       parentRefs:
         - name: envoy-internal
           namespace: network
+
     webhook:
       enabled: true
