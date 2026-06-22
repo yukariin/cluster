@@ -5,8 +5,8 @@ kind: Dragonfly
 metadata:
   name: ${APP}-dragonfly
 spec:
-  image: ghcr.io/dragonflydb/dragonfly:v1.39.0
-  replicas: 1
+  image: ghcr.io/dragonflydb/dragonfly:v1.39.0@sha256:0fa01a2b929e704c7a9300d23e7f52002ebd39e90996fb8bb63826aed92fa06f
+  replicas: ${DRAGONFLY_REPLICAS:=1}
   env:
     - name: MAX_MEMORY
       valueFrom:
@@ -20,6 +20,6 @@ spec:
     - --lock_on_hashtags
   resources:
     requests:
-      cpu: 100m
+      cpu: 50m
     limits:
       memory: 512Mi
