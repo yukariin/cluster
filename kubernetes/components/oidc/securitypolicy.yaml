@@ -11,14 +11,14 @@ spec:
       name: ${APP}
   oidc:
     provider:
-      issuer: "https://authentik.mistelinn.org/application/o/${APP}/"
+      issuer: "https://id.mistelinn.org"
     clientIDRef:
       group: ""
       kind: Secret
-      name: ${APP}-secret
+      name: ${APP}-oidc-credentials
     clientSecret:
       group: ""
       kind: Secret
-      name: ${APP}-secret
+      name: ${APP}-oidc-credentials
     redirectURL: "https://${APP}.mistelinn.org/oauth2/callback"
     logoutPath: "/logout"
