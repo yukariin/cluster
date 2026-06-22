@@ -152,11 +152,11 @@ spec:
         port: *sshPort
     httpRoute:
       enabled: true
+      hostnames:
+        - "git.mistelinn.org"
       parentRefs:
         - name: envoy-internal
           namespace: network
-      hostnames:
-        - "git.mistelinn.org"
     tcpRoute:
       enabled: true
       parentRefs:
