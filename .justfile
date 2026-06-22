@@ -22,7 +22,7 @@ doctor:
         echo "All tools present"
     else
         echo "Missing: ${missing[*]}"
-        echo "Hint: run 'mise install' for mise-managed tools (e.g. flux-local)"
+        echo "Hint: run 'mise install' for mise-managed tools (e.g. flate)"
         exit 1
     fi
 
