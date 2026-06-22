@@ -3,20 +3,10 @@
   extends: [
     ":timezone(Europe/Moscow)",
 
-    "github>home-operations/renovate-presets//config/baseConfig.json5",
-    "github>home-operations/renovate-presets//config/dependencyDashboard.json5",
-    "github>home-operations/renovate-presets//config/managerFilePatterns.json5",
-    "github>home-operations/renovate-presets//config/registryAliases.json5",
-    "github>home-operations/renovate-presets//managers/grafanaDashboards.json5",
-    "github>home-operations/renovate-presets//managers/oci.json5",
-    "github>home-operations/renovate-presets//managers/talosFactory.json5",
-    "github>home-operations/renovate-presets//overrides/changelogs.json5",
-    "github>home-operations/renovate-presets//overrides/helmfile.json5",
-    "github>home-operations/renovate-presets//overrides/renovateOperator.json5",
-    "github>home-operations/renovate-presets//policies/semanticCommits.json5",
+    "github>home-operations/renovate-presets#2.0.0",
 
     "local>yukarin/cluster//.renovate/autoMerge.json5",
-    "local>yukarin/cluster//.renovate/customManagers.json5",
+    "local>yukarin/cluster//.renovate/changelogs.json5",
     "local>yukarin/cluster//.renovate/exclusions.json5",
     "local>yukarin/cluster//.renovate/groups.json5",
     "local>yukarin/cluster//.renovate/labels.json5",
