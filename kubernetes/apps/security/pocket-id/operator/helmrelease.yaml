@@ -37,7 +37,6 @@ spec:
           apiKeyExpiration: true
           loginNotification: true
           oneTimeAccessAsAdmin: true
-          oneTimeAccessAsUnauthenticated: false
           verification: true
         encryptionKey:
           valueFrom:
@@ -96,6 +95,9 @@ spec:
       - name: users
         spec:
           friendlyName: Users
+          customClaims:
+            - name: kavita-roles
+              value: '[ "Login", "Download", "library-Manga" ]'
           users:
             userRefs:
               - name: yukarin
