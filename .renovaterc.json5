@@ -3,7 +3,7 @@
   extends: [
     ":timezone(Europe/Moscow)",
 
-    "github>home-operations/renovate-presets#2.0.1",
+    "github>home-operations/renovate-presets#2.1.0",
 
     "local>yukarin/cluster//.renovate/autoMerge.json5",
     "local>yukarin/cluster//.renovate/changelogs.json5",
