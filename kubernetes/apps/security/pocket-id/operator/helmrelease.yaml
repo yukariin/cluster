@@ -96,7 +96,7 @@ spec:
         spec:
           friendlyName: Users
           customClaims:
-            - name: kavita-roles
+            - key: kavita-roles
               value: '[ "Login", "Download", "library-Manga" ]'
           users:
             userRefs:
