@@ -59,12 +59,6 @@ spec:
                     name: grafana-secret
                 - secretRef:
                     name: grafana-oidc-credentials
-              env:
-                - name: GF_SECURITY_ADMIN_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: grafana-secret
-                      key: GF_SECURITY_ADMIN_PASSWORD
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
