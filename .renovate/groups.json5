@@ -2,6 +2,18 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      description: "Flate Group",
+      groupName: "flate",
+      matchPackageNames: [
+        "home-operations/flate",
+        "github:home-operations/flate"
+      ],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
       description: "Flux Operator Group",
       groupName: "flux-operator",
       matchDatasources: ["docker"],
