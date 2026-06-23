@@ -47,7 +47,7 @@ jobs:
         uses: https://github.com/home-operations/flate/action@a13598d5cb2faa79c2638e7bfe61711b1a1c1a5f # v0.4.9
         with:
           # renovate: datasource=github-releases depName=home-operations/flate
-          version: v0.4.8
+          version: v0.4.9
           cache: true
 
       - name: Run flate test
