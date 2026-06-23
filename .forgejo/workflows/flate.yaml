@@ -48,7 +48,6 @@ jobs:
         with:
           # renovate: datasource=github-releases depName=home-operations/flate
           version: v0.4.9
-          cache: true
 
       - name: Run flate test
         run: flate test all --base ${{ forgejo.event.repository.default_branch }} --allow-missing-secrets
