@@ -36,6 +36,8 @@ kind: Kustomization
 metadata:
   name: forgejo-runner
 spec:
+  dependsOn:
+    - name: forgejo
   interval: 1h
   path: kubernetes/apps/forgejo-system/forgejo/runner
   prune: true
