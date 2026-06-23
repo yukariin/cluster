@@ -22,9 +22,9 @@ spec:
             app.kubernetes.io/component: forgejo-runner
           securityContext:
             runAsNonRoot: true
-            runAsGroup: 1000
-            runAsUser: 1000
-            fsGroup: 1000
+            runAsGroup: 568
+            runAsUser: 568
+            fsGroup: 568
             fsGroupChangePolicy: OnRootMismatch
           # must cover runner.shutdown_timeout plus the plugin's 60s cleanup budget
           terminationGracePeriodSeconds: 300
@@ -45,7 +45,7 @@ spec:
                 memory: 32Mi
               limits:
                 memory: 128Mi
-            securityContext:
+            securityContext: &sc
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
@@ -69,10 +69,7 @@ spec:
                 memory: 32Mi
               limits:
                 memory: 512Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
+            securityContext: *sc
     defaultPodOptions:
       automountServiceAccountToken: true
     persistence:
