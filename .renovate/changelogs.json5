@@ -2,33 +2,57 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      description: "Changelog URL for Cloudflared",
-      matchPackageNames: ["/cloudflared/"],
-      changelogUrl: "https://github.com/cloudflare/cloudflared/blob/master/RELEASE_NOTES",
-    },
-    {
-      description: "Changelog URL for cloudnative-pg",
-      matchPackageNames: ["/cloudnative-pg/"],
-      changelogUrl: "https://github.com/cloudnative-pg/cloudnative-pg/releases/latest",
-    },
-    {
-      description: "Changelog URL for prompp",
+      description: "Changelog for prompp",
       matchPackageNames: ["/prompp/"],
       changelogUrl: "https://github.com/deckhouse/prompp/blob/pp/CHANGELOG.md",
+      sourceUrl: "https://github.com/deckhouse/prompp",
     },
     {
-      description: "Changelog URL for Spegel",
+      description: "Changelog for Spegel",
       matchPackageNames: ["/spegel/"],
       changelogUrl: "https://github.com/spegel-org/spegel/blob/main/CHANGELOG.md",
+      sourceUrl: "https://github.com/spegel-org/spegel",
     },
     {
-      description: "Source URL for Envoy Proxy",
+      description: "Changelog for Envoy Proxy",
       matchDatasources: ["docker"],
       matchPackageNames: [
         "docker.io/envoyproxy/envoy",
         "mirror.gcr.io/envoyproxy/envoy",
       ],
       sourceUrl: "https://github.com/envoyproxy/envoy",
+    },
+    {
+      description: "Changelog for Talos",
+      matchPackageNames: [
+        "ghcr.io/siderolabs/installer",
+        "siderolabs/talos",
+      ],
+      sourceUrl: "https://github.com/siderolabs/talos",
+    },
+    {
+      description: "Changelog for Traefik",
+      matchPackageNames: ["/traefik/"],
+      changelogUrl: "https://github.com/traefik/traefik/releases",
+      sourceUrl: "https://github.com/traefik/traefik",
+    },
+    {
+      description: "Changelog for Jellyfin",
+      matchPackageNames: ["/jellyfin/"],
+      changelogUrl: "https://github.com/jellyfin/jellyfin/releases",
+      sourceUrl: "https://github.com/jellyfin/jellyfin",
+    },
+    {
+      description: "Changelog for VictoriaMetrics Logs",
+      matchPackageNames: ["/victoria-logs-single/"],
+      changelogUrl: "https://github.com/victoriametrics/helm-charts/blob/master/charts/victoria-logs-single/CHANGELOG.md",
+      sourceUrl: "https://github.com/victoriametrics/helm-charts",
+    },
+    {
+      description: "Changelog for Dragonfly Operator",
+      matchPackageNames: ["/dragonfly-operator/"],
+      changelogUrl: "https://github.com/dragonflydb/dragonfly-operator/releases",
+      sourceUrl: "https://github.com/dragonflydb/dragonfly-operator",
     },
   ],
 }
