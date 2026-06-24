@@ -23,8 +23,12 @@
     },
     {
       description: "Source URL for Envoy Proxy",
-      matchPackageNames: ["mirror.gcr.io/envoyproxy/envoy"],
-      sourceUrl: "https://github.com/envoyproxy/envoy"
+      matchDatasources: ["docker"],
+      matchPackageNames: [
+        "docker.io/envoyproxy/envoy",
+        "mirror.gcr.io/envoyproxy/envoy",
+      ],
+      sourceUrl: "https://github.com/envoyproxy/envoy",
     },
   ],
 }
