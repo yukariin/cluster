@@ -1,4 +1,6 @@
+set lazy
 set quiet
+set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
 talos_dir := justfile_dir() + '/talos'
@@ -25,33 +27,43 @@ gen-schematic-id:
     curl -sX POST --data-binary @<(just template talos "{{ talos_dir }}/schematic.yaml.j2") "https://factory.talos.dev/schematics" | jq -r '.id'
 
 [doc('Reboot a node')]
+[script]
 reboot-node node:
-    gum confirm "Reboot node {{ node }}?" --default="No" && \
-        talosctl -n {{ node }} reboot -m powercycle || exit 0
+    if gum confirm "Reboot node {{ node }}?" --default="No"; then
+        talosctl -n {{ node }} reboot -m powercycle
+    fi
 
 [doc('Render Talos config for a node')]
+[script]
 render-config node:
-    export IS_CONTROLLER="$(just talos machine-controller {{ node }})"; \
+    IS_CONTROLLER="$(just talos machine-controller {{ node }})"
+    export IS_CONTROLLER
     talosctl machineconfig patch <(just template talos "{{ talos_dir }}/machineconfig.yaml.j2") \
         -p @<(just template talos "{{ talos_dir }}/nodes/{{ node }}.yaml.j2")
 
 [doc('Reset a node')]
+[script]
 reset-node node *args:
-    gum confirm "Reset node {{ node }}?" --default="No" && \
-        talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe u-local-hostpath --graceful=false {{ args }} || exit 0
+    if gum confirm "Reset node {{ node }}?" --default="No"; then
+        talosctl -n "{{ node }}" reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --system-labels-to-wipe u-local-hostpath --graceful=false {{ args }}
+    fi
 
 [doc('Shutdown a node')]
+[script]
 shutdown-node node *args:
-    gum confirm "Shutdown node {{ node }}?" --default="No" && \
-        talosctl -n "{{ node }}" shutdown --force {{ args }} || exit 0
+    if gum confirm "Shutdown node {{ node }}?" --default="No"; then
+        talosctl -n "{{ node }}" shutdown --force {{ args }}
+    fi
 
 [doc('Upgrade Kubernetes version on the cluster')]
 upgrade-k8s version:
     talosctl -n "{{ controller }}" upgrade-k8s --to {{ version }}
 
 [doc('Upgrade Talos version on a node')]
+[script]
 upgrade-node node *args:
-    export IS_CONTROLLER="$(just talos machine-controller {{ node }})"; \
+    IS_CONTROLLER="$(just talos machine-controller {{ node }})"
+    export IS_CONTROLLER
     talosctl -n "{{ node }}" upgrade -i "$(just talos machine-image)" -m powercycle --timeout=10m {{ args }}
 
 [private]

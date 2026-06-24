@@ -17,7 +17,6 @@ browse-pvc ns claim:
     kubectl browse-pvc -n {{ ns }} -i mirror.gcr.io/alpine:latest {{ claim }}
 
 [doc('Delete local Flux Kustomization')]
-[script]
 delete-ks ns ks:
     just kube render-local-ks "{{ ns }}" "{{ ks }}" | kubectl delete -f /dev/stdin
 
@@ -30,14 +29,14 @@ node-shell node:
 [script]
 prune-pods:
     for phase in Failed Pending Succeeded; do
-        kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true;
+        kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true
     done
 
 [doc('Snapshot VolSync PVCs')]
 [script]
 snapshot:
     kubectl get replicationsources --no-headers -A | while read -r ns name _; do
-        kubectl -n "$ns" patch replicationsources "$name" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}';
+        kubectl -n "$ns" patch replicationsources "$name" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}'
     done
 
 [arg('state', pattern='suspend|resume')]
@@ -45,7 +44,7 @@ snapshot:
 [script]
 keda state:
     kubectl get scaledobjects --no-headers -A | while read -r ns name _; do
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite so "$name" autoscaling.keda.sh/paused{{ if state != "suspend" { "-" } else { "=true" } }};
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite so "$name" autoscaling.keda.sh/paused{{ if state != "suspend" { "-" } else { "=true" } }}
     done
 
 [arg('state', pattern='suspend|resume')]
@@ -54,7 +53,7 @@ keda state:
 cnpg state:
     kubectl get clusters --no-headers -A | while read -r ns name _; do
         kubectl -n "$ns" patch cluster "$name" --type merge \
-            -p '{"spec":{"nodeMaintenanceWindow":{"inProgress":{{ if state == "suspend" { "true" } else { "false" } }},"reusePVC":true}}}';
+            -p '{"spec":{"nodeMaintenanceWindow":{"inProgress":{{ if state == "suspend" { "true" } else { "false" } }},"reusePVC":true}}}'
     done
 
 [arg('state', pattern='suspend|resume')]
@@ -68,35 +67,35 @@ volsync state:
 [script]
 sync-es:
     kubectl get es --no-headers -A | while read -r ns name _; do
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite es "$name" force-sync="$(date +%s)";
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite es "$name" force-sync="$(date +%s)"
     done
 
 [doc('Sync GitRepositories')]
 [script]
 sync-git:
     kubectl get gitrepo --no-headers -A | while read -r ns name _; do
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite gitrepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)";
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite gitrepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"
     done
 
 [doc('Sync HelmReleases')]
 [script]
 sync-hr:
     kubectl get hr --no-headers -A | while read -r ns name _; do
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite hr "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)";
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite hr "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)" reconcile.fluxcd.io/forceAt="$(date +%s)"
     done
 
 [doc('Sync Kustomizations')]
 [script]
 sync-ks:
     kubectl get ks --no-headers -A | while read -r ns name _; do
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ks "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)";
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ks "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"
     done
 
 [doc('Sync OCIRepositories')]
 [script]
 sync-oci:
     kubectl get ocirepo --no-headers -A | while read -r ns name _; do
-        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ocirepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)";
+        kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite ocirepo "$name" reconcile.fluxcd.io/requestedAt="$(date +%s)"
     done
 
 [doc('View a secret')]
