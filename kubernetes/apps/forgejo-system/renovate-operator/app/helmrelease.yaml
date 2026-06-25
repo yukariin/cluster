@@ -20,6 +20,15 @@ spec:
         - name: envoy-internal
           namespace: network
 
+    auth:
+      oidc:
+        enabled: true
+        issuerUrl: https://id.mistelinn.org
+        existingSecret: renovate-operator-oidc-credentials
+        redirectUrl: https://renovate.mistelinn.org/auth/callback
+        additionalScopes:
+          - groups
+
     webhook:
       enabled: true
       route:
@@ -29,3 +38,10 @@ spec:
         parentRefs:
           - name: envoy-internal
             namespace: network
+
+  valuesFrom:
+    - kind: Secret
+      name: renovate-operator-oidc-credentials
+      valuesKey: client-id
+      targetPath: auth.oidc.clientId
+      optional: true

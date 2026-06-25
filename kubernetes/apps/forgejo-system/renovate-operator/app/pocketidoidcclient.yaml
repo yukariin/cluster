@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://schemas.ajgon.casa/pocketid.internal/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: renovate-operator
+spec:
+  launchUrl: https://renovate.mistelinn.org
+  callbackUrls:
+    - https://renovate.mistelinn.org/auth/callback
+  logoutCallbackUrls:
+    - https://renovate.mistelinn.org
+  allowedUserGroups:
+    - name: admins
+      namespace: security
+  pkceEnabled: true
+  secret:
+    keys:
+      clientID: client-id
+      clientSecret: client-secret
