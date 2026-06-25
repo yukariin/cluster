@@ -10,4 +10,4 @@ components:
 resources:
   - namespace.yaml
   - forgejo/ks.yaml
-  - renovate/ks.yaml
+  - renovate-operator/ks.yaml

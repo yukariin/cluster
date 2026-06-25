@@ -6,7 +6,7 @@ metadata:
   name: renovate-operator
 spec:
   interval: 1h
-  path: kubernetes/apps/forgejo-system/renovate/operator
+  path: kubernetes/apps/forgejo-system/renovate-operator/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -20,7 +20,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app renovate-jobs
+  name: &app renovate-operator-jobs
 spec:
   components:
     - ../../../../components/dragonfly
@@ -29,7 +29,7 @@ spec:
     - name: dragonfly
       namespace: database
   interval: 1h
-  path: kubernetes/apps/forgejo-system/renovate/jobs
+  path: kubernetes/apps/forgejo-system/renovate-operator/jobs
   prune: true
   postBuild:
     substitute:
