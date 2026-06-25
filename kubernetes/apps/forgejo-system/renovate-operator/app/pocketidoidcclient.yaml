@@ -8,8 +8,6 @@ spec:
   launchUrl: https://renovate.mistelinn.org
   callbackUrls:
     - https://renovate.mistelinn.org/auth/callback
-  logoutCallbackUrls:
-    - https://renovate.mistelinn.org
   allowedUserGroups:
     - name: admins
       namespace: security

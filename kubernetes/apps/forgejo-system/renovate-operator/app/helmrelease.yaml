@@ -12,14 +12,6 @@ spec:
   values:
     fullnameOverride: *app
 
-    route:
-      enabled: true
-      hostnames:
-        - renovate.mistelinn.org
-      parentRefs:
-        - name: envoy-internal
-          namespace: network
-
     auth:
       oidc:
         enabled: true
@@ -28,6 +20,14 @@ spec:
         redirectUrl: https://renovate.mistelinn.org/auth/callback
         additionalScopes:
           - groups
+
+    route:
+      enabled: true
+      hostnames:
+        - renovate.mistelinn.org
+      parentRefs:
+        - name: envoy-internal
+          namespace: network
 
     webhook:
       enabled: true
