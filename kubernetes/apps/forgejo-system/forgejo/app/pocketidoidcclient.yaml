@@ -7,8 +7,6 @@ spec:
   launchUrl: https://git.mistelinn.org
   callbackUrls:
     - https://git.mistelinn.org/user/oauth2/pocket-id/callback
-  logoutCallbackUrls:
-    - https://git.mistelinn.org
   allowedUserGroups:
     - name: admins
       namespace: security
