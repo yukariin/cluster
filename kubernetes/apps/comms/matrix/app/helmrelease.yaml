@@ -106,14 +106,10 @@ spec:
             "features": {
               "feature_video_rooms": true,
               "feature_element_call_video_rooms": true,
-              "feature_group_calls": true,
-              "feature_new_room_list": false,
-              "feature_pinning": true
+              "feature_group_calls": true
             },
             "setting_defaults": {
-              "FTUE.userOnboardingButton": false,
-              "Spaces.allRoomsInHome": true,
-              "alwaysShowTimestamps": true
+              "FTUE.userOnboardingButton": false
             },
             "jitsi": {
               "preferred_domain": "meet.jit.si"
@@ -143,8 +139,9 @@ spec:
               "url": "https://matrix.mistelinn.org"
             },
             "io.element.e2ee": {
-              "force_disable": false,
-              "default": false
+              "default": true,
+              "secure_backup_required": false,
+              "secure_backup_setup_methods": ["key", "passphrase"]
             },
             "io.element.call": {
               "rtc_backend": "https://rtc.mistelinn.org"

@@ -24,10 +24,6 @@ rc_message:
   per_second: 5
   burst_count: 20
 experimental_features:
-  # MSC3575: original sliding sync API plumbing.
-  msc3575_enabled: true
-  # MSC4186: native simplified sliding sync implementation in Synapse.
-  msc4186_enabled: true
   # MSC4354: sticky events for matrixRTC user state
   msc4354_enabled: true
 database:
