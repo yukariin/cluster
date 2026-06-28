@@ -12,6 +12,7 @@ resources:
   - autobrr/ks.yaml
   - bazarr/ks.yaml
   - cross-seed/ks.yaml
+  - fmd2/ks.yaml
   - jellyfin/ks.yaml
   - jellyseerr/ks.yaml
   - kavita/ks.yaml

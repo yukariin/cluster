@@ -1,0 +1,66 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: fmd2
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    controllers:
+      fmd2:
+        containers:
+          app:
+            image:
+              repository: ghcr.io/yukariin/fmd2
+              tag: latest
+            env:
+              BIND_PORT: &port 3000
+              PUID: "568"
+              PGID: "568"
+              UMASK: "022"
+              THRESHOLD_MINUTES: "3"
+              TRANSFER_FILE_TYPE: ".cbz"
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 512Mi
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /app/FMD2/userdata
+      media:
+        type: nfs
+        server: nas.internal
+        path: /mnt/data_pool/data
+        globalMounts:
+          - path: /downloads
+            subPath: media
+          - path: /media
+    route:
+      app:
+        hostnames:
+          - "fmd.mistelinn.org"
+        parentRefs:
+          - {name: envoy-internal, namespace: network}
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    service:
+      app:
+        ports:
+          http:
+            port: *port
