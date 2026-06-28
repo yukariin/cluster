@@ -24,5 +24,6 @@ resources:
   - radarr/ks.yaml
   - slskd/ks.yaml
   - sonarr/ks.yaml
+  - suwayomi/ks.yaml
   - tqm/ks.yaml
   - unpackerr/ks.yaml
