@@ -64,16 +64,9 @@ spec:
             subPath: logs
           - path: /tmp
             subPath: tmp
-    route:
-      app:
-        hostnames:
-          - "{{ .Release.Name }}.mistelinn.org"
-        parentRefs:
-          - {name: envoy-internal, namespace: network}
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
+    # NOTE: HTTPRoute is defined in ./httproute.yaml (not here) because the
+    # Komelia webui assets need a gzip-rewrite workaround that app-template's
+    # route block can't express.
     service:
       app:
         ports:

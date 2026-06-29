@@ -5,6 +5,8 @@ kind: Kustomization
 resources:
   - externalsecret.yaml
   - helmrelease.yaml
+  - httproutefilter.yaml
+  - httproute.yaml
 configMapGenerator:
   - name: komf-configmap
     files:

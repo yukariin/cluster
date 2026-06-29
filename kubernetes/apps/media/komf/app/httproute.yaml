@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: komf
+spec:
+  hostnames:
+    - "komf.mistelinn.org"
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+  rules:
+    # .js assets: rewrite to .gz and serve as gzipped JavaScript
+    - matches:
+        - path:
+            type: RegularExpression
+            value: .*\.js$
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
+            name: komf-gz-rewrite
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Content-Encoding
+                value: gzip
+              - name: Content-Type
+                value: text/javascript
+      backendRefs:
+        - name: komf
+          port: 8085
+    # .wasm assets: rewrite to .gz and serve as gzipped WebAssembly
+    - matches:
+        - path:
+            type: RegularExpression
+            value: .*\.wasm$
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.envoyproxy.io
+            kind: HTTPRouteFilter
+            name: komf-gz-rewrite
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Content-Encoding
+                value: gzip
+              - name: Content-Type
+                value: application/wasm
+      backendRefs:
+        - name: komf
+          port: 8085
+    # everything else: pass through unmodified
+    - backendRefs:
+        - name: komf
+          port: 8085
