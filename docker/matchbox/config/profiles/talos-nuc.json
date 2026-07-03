@@ -1,6 +1,6 @@
 {
-  "id": "talos-nuc-12",
-  "name": "talos-nuc-12",
+  "id": "talos-nuc",
+  "name": "talos-nuc",
   "boot": {
     "kernel": "https://matchbox.mistelinn.org/assets/talos-nuc.ipxe"
   }
