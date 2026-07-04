@@ -9,7 +9,6 @@ components:
 
 resources:
   - namespace.yaml
-  - priorityclass.yaml
   - cilium/ks.yaml
   - coredns/ks.yaml
   - descheduler/ks.yaml
@@ -20,4 +19,4 @@ resources:
   - node-feature-discovery/ks.yaml
   - reloader/ks.yaml
   - snapshot-controller/ks.yaml
-  # - spegel/ks.yaml
+  - spegel/ks.yaml

@@ -11,8 +11,8 @@ spec:
   dependsOn:
     - name: dragonfly
       namespace: database
-    - name: democratic-csi
-      namespace: democratic-csi
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: kubernetes/apps/forgejo-system/forgejo/app
   prune: true

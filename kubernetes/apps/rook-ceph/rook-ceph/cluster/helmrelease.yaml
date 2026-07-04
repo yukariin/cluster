@@ -63,9 +63,15 @@ spec:
           requireMsgr2: true
       resources:
         mgr:
+          requests:
+            cpu: 500m
+            memory: 512Mi
           limits:
             memory: 2Gi
         osd:
+          requests:
+            cpu: 1000m
+            memory: 4Gi
           limits:
             memory: 8Gi # Required for bootstrap
       storage:
@@ -73,11 +79,11 @@ spec:
         useAllDevices: false
         nodes:
           - name: "sakuya"
-            devicePathFilter: /dev/disk/by-id/nvme-Phison_1TB_ESR01TBTCCZ-27J-2MS_*
-            # - name: "remilia"
-            #   devicePathFilter: /dev/disk/by-id/nvme-SPCC_M.2_PCIe_SSD_*
-            # - name: "flandre"
-            #   devicePathFilter: /dev/disk/by-id/nvme-WD_BLACK_SN850X_2000GB_*
+            devicePathFilter: /dev/disk/by-id/nvme-Phison_1TB_ESR01TBTCCZ-27J-2MS_.*
+          - name: "remilia"
+            devicePathFilter: &path "/dev/disk/by-id/nvme-CT1000P310SSD8_.*"
+          - name: "flandre"
+            devicePathFilter: *path
         config:
           osdsPerDevice: "1"
 

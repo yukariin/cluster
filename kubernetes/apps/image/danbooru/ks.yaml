@@ -8,8 +8,8 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: database
-    - name: democratic-csi
-      namespace: democratic-csi
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: kubernetes/apps/image/danbooru/database
   prune: true
@@ -73,8 +73,8 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
-    - name: democratic-csi
-      namespace: democratic-csi
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: kubernetes/apps/image/danbooru/iqdb
   prune: true

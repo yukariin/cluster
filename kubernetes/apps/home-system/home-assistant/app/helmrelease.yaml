@@ -50,7 +50,7 @@ spec:
         statefulset:
           volumeClaimTemplates:
             - name: cache
-              storageClass: democratic-csi-hostpath
+              storageClass: ceph-block
               accessMode: ReadWriteOnce
               size: 1Gi
               advancedMounts:

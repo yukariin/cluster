@@ -15,7 +15,7 @@ spec:
       smtp-relay:
         annotations:
           reloader.stakater.com/auto: "true"
-        replicas: 1 # 2
+        replicas: 2
         strategy: RollingUpdate
         containers:
           app:

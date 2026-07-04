@@ -26,8 +26,8 @@ spec:
     - ../../../../components/volsync
   dependsOn:
     - name: mc-router
-    - name: democratic-csi
-      namespace: democratic-csi
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: kubernetes/apps/game-system/minecraft/paper
   prune: true

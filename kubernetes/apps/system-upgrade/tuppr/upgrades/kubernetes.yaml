@@ -7,14 +7,14 @@ spec:
   kubernetes:
     # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
     version: v1.36.2
-  maintenance:
-    windows:
-      - start: "0 4 * * 0"
-        duration: "4h"
   healthChecks:
     - apiVersion: volsync.backube/v1alpha1
       kind: ReplicationSource
       expr: status.conditions.filter(c, c.type == "Synchronizing").all(c, c.status == "False")
+    - apiVersion: ceph.rook.io/v1
+      kind: CephCluster
+      expr: |-
+        status.ceph.health in ['HEALTH_OK', 'HEALTH_WARN']
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
       expr: status.conditions.filter(c, c.type == "Ready").all(c, c.status == "True")

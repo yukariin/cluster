@@ -13,8 +13,6 @@ spec:
   values:
     controllers:
       forgejo-runner:
-        type: deployment
-        replicas: 1
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
@@ -92,7 +90,7 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 10Gi
-        storageClass: democratic-csi-hostpath
+        storageClass: ceph-block
         globalMounts:
           - path: /data/cache
       tmpfs:

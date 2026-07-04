@@ -10,8 +10,8 @@ spec:
     - ../../../../components/keda
     - ../../../../components/volsync
   dependsOn:
-    - name: democratic-csi
-      namespace: democratic-csi
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
     - name: dragonfly
       namespace: database
   interval: 1h

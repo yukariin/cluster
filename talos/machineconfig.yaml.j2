@@ -71,7 +71,9 @@ machine:
     extraConfig:
       featureGates:
         UserNamespacesSupport: true
-      maxPods: 250
+      # imageMaximumGCAge: 24h
+      imageGCHighThresholdPercent: 65
+      imageGCLowThresholdPercent: 50
       serializeImagePulls: false
     image: ghcr.io/siderolabs/kubelet:v1.36.2
     nodeIP:
@@ -80,7 +82,7 @@ machine:
 
   nodeLabels:
     node.kubernetes.io/gpu: "true"
-    topology.kubernetes.io/region: homelab
+    topology.kubernetes.io/region: gensokyo
 
   sysctls:
     # Filesystem Watchers
@@ -264,6 +266,12 @@ apiVersion: v1alpha1
 kind: DHCPv4Config
 name: eth0
 clientIdentifier: mac
+
+---
+apiVersion: v1alpha1
+kind: Layer2VIPConfig
+name: 192.168.90.5
+link: eth0
 
 ---
 apiVersion: v1alpha1

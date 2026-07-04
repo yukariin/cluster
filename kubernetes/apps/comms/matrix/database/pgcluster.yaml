@@ -14,7 +14,7 @@ spec:
         - "r"
   storage:
     size: 10G
-    storageClass: democratic-csi-hostpath
+    storageClass: ceph-block
   monitoring:
     enablePodMonitor: true
 
