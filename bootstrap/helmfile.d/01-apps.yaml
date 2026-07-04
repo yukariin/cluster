@@ -85,6 +85,8 @@ releases:
     version: 0.53.0
     values:
       - ./templates/values.yaml.gotmpl
+      - web:
+          enabled: false
     needs:
       - external-secrets/external-secrets
 
