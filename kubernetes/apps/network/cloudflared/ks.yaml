@@ -5,6 +5,8 @@ kind: Kustomization
 metadata:
   name: cloudflared
 spec:
+  dependsOn:
+    - name: external-dns-cloudflare
   interval: 1h
   path: kubernetes/apps/network/cloudflared/app
   postBuild:
