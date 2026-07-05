@@ -12,13 +12,17 @@ spec:
   values:
     operatorConfig:
       driverSpecDefaults:
+        # Rook supplies the CSI sidecar/cephcsi images via the operator chart's
+        # image-set ConfigMap; reference it so images stay in lockstep with Rook.
+        imageSet:
+          name: rook-csi-operator-image-set-configmap
         clusterName: rook-ceph
         controllerPlugin:
           hostNetwork: true
           replicas: 2
-          priorityClassName: system-cluster-critical
           deploymentStrategy:
             type: Recreate
+          priorityClassName: system-cluster-critical
         nodePlugin:
           priorityClassName: system-node-critical
 
@@ -26,7 +30,7 @@ spec:
       cephfs:
         enabled: true
         name: rook-ceph.cephfs.csi.ceph.com
-        snapshotPolicy: volumeSnapshot
+        snapshotPolicy: volumeGroupSnapshot
         kernelMountOptions:
           ms_mode: prefer-crc
 
