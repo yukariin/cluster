@@ -10,10 +10,12 @@ spec:
     - ../../../../components/keda
     - ../../../../components/volsync
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
     - name: dragonfly
       namespace: database
+    - name: pocket-id-operator
+      namespace: security
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: kubernetes/apps/personal/paperless/app
   prune: true

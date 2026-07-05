@@ -9,6 +9,8 @@ spec:
     - ../../../../components/keda
     - ../../../../components/volsync
   dependsOn:
+    - name: pocket-id-operator
+      namespace: security
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h

@@ -31,6 +31,8 @@ spec:
     - ../../../../components/volsync
   dependsOn:
     - name: matrix-database
+    - name: pocket-id-operator
+      namespace: security
   interval: 1h
   path: kubernetes/apps/comms/matrix/app
   prune: true

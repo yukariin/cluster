@@ -29,6 +29,8 @@ metadata:
 spec:
   dependsOn:
     - name: miniflux-database
+    - name: pocket-id-operator
+      namespace: security
   interval: 1h
   path: kubernetes/apps/rss/miniflux/app
   prune: true
