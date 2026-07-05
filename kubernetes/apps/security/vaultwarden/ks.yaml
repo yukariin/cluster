@@ -7,13 +7,15 @@ metadata:
 spec:
   components:
     - ../../../../components/volsync
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: kubernetes/apps/security/vaultwarden/app
   prune: true
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 5Gi
   sourceRef:
     kind: GitRepository
     name: flux-system
