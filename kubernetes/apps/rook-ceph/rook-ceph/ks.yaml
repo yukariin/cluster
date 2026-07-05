@@ -43,6 +43,8 @@ metadata:
 spec:
   dependsOn:
     - name: rook-ceph-csi-drivers
+    - name: snapshot-controller
+      namespace: kube-system
   targetNamespace: &ns rook-ceph
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
