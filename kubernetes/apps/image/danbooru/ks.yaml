@@ -6,7 +6,7 @@ metadata:
   name: danbooru-database
 spec:
   dependsOn:
-    - name: cloudnative-pg
+    - name: plugin-barman-cloud
       namespace: database
     - name: rook-ceph-cluster
       namespace: rook-ceph
