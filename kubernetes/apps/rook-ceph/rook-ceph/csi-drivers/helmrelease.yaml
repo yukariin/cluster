@@ -17,6 +17,7 @@ spec:
         imageSet:
           name: rook-csi-operator-image-set-configmap
         clusterName: rook-ceph
+        enableMetadata: true
         controllerPlugin:
           hostNetwork: true
           replicas: 2
