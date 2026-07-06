@@ -5,9 +5,6 @@ kind: Kustomization
 metadata:
   name: intel-gpu-resource-driver
 spec:
-  dependsOn:
-    - name: node-feature-discovery
-      namespace: kube-system
   interval: 1h
   path: kubernetes/apps/kube-system/intel-gpu-resource-driver/app
   prune: true
