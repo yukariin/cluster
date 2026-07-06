@@ -50,9 +50,9 @@ spec:
       enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
+        runAsUser: &puid 1000
+        runAsGroup: *puid
+        fsGroup: *puid
         fsGroupChangePolicy: OnRootMismatch
     service:
       app:
