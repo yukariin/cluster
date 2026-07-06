@@ -8,10 +8,10 @@ spec:
   components:
     - ../../../../components/volsync
   dependsOn:
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
     - name: multus
       namespace: kube-system
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
   interval: 1h
   path: kubernetes/apps/home-system/home-assistant/app
   prune: true
