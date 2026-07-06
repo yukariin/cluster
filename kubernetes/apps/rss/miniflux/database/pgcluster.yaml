@@ -12,9 +12,14 @@ spec:
       disabledDefaultServices:
         - "ro"
         - "r"
+  postgresql:
+    parameters:
+      max_wal_size: 256MB
+      wal_keep_size: 64MB
   storage:
     size: 1G
     storageClass: ceph-block
+
   monitoring:
     enablePodMonitor: true
 
