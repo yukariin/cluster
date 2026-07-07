@@ -15,11 +15,11 @@ spec:
           path: /mnt/data_pool/kopia
           server: nas.internal
   podSecurityContext:
-    fsGroup: 568
-    fsGroupChangePolicy: OnRootMismatch
     runAsNonRoot: true
     runAsUser: 568
     runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: OnRootMismatch
     seccompProfile: {type: RuntimeDefault}
   repository:
     repository: volsync-maintenance-secret
