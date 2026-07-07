@@ -61,6 +61,13 @@ spec:
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
+      media:
+        type: nfs
+        server: nas.internal
+        path: /mnt/data_pool/data
+        globalMounts:
+          - path: /media/torrents
+            subPath: torrents
     route:
       app:
         hostnames:
