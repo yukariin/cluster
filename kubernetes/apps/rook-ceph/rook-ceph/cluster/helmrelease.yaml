@@ -9,6 +9,21 @@ spec:
     kind: OCIRepository
     name: rook-ceph-cluster
   interval: 1h
+  # A Ceph upgrade rolls OSDs one at a time and can take a while; give Helm room.
+  timeout: 15m
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: false
+    remediation:
+      # NEVER roll back: a Helm rollback of this release is a Ceph version
+      # DOWNGRADE, which Ceph does not support (it poisons the mon store and
+      # deadlocks OSD activation). On a failed/slow upgrade, leave the release
+      # as-is and let the operator finish the roll; Flux re-attempts the
+      # upgrade on the next interval instead of downgrading.
+      retries: 0
+      remediateLastFailure: false
   values:
     monitoring:
       enabled: true
@@ -96,26 +111,26 @@ spec:
         storageClass:
           enabled: true
           name: ceph-block
-          allowVolumeExpansion: true
           isDefault: true
+          reclaimPolicy: Delete
+          allowVolumeExpansion: true
+          volumeBindingMode: Immediate
           mountOptions:
             - discard
           parameters:
             compression_algorithm: zstd
             compression_mode: passive
+            imageFormat: "2"
+            imageFeatures: deep-flatten,exclusive-lock,fast-diff,layering,object-map
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
             csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/controller-publish-secret-name: rook-csi-rbd-provisioner
             csi.storage.k8s.io/controller-publish-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/fstype: ext4
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
             csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-            csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
-            imageFeatures: deep-flatten,exclusive-lock,fast-diff,layering,object-map
-            imageFormat: "2"
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
+            csi.storage.k8s.io/fstype: ext4
 
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true
@@ -137,6 +152,7 @@ spec:
           metadataServer:
             activeCount: 1
             activeStandby: true
+            priorityClassName: system-cluster-critical
             placement:
               topologySpreadConstraints:
                 - maxSkew: 1
@@ -146,7 +162,6 @@ spec:
                     matchLabels:
                       app.kubernetes.io/name: ceph-mds
                       app.kubernetes.io/part-of: *cephFileSystemName
-            priorityClassName: system-cluster-critical
             resources:
               requests:
                 cpu: 100m
@@ -155,21 +170,22 @@ spec:
                 memory: 4Gi
         storageClass:
           enabled: true
-          name: ceph-filesystem
-          allowVolumeExpansion: true
           isDefault: false
+          name: ceph-filesystem
+          pool: data0
+          reclaimPolicy: Delete
+          allowVolumeExpansion: true
+          volumeBindingMode: Immediate
           parameters:
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
             csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/controller-publish-secret-name: rook-csi-cephfs-provisioner
             csi.storage.k8s.io/controller-publish-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
             csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
-            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-            csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
-          pool: data0
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
+            csi.storage.k8s.io/fstype: ext4
 
     cephFileSystemVolumeSnapshotClass:
       enabled: true
