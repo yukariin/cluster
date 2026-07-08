@@ -26,7 +26,7 @@ spec:
               QUI__OIDC_DISABLE_BUILT_IN_LOGIN: "true"
               QUI__OIDC_ENABLED: "true"
               QUI__OIDC_ISSUER: https://id.mistelinn.org
-              QUI__OIDC_REDIRECT_URL: https://torrents.mistelinn.org/api/auth/oidc/callback
+              QUI__OIDC_REDIRECT_URL: https://qui.mistelinn.org/api/auth/oidc/callback
               QUI__PORT: &port 80
             envFrom:
               - secretRef:
