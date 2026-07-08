@@ -23,10 +23,16 @@ spec:
             env:
               QUI__HOST: 0.0.0.0
               QUI__LOG_LEVEL: INFO
+              QUI__OIDC_DISABLE_BUILT_IN_LOGIN: "true"
+              QUI__OIDC_ENABLED: "true"
+              QUI__OIDC_ISSUER: https://id.mistelinn.org
+              QUI__OIDC_REDIRECT_URL: https://torrents.mistelinn.org/api/auth/oidc/callback
               QUI__PORT: &port 80
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
+              - secretRef:
+                  name: "{{ .Release.Name }}-oidc-credentials"
             probes:
               liveness: &probes
                 enabled: true

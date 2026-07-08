@@ -1,0 +1,16 @@
+---
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: qui
+spec:
+  launchUrl: https://qui.mistelinn.org
+  callbackUrls:
+    - "https://qui.mistelinn.org/api/auth/oidc/callback"
+  allowedUserGroups:
+    - name: users
+      namespace: security
+  secret:
+    keys:
+      clientID: QUI__OIDC_CLIENT_ID
+      clientSecret: QUI__OIDC_CLIENT_SECRET
