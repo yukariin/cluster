@@ -22,6 +22,7 @@ spec:
             env:
               ND_BASEURL: "https://{{ .Release.Name }}.mistelinn.org"
               ND_CACHEFOLDER: /config/cache
+              ND_COVERARTPRIORITY: "folder.*, cover.*, front.*"
               ND_DATAFOLDER: /config
               ND_ENABLEINSIGHTSCOLLECTOR: false
               ND_IMAGECACHESIZE: 500MB

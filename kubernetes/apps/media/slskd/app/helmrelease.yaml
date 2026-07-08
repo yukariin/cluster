@@ -23,7 +23,6 @@ spec:
             env:
               DOTNET_BUNDLE_EXTRACT_BASE_DIR: /tmp/.net
               SLSKD_APP_DIR: /config
-              ND_COVERARTPRIORITY: "folder.*, cover.*, front.*"
               SLSKD_DOWNLOADS_DIR: /media/soulseek/complete
               SLSKD_FILE_PERMISSION_MODE: 664
               SLSKD_HTTP_PORT: &port 80
