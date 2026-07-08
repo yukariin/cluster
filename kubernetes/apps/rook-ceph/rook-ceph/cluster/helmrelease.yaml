@@ -72,8 +72,11 @@ spec:
             enabled: true
           - name: pg_autoscaler
             enabled: true
+          # mitigates mgr leak in Ceph 20.2.2 (tracker #77724); revert on v20.2.3
+          - name: nfs
+            enabled: false
           - name: rook
-            enabled: false # mitigates mgr leak in Ceph 20.2.2 (tracker #77724); revert on v20.2.3
+            enabled: false
       network:
         provider: host
         connections:
