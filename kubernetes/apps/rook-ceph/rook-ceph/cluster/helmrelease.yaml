@@ -86,6 +86,13 @@ spec:
           limits:
             cpu: 1000m
             memory: 2Gi
+        mgr-sidecar:
+          requests:
+            cpu: 100m
+            memory: 40Mi
+          limits:
+            cpu: 1000m
+            memory: 100Mi
         osd:
           requests:
             cpu: 1000m
