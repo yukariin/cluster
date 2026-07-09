@@ -56,7 +56,7 @@ spec:
                 enabled: true
                 custom: true
                 spec:
-                  httpGet:
+                  httpGet: &probeGet
                     path: /up
                     port: &appPort 3000
                   initialDelaySeconds: 0
@@ -64,6 +64,14 @@ spec:
                   timeoutSeconds: 5
                   failureThreshold: 3
               readiness: *appProbes
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: *probeGet
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 30
             lifecycle: &lifecycle
               preStop: {exec: {command: ["sleep", "15"]}}
             securityContext: &sc
