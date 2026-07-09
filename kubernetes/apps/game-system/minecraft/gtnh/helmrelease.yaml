@@ -38,7 +38,7 @@ spec:
               ENABLE_COMMAND_BLOCK: true
               SPAWN_PROTECTION: 1
               VIEW_DISTANCE: 8
-              MODE: o
+              MODE: 0
               LEVEL_TYPE: "rwg"
               ALLOW_FLIGHT: true
               # Defaults
