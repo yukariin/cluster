@@ -62,7 +62,7 @@ spec:
                 spec:
                   exec: *probeExec
                   failureThreshold: 300
-                  initialDelaySeconds: 30
+                  initialDelaySeconds: 60
                   periodSeconds: 1
             securityContext:
               allowPrivilegeEscalation: true
