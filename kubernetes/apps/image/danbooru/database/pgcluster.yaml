@@ -7,6 +7,9 @@ metadata:
     cnpg.io/skipEmptyWalArchiveCheck: "enabled"
 spec:
   instances: 1
+  # Single-instance cluster: disable PDB so the node hosting it can be drained
+  # for Talos/Kubernetes upgrades (CNPG blocks single-instance drains otherwise).
+  enablePDB: false
   managed:
     services:
       disabledDefaultServices:
