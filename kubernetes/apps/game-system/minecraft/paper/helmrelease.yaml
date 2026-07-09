@@ -30,7 +30,7 @@ spec:
               MAX_MEMORY: 10G
               MODE: survival
               PAPER_CHANNEL: experimental
-              PAUSE_WHEN_EMPTY_SECONDS: "600"
+              PAUSE_WHEN_EMPTY_SECONDS: "300"
               SEED: "1691256543523182218"
               SERVER_NAME: Terra
               SPAWN_PROTECTION: 0
@@ -98,9 +98,5 @@ spec:
         ports:
           minecraft:
             port: 25565
-      rcon:
-        controller: paper
-        ports:
           rcon:
             port: 25575
-            targetPort: 25575
