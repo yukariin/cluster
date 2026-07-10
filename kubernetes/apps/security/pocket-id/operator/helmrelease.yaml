@@ -10,6 +10,9 @@ spec:
     name: pocket-id-operator
   interval: 1h
   values:
+    operator:
+      replicas: 2
+
     metrics:
       enabled: true
       serviceMonitor:
