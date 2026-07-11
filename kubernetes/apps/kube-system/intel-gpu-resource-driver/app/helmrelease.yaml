@@ -14,6 +14,13 @@ spec:
       staticPath: /var/cdi/static
       dynamicPath: /var/cdi/dynamic
     kubeletPlugin:
+      # xpumd is not deployed, so disable health monitoring to avoid
+      # trying to connect to /run/xpumd/intelxpuinfo.sock.
+      # With health monitoring off, privileged mode is required for the driver
+      # to query hardware details directly from devices.
       privileged: true
       healthMonitoring:
         enabled: false
+
+      nodeSelector:
+        node.kubernetes.io/gpu: "true"
