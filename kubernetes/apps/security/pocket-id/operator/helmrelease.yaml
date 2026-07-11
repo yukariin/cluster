@@ -30,8 +30,6 @@ spec:
     instance:
       enabled: true
       name: pocket-id
-      serviceMonitor:
-        enabled: true
       spec:
         analyticsDisabled: true
         appUrl: "https://id.mistelinn.org"
