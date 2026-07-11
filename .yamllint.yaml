@@ -15,7 +15,7 @@ rules:
     check-multi-line-strings: false
   line-length: disable
   quoted-strings:
-    quote-type: consistent
+    quote-type: double
     required: false
   truthy:
     allowed-values:
