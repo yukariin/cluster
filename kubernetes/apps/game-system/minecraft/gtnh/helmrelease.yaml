@@ -29,7 +29,7 @@ spec:
               MODS: https://github.com/GTNewHorizons/GTNH-Web-Map/releases/download/0.3.38/gtnh-web-map-0.3.38.jar,https://github.com/GTNewHorizons/worldedit-gtnh/releases/download/v0.0.7/worldedit-v0.0.7.jar
               # if this isn't true, then the container tries to download the modpack every run
               SKIP_GENERIC_PACK_UPDATE_CHECK: "true"
-              MEMORY: 8G
+              MAX_MEMORY: 8G
               # Make sure that this matches what is in your pack's startserver bash file
               JVM_OPTS: "-Dfml.readTimeout=180 @java9args.txt"
               CUSTOM_SERVER: "https://github.com/GTNewHorizons/lwjgl3ify/releases/download/3.0.26/lwjgl3ify-3.0.26-forgePatches.jar"
