@@ -28,9 +28,9 @@ spec:
   components:
     - ../../../../components/dragonfly
   dependsOn:
-    - name: renovate-operator
     - name: dragonfly
       namespace: database
+    - name: renovate-operator
   interval: 1h
   path: kubernetes/apps/forgejo-system/renovate-operator/jobs
   prune: true

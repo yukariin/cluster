@@ -3,22 +3,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: external-dns-unifi
-spec:
-  interval: 1h
-  path: kubernetes/apps/network/external-dns/unifi
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: network
-
----
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: external-dns-cloudflare
 spec:
   healthChecks:
@@ -31,6 +15,22 @@ spec:
       name: dnsendpoints.externaldns.k8s.io
   interval: 1h
   path: kubernetes/apps/network/external-dns/cloudflare
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: network
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: external-dns-unifi
+spec:
+  interval: 1h
+  path: kubernetes/apps/network/external-dns/unifi
   prune: true
   sourceRef:
     kind: GitRepository
