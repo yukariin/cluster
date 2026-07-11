@@ -19,7 +19,7 @@ spec:
         clusterName: rook-ceph
         enableMetadata: true
         controllerPlugin:
-          hostNetwork: true
+          hostNetwork: true # same as Cluster's network.provider
           replicas: 2
           deploymentStrategy:
             type: Recreate
