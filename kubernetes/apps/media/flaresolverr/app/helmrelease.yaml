@@ -36,7 +36,7 @@ spec:
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
             resources:
               requests:
@@ -50,10 +50,19 @@ spec:
       enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
-        runAsUser: &puid 1000
-        runAsGroup: *puid
-        fsGroup: *puid
+        runAsUser: &fs_id 1000
+        runAsGroup: *fs_id
+        fsGroup: *fs_id
         fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /app
+            subPath: app
+          - path: /tmp
+            subPath: tmp
     service:
       app:
         ports:
