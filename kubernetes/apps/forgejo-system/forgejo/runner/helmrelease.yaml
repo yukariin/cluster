@@ -24,6 +24,7 @@ spec:
             runAsUser: 568
             fsGroup: 568
             fsGroupChangePolicy: OnRootMismatch
+            seccompProfile: {type: RuntimeDefault}
           # must cover runner.shutdown_timeout plus the plugin's 60s cleanup budget
           terminationGracePeriodSeconds: 300
         initContainers:
