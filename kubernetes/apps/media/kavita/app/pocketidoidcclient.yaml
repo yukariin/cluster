@@ -14,6 +14,7 @@ spec:
     - name: users
       namespace: security
   pkceEnabled: true
+  skipConsent: true
   secret:
     keys:
       clientID: OAUTH_CLIENT_ID

@@ -12,6 +12,7 @@ spec:
     - name: docs
       namespace: security
   pkceEnabled: true
+  skipConsent: true
   secret:
     keys:
       clientID: OIDC_CLIENT_ID

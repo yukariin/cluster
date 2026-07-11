@@ -11,3 +11,4 @@ spec:
     - name: users
       namespace: security
   pkceEnabled: true
+  skipConsent: true

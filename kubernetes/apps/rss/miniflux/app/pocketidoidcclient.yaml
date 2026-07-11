@@ -11,6 +11,8 @@ spec:
   allowedUserGroups:
     - name: users
       namespace: security
+  pkceEnabled: true
+  skipConsent: true
   secret:
     keys:
       clientID: OAUTH2_CLIENT_ID

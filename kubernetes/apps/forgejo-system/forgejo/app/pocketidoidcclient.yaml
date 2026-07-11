@@ -11,6 +11,7 @@ spec:
     - name: admins
       namespace: security
   pkceEnabled: true
+  skipConsent: true
   secret:
     keys:
       clientID: key

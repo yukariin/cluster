@@ -10,6 +10,8 @@ spec:
   allowedUserGroups:
     - name: users
       namespace: security
+  pkceEnabled: true
+  skipConsent: true
   secret:
     keys:
       clientID: QUI__OIDC_CLIENT_ID

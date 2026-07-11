@@ -12,6 +12,7 @@ spec:
     - name: admins
       namespace: security
   pkceEnabled: true
+  skipConsent: true
   secret:
     keys:
       clientID: SSO_CLIENT_ID
