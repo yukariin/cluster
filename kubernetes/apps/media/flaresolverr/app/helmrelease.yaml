@@ -36,7 +36,8 @@ spec:
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              # undetected_chromedriver patches /app/chromedriver in-place at startup (r+b open)
+              readOnlyRootFilesystem: false
               capabilities: {drop: ["ALL"]}
             resources:
               requests:
@@ -55,14 +56,6 @@ spec:
         fsGroup: *fs_id
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile: {type: RuntimeDefault}
-    persistence:
-      tmpfs:
-        type: emptyDir
-        globalMounts:
-          - path: /app
-            subPath: app
-          - path: /tmp
-            subPath: tmp
     service:
       app:
         ports:
