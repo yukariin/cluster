@@ -23,4 +23,5 @@ spec:
         enabled: false
 
       nodeSelector:
+        # Label is managed by the Talos machine configuration.
         node.kubernetes.io/gpu: "true"
