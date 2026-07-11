@@ -13,6 +13,7 @@ spec:
   allowedUserGroups:
     - name: users
       namespace: security
+  pkceEnabled: true
   secret:
     keys:
       clientID: OAUTH_CLIENT_ID

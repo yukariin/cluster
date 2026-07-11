@@ -10,6 +10,7 @@ spec:
   allowedUserGroups:
     - name: admins
       namespace: security
+  pkceEnabled: true
   secret:
     keys:
       clientID: key
