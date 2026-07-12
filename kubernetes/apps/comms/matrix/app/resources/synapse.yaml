@@ -28,6 +28,10 @@ experimental_features:
   msc4354_enabled: true
 database:
   allow_unsafe_locale: true
+  args:
+    sslcert: /var/run/secrets/postgresql/tls.crt
+    sslkey: /var/run/secrets/postgresql/tls.key
+    sslrootcert: /var/run/secrets/postgres-server-ca/ca.crt
 email:
   smtp_host: smtp-relay.network.svc.cluster.local
   smtp_port: 25

@@ -1,9 +1,13 @@
 ---
-# Mounts the app's client cert + the server CA into its pod so it can connect to
-# the pooler with sslmode=verify-full. Assumes a bjw-s app-template HelmRelease.
-# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+# Shared-cluster access for bjw-s app-template apps: client cert + URL ConfigMap,
+# with the cert and server CA mounted into the pod for sslmode=verify-full.
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.config.k8s.io/component_v1alpha1.json
 apiVersion: kustomize.config.k8s.io/v1alpha1
 kind: Component
+components:
+  - ../base/cert
+resources:
+  - configmap.yaml
 patches:
   - target:
       group: helm.toolkit.fluxcd.io

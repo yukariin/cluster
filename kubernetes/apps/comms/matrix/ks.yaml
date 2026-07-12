@@ -25,12 +25,80 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: matrix-synapse-db
+spec:
+  dependsOn:
+    - name: cluster
+      namespace: database
+  healthCheckExprs:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      inProgress: "!has(status.applied)"
+      failed: status.applied == false
+      current: status.applied == true
+  interval: 1h
+  path: kubernetes/components/postgres/base/database
+  prune: true
+  postBuild:
+    substitute:
+      APP: synapse
+      OWNER: matrix
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: database
+  wait: true
+  timeout: 5m
+  retryInterval: 2m
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: matrix-mas-db
+spec:
+  dependsOn:
+    - name: cluster
+      namespace: database
+  healthCheckExprs:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      inProgress: "!has(status.applied)"
+      failed: status.applied == false
+      current: status.applied == true
+  interval: 1h
+  path: kubernetes/components/postgres/base/database
+  prune: true
+  postBuild:
+    substitute:
+      APP: mas
+      OWNER: matrix
+      DATABASE_EXTENSIONS: "[{name: pg_trgm}]"
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: database
+  wait: true
+  timeout: 5m
+  retryInterval: 2m
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: &app matrix
 spec:
   components:
+    - ../../../../components/postgres/base/cert
     - ../../../../components/volsync
   dependsOn:
     - name: matrix-database
+    - name: matrix-mas-db
+    - name: matrix-synapse-db
     - name: pocket-id-operator
       namespace: security
   interval: 1h
@@ -39,6 +107,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      PG_APP: *app
       VOLSYNC_CAPACITY: 10Gi
   sourceRef:
     kind: GitRepository

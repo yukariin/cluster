@@ -61,7 +61,7 @@ metadata:
   name: &app miniflux
 spec:
   components:
-    - ../../../../components/postgres/cert
+    - ../../../../components/postgres/app-template
   dependsOn:
     - name: miniflux-db
     - name: pocket-id-operator

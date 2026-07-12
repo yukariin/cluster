@@ -63,7 +63,7 @@ spec:
   components:
     - ../../../../components/dragonfly
     - ../../../../components/keda
-    - ../../../../components/postgres/cert
+    - ../../../../components/postgres/app-template
   dependsOn:
     - name: danbooru-db
     - name: dragonfly

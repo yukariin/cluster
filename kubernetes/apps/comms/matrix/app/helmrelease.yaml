@@ -24,12 +24,28 @@ spec:
           existingClaim: "{{ .Release.Name }}"
         maxUploadSize: 256M
       postgres:
-        host: pg-matrix-rw
+        host: pooler-rw.database.svc
         user: matrix
         database: synapse
+        sslMode: verify-full
         password:
-          secret: pg-matrix-app
-          secretKey: password
+          value: unused-cert-auth
+      extraVolumes: &pgCertVolumes
+        - name: postgres-cert
+          secret:
+            secretName: postgres-matrix-cert
+            defaultMode: 0440
+        - name: postgres-server-ca
+          secret:
+            secretName: postgres-server-ca
+            defaultMode: 0440
+      extraVolumeMounts: &pgCertMounts
+        - name: postgres-cert
+          mountPath: /var/run/secrets/postgresql
+          readOnly: true
+        - name: postgres-server-ca
+          mountPath: /var/run/secrets/postgres-server-ca
+          readOnly: true
       additional:
         0-baseConfig:
           configSecret: matrix-secret
@@ -48,12 +64,14 @@ spec:
         className: disabled
         tlsEnabled: false
       postgres:
-        host: pg-matrix-rw
+        host: pooler-rw.database.svc
         user: matrix
         database: mas
+        sslMode: verify-full
         password:
-          secret: pg-matrix-app
-          secretKey: password
+          value: unused-cert-auth
+      extraVolumes: *pgCertVolumes
+      extraVolumeMounts: *pgCertMounts
       additional:
         0-baseConfig:
           configSecret: matrix-secret
