@@ -1,0 +1,89 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/postgresql.cnpg.io/cluster_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: &name postgres
+  annotations:
+    cnpg.io/skipEmptyWalArchiveCheck: "enabled"
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.10-bookworm
+
+  primaryUpdateMethod: switchover
+
+  certificates:
+    serverCASecret: postgres-server-ca
+    serverTLSSecret: postgres-server-cert
+    clientCASecret: postgres-client-ca
+    replicationTLSSecret: postgres-replication-cert
+
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: 256MB
+      max_wal_size: 1GB
+      wal_keep_size: 512MB
+
+    pg_hba:
+      - hostssl all all all cert clientcert=verify-full map=pooler-map
+    pg_ident:
+      - pooler-map pooler-rw all
+
+  affinity:
+    enablePodAntiAffinity: true
+    podAntiAffinityType: required
+    topologyKey: kubernetes.io/hostname
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 1Gi
+
+  storage:
+    size: 20G
+    storageClass: ceph-block
+
+  bootstrap:
+    initdb: {}
+    # recovery:
+    #   source: *src
+    #   recoveryTarget:
+    #     targetTLI: "1"
+
+  managed:
+    roles:
+      - name: pooler-rw
+        ensure: present
+        login: true
+        superuser: false
+        disablePassword: true
+
+  plugins:
+    - name: &plugin barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: &store postgres-store
+
+  externalClusters:
+    - name: &src postgres-restore
+      plugin:
+        name: *plugin
+        parameters:
+          barmanObjectName: *store
+          serverName: *name
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: &name postgres
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: *name

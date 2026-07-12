@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: &name postgres-server-ca
+spec:
+  commonName: postgres-server-ca
+  duration: 87660h # 10 years
+  isCA: true
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: selfsigned-issuer
+  nameConstraints:
+    critical: true
+    permitted:
+      dnsDomains:
+        - .database.svc.cluster.local
+        - .database.svc
+        - pooler-rw
+        - postgres-r
+        - postgres-ro
+        - postgres-rw
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS8
+    rotationPolicy: Never
+    size: 384
+  # -root suffix: the trust-manager Bundle writes its target Secret (named
+  # postgres-server-ca) into every namespace, including this one — the source
+  # holding the CA key must not share that name or the two controllers collide.
+  secretName: postgres-server-ca-root
+  usages:
+    - cert sign
+    - crl sign
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/cert-manager.io/clusterissuer_v1.json
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: postgres-server-ca
+spec:
+  ca:
+    secretName: postgres-server-ca-root

@@ -1,0 +1,54 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/postgresql.cnpg.io/pooler_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Pooler
+metadata:
+  name: pooler-rw
+spec:
+  cluster:
+    name: postgres
+  instances: 2
+  type: rw
+
+  template:
+    spec:
+      containers: []
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  cnpg.io/poolerName: pooler-rw
+              topologyKey: kubernetes.io/hostname
+
+  pgbouncer:
+    poolMode: session
+    authQuery: "SELECT $1, NULL"
+    clientCASecret:
+      name: pooler-client-cert
+    clientTLSSecret:
+      name: pooler-server-cert
+    serverCASecret:
+      name: pooler-server-cert
+    serverTLSSecret:
+      name: pooler-client-cert
+    parameters:
+      auth_type: cert
+      client_tls_sslmode: verify-full
+      server_tls_sslmode: verify-full
+      default_pool_size: "60"
+      max_client_conn: "1000"
+      max_prepared_statements: "200"
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: &name pooler-rw
+spec:
+  podMetricsEndpoints:
+    - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/poolerName: *name

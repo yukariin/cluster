@@ -1,0 +1,39 @@
+---
+# Distributes the CA public certs to every namespace as Secrets named after the
+# Bundle. Sources use the -root secrets (which also hold the CA keys) — target
+# and source names must differ because the target is written into cert-manager
+# too, where a same-named source would be overwritten.
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/trust.cert-manager.io/bundle_v1alpha1.json
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: postgres-server-ca
+spec:
+  sources:
+    - secret:
+        name: postgres-server-ca-root
+        key: tls.crt
+  target:
+    secret:
+      key: ca.crt
+      metadata:
+        labels:
+          cnpg.io/reload: ""
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/trust.cert-manager.io/bundle_v1alpha1.json
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: postgres-client-ca
+spec:
+  sources:
+    - secret:
+        name: postgres-client-ca-root
+        key: tls.crt
+  target:
+    secret:
+      key: ca.crt
+      metadata:
+        labels:
+          cnpg.io/reload: ""

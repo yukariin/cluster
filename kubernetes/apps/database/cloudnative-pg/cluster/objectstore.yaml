@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/barmancloud.cnpg.io/objectstore_v1.json
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: postgres-store
+spec:
+  retentionPolicy: 30d
+  configuration:
+    destinationPath: s3://cnpg-backups/
+    endpointURL: "https://s3.mistelinn.org"
+    s3Credentials:
+      region:
+        name: postgres-store-secret
+        key: AWS_REGION
+      accessKeyId:
+        name: postgres-store-secret
+        key: AWS_ACCESS_KEY_ID
+      secretAccessKey:
+        name: postgres-store-secret
+        key: AWS_SECRET_ACCESS_KEY
+    wal:
+      compression: zstd
