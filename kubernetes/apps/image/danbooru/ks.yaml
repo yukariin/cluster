@@ -25,13 +25,50 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: danbooru-db
+spec:
+  dependsOn:
+    - name: cluster
+      namespace: database
+  interval: 1h
+  path: kubernetes/components/postgres/base/database
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: database
+  wait: true
+  # Without these, kstatus reports a Database "ready" once observedGeneration
+  # matches, even when status.applied == false.
+  healthCheckExprs:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      failed: status.applied == false
+      current: status.applied == true
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: DatabaseRole
+      failed: status.applied == false
+      current: status.applied == true
+  postBuild:
+    substitute:
+      APP: danbooru
+      OWNER: danbooru
+      DATABASE_EXTENSIONS: "[{name: btree_gin}, {name: fuzzystrmatch}, {name: pg_trgm}, {name: pgcrypto}, {name: pgstattuple}]"
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: &app danbooru
 spec:
   components:
     - ../../../../components/dragonfly
     - ../../../../components/keda
+    - ../../../../components/postgres/cert
   dependsOn:
-    - name: danbooru-database
+    - name: danbooru-db
     - name: dragonfly
       namespace: database
   interval: 1h
@@ -40,6 +77,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      PG_APP: *app
   sourceRef:
     kind: GitRepository
     name: flux-system

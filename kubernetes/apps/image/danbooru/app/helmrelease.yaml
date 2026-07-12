@@ -45,9 +45,9 @@ spec:
                     fieldPath: metadata.name
               DATABASE_URL:
                 valueFrom:
-                  secretKeyRef:
-                    name: pg-danbooru-app
-                    key: uri
+                  configMapKeyRef:
+                    name: danbooru-postgres
+                    key: url
             envFrom: &envFrom
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
