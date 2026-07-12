@@ -8,28 +8,28 @@ spec:
   dependsOn:
     - name: cluster
       namespace: database
-  interval: 1h
-  path: kubernetes/components/postgres/base/database
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: database
-  wait: true
-  timeout: 5m
-  retryInterval: 2m
   healthCheckExprs:
     - apiVersion: postgresql.cnpg.io/v1
       kind: Database
       inProgress: "!has(status.applied)"
       failed: status.applied == false
       current: status.applied == true
+  interval: 1h
+  timeout: 5m
+  retryInterval: 2m
+  path: kubernetes/components/postgres/base/database
+  prune: true
   postBuild:
     substitute:
       APP: danbooru
       OWNER: danbooru
       DATABASE_EXTENSIONS: "[{name: btree_gin}, {name: fuzzystrmatch}, {name: pg_trgm}, {name: pgcrypto}, {name: pgstattuple}]"
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: database
+  wait: true
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
