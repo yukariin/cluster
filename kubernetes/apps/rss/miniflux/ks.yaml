@@ -43,11 +43,11 @@ spec:
   retryInterval: 2m
   healthCheckExprs:
     - apiVersion: postgresql.cnpg.io/v1
-      kind: Database
+      kind: DatabaseRole
       inProgress: "!has(status.applied)"
       current: status.applied == true
     - apiVersion: postgresql.cnpg.io/v1
-      kind: DatabaseRole
+      kind: Database
       inProgress: "!has(status.applied)"
       current: status.applied == true
   postBuild:
