@@ -3,11 +3,45 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: vaultwarden-db
+spec:
+  dependsOn:
+    - name: cluster
+      namespace: database
+  healthCheckExprs:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      inProgress: "!has(status.applied)"
+      failed: status.applied == false
+      current: status.applied == true
+  interval: 1h
+  timeout: 5m
+  retryInterval: 2m
+  path: kubernetes/components/postgres/base/database
+  prune: true
+  postBuild:
+    substitute:
+      APP: vaultwarden
+      OWNER: vaultwarden
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: database
+  wait: true
+
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: &app vaultwarden
 spec:
   components:
+    - ../../../../components/postgres/app-template
     - ../../../../components/volsync
   dependsOn:
+    - name: vaultwarden-db
     - name: pocket-id-operator
       namespace: security
     - name: rook-ceph-cluster
@@ -18,6 +52,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      PG_APP: *app
   sourceRef:
     kind: GitRepository
     name: flux-system

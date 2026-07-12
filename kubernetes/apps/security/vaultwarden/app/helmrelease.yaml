@@ -38,6 +38,11 @@ spec:
               SSO_SIGNUPS_MATCH_EMAIL: "true"
               SSO_AUTHORITY: "https://id.mistelinn.org"
               SSO_SCOPES: "email profile groups openid offline_access"
+              DATABASE_URL:
+                valueFrom:
+                  configMapKeyRef:
+                    name: vaultwarden-postgres
+                    key: url
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
