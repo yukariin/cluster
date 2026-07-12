@@ -30,21 +30,26 @@ spec:
         sslMode: verify-full
         password:
           value: unused-cert-auth
-      extraVolumes: &pgCertVolumes
-        - name: postgres-cert
-          secret:
-            secretName: postgres-matrix-cert
+      extraVolumes: &pgVolumes
+        - name: postgres-tls
+          projected:
             defaultMode: 0440
-        - name: postgres-server-ca
-          secret:
-            secretName: postgres-server-ca
-            defaultMode: 0440
-      extraVolumeMounts: &pgCertMounts
-        - name: postgres-cert
+            sources:
+              - secret:
+                  name: postgres-matrix-cert
+                  items:
+                    - key: tls.crt
+                      path: tls.crt
+                    - key: tls.key
+                      path: tls.key
+              - secret:
+                  name: postgres-server-ca
+                  items:
+                    - key: ca.crt
+                      path: ca.crt
+      extraVolumeMounts: &pgVolumeMounts
+        - name: postgres-tls
           mountPath: /var/run/secrets/postgresql
-          readOnly: true
-        - name: postgres-server-ca
-          mountPath: /var/run/secrets/postgres-server-ca
           readOnly: true
       additional:
         0-baseConfig:
@@ -70,8 +75,8 @@ spec:
         sslMode: verify-full
         password:
           value: unused-cert-auth
-      extraVolumes: *pgCertVolumes
-      extraVolumeMounts: *pgCertMounts
+      extraVolumes: *pgVolumes
+      extraVolumeMounts: *pgVolumeMounts
       additional:
         0-baseConfig:
           configSecret: matrix-secret

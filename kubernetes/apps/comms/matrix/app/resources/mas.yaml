@@ -3,7 +3,7 @@ database:
   ssl_mode: verify-full
   ssl_certificate_file: /var/run/secrets/postgresql/tls.crt
   ssl_key_file: /var/run/secrets/postgresql/tls.key
-  ssl_ca_file: /var/run/secrets/postgres-server-ca/ca.crt
+  ssl_ca_file: /var/run/secrets/postgresql/ca.crt
 branding:
   service_name: "Mistelinn Matrix"
 passwords:
