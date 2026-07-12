@@ -20,7 +20,7 @@ spec:
       value: enabled
     - name: RENOVATE_REDIS_URL
       value: redis://renovate-operator-jobs-dragonfly:6379
-  image: ghcr.io/renovatebot/renovate:43.260.1
+  image: ghcr.io/renovatebot/renovate:43.260.2
   parallelism: 5
   provider:
     name: forgejo
