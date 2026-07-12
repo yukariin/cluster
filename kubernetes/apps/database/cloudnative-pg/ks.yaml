@@ -50,6 +50,12 @@ spec:
       namespace: cert-manager
     - name: trust-manager-config
       namespace: cert-manager
+  healthCheckExprs:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: DatabaseRole
+      inProgress: "!has(status.applied)"
+      failed: status.applied == false
+      current: status.applied == true
   interval: 1h
   path: kubernetes/apps/database/cloudnative-pg/cluster
   prune: true

@@ -3,11 +3,11 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: DatabaseRole
 metadata:
-  name: postgres-${OWNER}-role
+  name: postgres-miniflux-role
 spec:
   cluster:
     name: postgres
-  name: ${OWNER}
+  name: miniflux
   ensure: present
   login: true
   superuser: false

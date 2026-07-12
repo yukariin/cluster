@@ -3,10 +3,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - roles
-  - externalsecret.yaml
-  - certificate.yaml
-  - objectstore.yaml
-  - cluster.yaml
-  - pooler.yaml
-  - scheduledbackup.yaml
+  - danbooru.yaml
+  - miniflux.yaml
