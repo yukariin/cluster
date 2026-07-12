@@ -5,7 +5,7 @@ kind: Certificate
 metadata:
   name: &name postgres-client-ca
 spec:
-  commonName: postgres-client-ca
+  commonName: *name
   duration: 87660h # 10 years
   isCA: true
   issuerRef:
@@ -17,7 +17,6 @@ spec:
     encoding: PKCS8
     rotationPolicy: Never
     size: 384
-  # -root suffix: see server-ca.yaml — must not collide with the Bundle target.
   secretName: postgres-client-ca-root
   usages:
     - cert sign

@@ -1,9 +1,5 @@
 ---
-# Distributes the CA public certs to every namespace as Secrets named after the
-# Bundle. Sources use the -root secrets (which also hold the CA keys) — target
-# and source names must differ because the target is written into cert-manager
-# too, where a same-named source would be overwritten.
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/trust.cert-manager.io/bundle_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/trust.cert-manager.io/bundle_v1alpha1.json
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
@@ -21,7 +17,7 @@ spec:
           cnpg.io/reload: ""
 
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/trust.cert-manager.io/bundle_v1alpha1.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/trust.cert-manager.io/bundle_v1alpha1.json
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:

@@ -5,7 +5,7 @@ kind: Certificate
 metadata:
   name: &name postgres-server-ca
 spec:
-  commonName: postgres-server-ca
+  commonName: *name
   duration: 87660h # 10 years
   isCA: true
   issuerRef:
@@ -27,9 +27,6 @@ spec:
     encoding: PKCS8
     rotationPolicy: Never
     size: 384
-  # -root suffix: the trust-manager Bundle writes its target Secret (named
-  # postgres-server-ca) into every namespace, including this one — the source
-  # holding the CA key must not share that name or the two controllers collide.
   secretName: postgres-server-ca-root
   usages:
     - cert sign
