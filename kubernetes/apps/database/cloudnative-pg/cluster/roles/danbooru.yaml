@@ -3,7 +3,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: DatabaseRole
 metadata:
-  name: postgres-danbooru-role
+  name: danbooru
 spec:
   cluster:
     name: postgres

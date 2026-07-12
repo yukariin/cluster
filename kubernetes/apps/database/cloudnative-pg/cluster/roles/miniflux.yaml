@@ -3,7 +3,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: DatabaseRole
 metadata:
-  name: postgres-miniflux-role
+  name: miniflux
 spec:
   cluster:
     name: postgres
