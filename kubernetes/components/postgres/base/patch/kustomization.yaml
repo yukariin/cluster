@@ -20,7 +20,7 @@ patches:
             postgres-certs:
               type: secret
               name: postgres-${PG_APP}-cert
-              defaultMode: 0640
+              defaultMode: 0600
               globalMounts:
                 - path: /var/run/secrets/postgresql
             postgres-server-ca:
