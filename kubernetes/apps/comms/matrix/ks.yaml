@@ -74,7 +74,6 @@ spec:
     - ../../../../components/postgres/base/cert
     - ../../../../components/volsync
   dependsOn:
-    - name: matrix-database
     - name: matrix-mas-db
     - name: matrix-synapse-db
     - name: pocket-id-operator
