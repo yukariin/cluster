@@ -47,11 +47,11 @@ spec:
     storageClass: ceph-block
 
   bootstrap:
-    initdb: {}
-    # recovery:
-    #   source: *src
-    #   recoveryTarget:
-    #     targetTLI: "1"
+    # initdb: {}
+    recovery:
+      source: &src postgres-restore
+      recoveryTarget:
+        targetTLI: "1"
 
   managed:
     roles:
@@ -68,7 +68,7 @@ spec:
         barmanObjectName: &store postgres-store
 
   externalClusters:
-    - name: &src postgres-restore
+    - name: *src
       plugin:
         name: *plugin
         parameters:
