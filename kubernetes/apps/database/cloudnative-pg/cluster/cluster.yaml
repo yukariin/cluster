@@ -38,7 +38,7 @@ spec:
   resources:
     requests:
       cpu: 100m
-      memory: 256Mi
+      memory: 512Mi # shared_buffers x 2
     limits:
       memory: 1Gi
 
