@@ -15,39 +15,66 @@ spec:
   targetNamespace: game-system
   wait: false
 
----
+# ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &app gtnh
-spec:
-  components:
-    - ../../../../components/volsync
-  dependsOn:
-    - name: mc-router
-    - name: rook-ceph-cluster
-      namespace: rook-ceph
-  interval: 1h
-  path: kubernetes/apps/game-system/minecraft/gtnh
-  prune: true
-  postBuild:
-    substitute:
-      APP: *app
-      VOLSYNC_CAPACITY: 10Gi
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-    namespace: flux-system
-  targetNamespace: game-system
-  wait: false
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: &app gtnh
+# spec:
+#   components:
+#     - ../../../../components/volsync
+#   dependsOn:
+#     - name: mc-router
+#     - name: rook-ceph-cluster
+#       namespace: rook-ceph
+#   interval: 1h
+#   path: kubernetes/apps/game-system/minecraft/gtnh
+#   prune: true
+#   postBuild:
+#     substitute:
+#       APP: *app
+#       VOLSYNC_CAPACITY: 10Gi
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#     namespace: flux-system
+#   targetNamespace: game-system
+#   wait: false
+
+# ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: &app paper
+# spec:
+#   components:
+#     - ../../../../components/volsync
+#   dependsOn:
+#     - name: mc-router
+#     - name: rook-ceph-cluster
+#       namespace: rook-ceph
+#   interval: 1h
+#   path: kubernetes/apps/game-system/minecraft/paper
+#   prune: true
+#   postBuild:
+#     substitute:
+#       APP: *app
+#       VOLSYNC_CAPACITY: 10Gi
+#   sourceRef:
+#     kind: GitRepository
+#     name: flux-system
+#     namespace: flux-system
+#   targetNamespace: game-system
+#   wait: false
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app paper
+  name: &app startech
 spec:
   components:
     - ../../../../components/volsync
@@ -56,7 +83,7 @@ spec:
     - name: rook-ceph-cluster
       namespace: rook-ceph
   interval: 1h
-  path: kubernetes/apps/game-system/minecraft/paper
+  path: kubernetes/apps/game-system/minecraft/startech
   prune: true
   postBuild:
     substitute:
