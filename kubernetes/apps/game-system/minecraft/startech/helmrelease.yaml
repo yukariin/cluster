@@ -29,6 +29,7 @@ spec:
               MODE: survival
               MOD_PLATFORM: AUTO_CURSEFORGE
               CF_SLUG: star-technology
+              CF_DOWNLOADS_REPO: /data/downloads
               SPAWN_PROTECTION: 16
               VIEW_DISTANCE: 10
               LEVEL_TYPE: "skyblockbuilder:skyblock"
