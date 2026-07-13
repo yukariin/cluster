@@ -40,7 +40,8 @@ spec:
           oneTimeAccessAsAdmin: true
           verification: true
         env:
-          TRUST_PROXY: 10.42.0.0/16
+          - name: TRUST_PROXY
+            value: "10.42.0.0/16"
         encryptionKey:
           valueFrom:
             secretKeyRef:
