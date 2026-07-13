@@ -7,6 +7,8 @@ metadata:
 spec:
   retentionPolicy: 30d
   configuration:
+    data:
+      compression: gzip
     destinationPath: s3://cnpg-backups/
     endpointURL: "https://s3.mistelinn.org"
     s3Credentials:
