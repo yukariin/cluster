@@ -34,7 +34,7 @@ spec:
               LEVEL_TYPE: "skyblockbuilder:skyblock"
             envFrom:
               - secretRef:
-                  name: paper-secret
+                  name: startech-secret
             probes:
               liveness: &probes
                 enabled: true
