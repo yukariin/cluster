@@ -80,7 +80,7 @@ spec:
           - path: /tmp
     service:
       app:
-        controller: paper
+        controller: startech
         annotations:
           external-dns.alpha.kubernetes.io/hostname: startech.mistelinn.org
           external-dns.alpha.kubernetes.io/target: mc-router.mistelinn.org
