@@ -98,7 +98,7 @@ spec:
           friendlyName: Users
           customClaims:
             - key: kavita-roles
-              value: "[ \"Login\", \"Download\", \"library-Manga\" ]"
+              value: "[ \"Login\", \"Download\", \"library-Book\", \"library-Light Novel\", \"library-Manga\" ]"
           users:
             userRefs:
               - name: yukarin
