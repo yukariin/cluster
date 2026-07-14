@@ -21,6 +21,7 @@ spec:
               repository: ghcr.io/itzg/minecraft-server
               tag: 2026.7.0@sha256:5ffbc91d933e2f0e194a4f49674a2d17b65bb051c86e61961a6c775312ef61c0
             env:
+              ALLOW_FLIGHT: true
               BROADCAST_RCON_TO_OPS: false
               DIFFICULTY: peaceful
               ENABLE_WHITELIST: true
