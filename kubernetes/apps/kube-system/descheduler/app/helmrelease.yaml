@@ -62,6 +62,11 @@ spec:
                 nodeAffinityType:
                   - requiredDuringSchedulingIgnoredDuringExecution
             - name: RemovePodsViolatingNodeTaints
+              args:
+                excludedTaints:
+                  - node.cilium.io/agent-not-ready
+                  - node.kubernetes.io/not-ready
+                  - node.kubernetes.io/unreachable
             - name: RemovePodsViolatingTopologySpreadConstraint
           plugins:
             balance:
