@@ -27,84 +27,89 @@ spec:
             matchLabels:
               dashboards: grafana
 
-    instance:
-      enabled: true
-      name: pocket-id
-      spec:
-        analyticsDisabled: true
-        appUrl: "https://id.mistelinn.org"
-        image: ghcr.io/pocket-id/pocket-id:v2.11.0-distroless@sha256:446624a84743c29f93db2ffbbe19f9059fd9741e0cb2516d31efcc764e131835
-        emailNotifications:
-          apiKeyExpiration: true
-          loginNotification: true
-          oneTimeAccessAsAdmin: true
-          verification: true
-        encryptionKey:
-          valueFrom:
-            secretKeyRef:
-              name: pocket-id-operator-secret
-              key: ENCRYPTION_KEY
-        geoip:
-          maxmindLicenseKey:
+    pocket-id-instance:
+      instance:
+        enabled: true
+        name: pocket-id
+        spec:
+          analyticsDisabled: true
+          appUrl: "https://id.mistelinn.org"
+          image: ghcr.io/pocket-id/pocket-id:v2.11.0-distroless@sha256:446624a84743c29f93db2ffbbe19f9059fd9741e0cb2516d31efcc764e131835
+          emailNotifications:
+            apiKeyExpiration: true
+            loginNotification: true
+            oneTimeAccessAsAdmin: true
+            verification: true
+          encryptionKey:
             valueFrom:
               secretKeyRef:
                 name: pocket-id-operator-secret
-                key: MAXMIND_LICENSE_KEY
-        logging:
-          level: "info"
-          json: true
-        persistence:
-          enabled: true
-          existingClaim: *app
-        route:
-          enabled: true
-          name: pocket-id
-          parentRefs:
-            - name: envoy-external
-              namespace: network
-        smtp:
-          host: smtp-relay.network.svc.cluster.local
-          port: 25
-          from: pocket-id@mistelinn.org
-          tls: none
-        ui:
-          sessionDuration: 1440 # 1 day
-        userManagement:
-          allowOwnAccountEdit: true
-          allowUserSignups: "disabled"
-          emailsVerified: true
-        versionCheckDisabled: true
+                key: ENCRYPTION_KEY
+          geoip:
+            maxmindLicenseKey:
+              valueFrom:
+                secretKeyRef:
+                  name: pocket-id-operator-secret
+                  key: MAXMIND_LICENSE_KEY
+          logging:
+            level: "info"
+            json: true
+          persistence:
+            enabled: true
+            existingClaim: *app
+          route:
+            enabled: true
+            name: pocket-id
+            parentRefs:
+              - name: envoy-external
+                namespace: network
+          smtp:
+            host: smtp-relay.network.svc.cluster.local
+            port: 25
+            from: pocket-id@mistelinn.org
+            tls: none
+          trustedProxies:
+            enabled: true
+            cidrs:
+              - 10.42.0.0/16
+          ui:
+            sessionDuration: 1440 # 1 day
+          userManagement:
+            allowOwnAccountEdit: true
+            allowUserSignups: "disabled"
+            emailsVerified: true
+          versionCheckDisabled: true
 
-    users:
-      - name: yukarin
-        spec:
-          admin: true
-          email:
-            value: "mistelinn@gmail.com"
-          firstName:
-            value: Yukari
-          lastName:
-            value: Yakumo
+      users:
+        - name: yukarin
+          spec:
+            admin: true
+            email:
+              value: "mistelinn@gmail.com"
+            firstName:
+              value: Yukari
+            lastName:
+              value: Yakumo
 
-    userGroups:
-      - name: admins
-        spec:
-          friendlyName: Administrators
-          users:
-            userRefs:
-              - name: yukarin
-      - name: users
-        spec:
-          friendlyName: Users
-          customClaims:
-            - key: kavita-roles
-              value: "[ \"Login\", \"Download\", \"library-Book\", \"library-Light Novel\", \"library-Manga\" ]"
-          users:
-            userRefs:
-              - name: yukarin
-      - name: docs
-        spec:
-          friendlyName: Documents
-          users:
-            userRefs:
-              - name: yukarin
+      userGroups:
+        - name: admins
+          spec:
+            friendlyName: Administrators
+            users:
+              userRefs:
+                - name: yukarin
+        - name: users
+          spec:
+            friendlyName: Users
+            customClaims:
+              - key: kavita-roles
+                value: "[ \"Login\", \"Download\", \"library-Book\", \"library-Light Novel\", \"library-Manga\" ]"
+            users:
+              userRefs:
+                - name: yukarin
+        - name: docs
+          spec:
+            friendlyName: Documents
+            users:
+              userRefs:
+                - name: yukarin
