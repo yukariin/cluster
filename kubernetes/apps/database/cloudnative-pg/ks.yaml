@@ -53,6 +53,10 @@ spec:
       namespace: cert-manager
   healthCheckExprs:
     - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      failed: has(status.phase) && status.phase.contains('manual intervention')
+      current: status.conditions.exists(c, c.type == "Ready" && c.status == "True")
+    - apiVersion: postgresql.cnpg.io/v1
       kind: DatabaseRole
       inProgress: "!has(status.applied)"
       failed: status.applied == false

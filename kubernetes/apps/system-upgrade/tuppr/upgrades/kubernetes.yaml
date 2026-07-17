@@ -17,4 +17,4 @@ spec:
         status.ceph.health in ['HEALTH_OK', 'HEALTH_WARN']
     - apiVersion: postgresql.cnpg.io/v1
       kind: Cluster
-      expr: status.conditions.filter(c, c.type == "Ready").all(c, c.status == "True")
+      expr: status.conditions.exists(c, c.type == "Ready" && c.status == "True")
