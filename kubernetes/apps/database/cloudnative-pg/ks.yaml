@@ -23,8 +23,9 @@ metadata:
   name: plugin-barman-cloud
 spec:
   dependsOn:
+    - name: cert-manager
+      namespace: cert-manager
     - name: cloudnative-pg
-      namespace: database
   interval: 1h
   path: kubernetes/apps/database/cloudnative-pg/plugin-barman-cloud
   prune: true
