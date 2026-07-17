@@ -26,7 +26,7 @@ spec:
         enabled: false
       hostRoot: /sys/fs/cgroup
     cni:
-      exclusive: false
+      exclusive: false # needed for multus
     dashboards:
       enabled: true
     devices: eth+
@@ -34,9 +34,7 @@ spec:
     endpointRoutes:
       enabled: true
     envoy:
-      enabled: false
-    gatewayAPI:
-      enabled: false
+      enabled: false # needed for envoy-gateway
     hubble:
       enabled: false
     ipam:
@@ -53,6 +51,11 @@ spec:
     localRedirectPolicies:
       enabled: true
     operator:
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: 1
+        maxUnavailable: null
+        unhealthyPodEvictionPolicy: AlwaysAllow
       dashboards:
         enabled: true
       prometheus:
