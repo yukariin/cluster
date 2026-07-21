@@ -20,10 +20,14 @@ spec:
 
   postgresql:
     parameters:
-      max_connections: "200"
-      shared_buffers: 256MB
+      max_connections: "100"
+      random_page_cost: "1.1"
+      # Memory
+      shared_buffers: 256MB # 25% of mem limit
+      effective_cache_size: 768MB # 75% of mem limit
+      # WAL
       max_wal_size: 1GB
-      wal_keep_size: 512MB
+      wal_compression: lz4
 
     pg_hba:
       - hostssl all all all cert clientcert=verify-full map=pooler-map
