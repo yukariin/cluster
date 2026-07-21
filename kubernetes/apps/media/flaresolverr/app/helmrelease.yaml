@@ -19,7 +19,6 @@ spec:
               repository: ghcr.io/flaresolverr/flaresolverr
               tag: v3.5.0@sha256:139dfee1c6f89249c8d665d1333a42e8ec74ec0a86bc6bb1c8461e10d3a66a47
             env:
-              BROWSER_TIMEOUT: "20000"
               PORT: &port 8191
             probes:
               liveness: &probes
@@ -51,6 +50,7 @@ spec:
       enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
+        # hardcoded in image
         runAsUser: &fs_id 1000
         runAsGroup: *fs_id
         fsGroup: *fs_id
