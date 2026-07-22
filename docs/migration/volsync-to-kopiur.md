@@ -130,10 +130,18 @@ kubectl get snapshotpolicies.kopiur.home-operations.com -A --no-headers | wc -l 
 The resolved identity must match what the fork wrote, for every app:
 
 ```sh
+# status.resolved.identity is an object {username, hostname, sourcePath}
 kubectl get snapshotpolicies.kopiur.home-operations.com -A -o json \
-  | jq -r '.items[] | "\(.status.resolved.identity // "UNRESOLVED")  \(.metadata.namespace)/\(.metadata.name)"'
-# every line: <app>@<namespace>:/data — anything else, STOP and fix before a snapshot runs
+  | jq -r '.items[] | (.status.resolved.identity // {}) as $i
+           | select(($i.username != .metadata.name) or ($i.hostname != .metadata.namespace) or ($i.sourcePath != "/data"))
+           | "MISMATCH \(.metadata.namespace)/\(.metadata.name): \($i)"'
+# expect NO output — any line means STOP and fix before a snapshot runs
 ```
+
+Snapshots of *retired* apps (nothing deploys them anymore, so no policy matches
+their identity) stay as `origin: discovered` rows — expected, they are archive,
+not an error. Everything matching a live policy flips to `origin: adopted` and
+comes under that policy's GFS retention.
 
 An identity mismatch is only cheap to fix **before** the first kopiur snapshot;
 after one exists, the admission webhook requires an explicit
