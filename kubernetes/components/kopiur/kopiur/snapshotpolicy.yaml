@@ -24,6 +24,7 @@ spec:
   sources:
     - pvc:
         name: ${APP}
+      sourcePathOverride: /data
   verification:
     deep:
       schedule:
