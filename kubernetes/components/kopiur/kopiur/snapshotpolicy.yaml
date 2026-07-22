@@ -31,4 +31,4 @@ spec:
     quick:
       schedule:
         cron: H 4 * * * # Every day at 4am
-  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=csi-ceph-block}
+  volumeSnapshotClassName: ${KOPIUR_SNAPSHOTCLASS:=csi-ceph-blockpool}
