@@ -39,3 +39,8 @@ releases:
     namespace: observability
     chart: oci://gsoci.azurecr.io/charts/giantswarm/silence-operator
     version: 0.20.1
+
+  - name: kopiur
+    namespace: kopiur-system
+    chart: oci://ghcr.io/home-operations/charts/kopiur
+    version: 0.8.0
