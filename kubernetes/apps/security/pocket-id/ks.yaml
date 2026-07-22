@@ -25,6 +25,9 @@ spec:
     substitute:
       APP: *app
       KOPIUR_CAPACITY: 1Gi
+      # nobody:nogroup
+      KOPIUR_PUID: "65534"
+      KOPIUR_PGID: "65534"
   sourceRef:
     kind: GitRepository
     name: flux-system
