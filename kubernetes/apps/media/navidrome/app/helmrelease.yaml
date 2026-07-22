@@ -13,7 +13,6 @@ spec:
   values:
     controllers:
       navidrome:
-        type: statefulset
         containers:
           app:
             image:
@@ -61,15 +60,6 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 750Mi
-        statefulset:
-          volumeClaimTemplates:
-            - name: cache
-              storageClass: ceph-block
-              accessMode: ReadWriteOnce
-              size: 5Gi
-              advancedMounts:
-                app:
-                  - path: /config/cache
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -89,8 +79,13 @@ spec:
           - path: /music
             subPath: media/music
             readOnly: true
-      tmp:
+      tmpfs:
         type: emptyDir
+        globalMounts:
+          - path: /config/cache
+            subPath: cache
+          - path: /tmp
+            subPath: tmp
     route:
       app:
         annotations:
