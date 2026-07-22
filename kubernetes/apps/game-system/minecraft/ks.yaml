@@ -23,7 +23,7 @@ spec:
 #   name: &app gtnh
 # spec:
 #   components:
-#     - ../../../../components/volsync
+#     - ../../../../components/kopiur
 #   dependsOn:
 #     - name: mc-router
 #     - name: rook-ceph-cluster
@@ -34,7 +34,7 @@ spec:
 #   postBuild:
 #     substitute:
 #       APP: *app
-#       VOLSYNC_CAPACITY: 10Gi
+#       KOPIUR_CAPACITY: 10Gi
 #   sourceRef:
 #     kind: GitRepository
 #     name: flux-system
@@ -50,7 +50,7 @@ spec:
 #   name: &app paper
 # spec:
 #   components:
-#     - ../../../../components/volsync
+#     - ../../../../components/kopiur
 #   dependsOn:
 #     - name: mc-router
 #     - name: rook-ceph-cluster
@@ -61,7 +61,7 @@ spec:
 #   postBuild:
 #     substitute:
 #       APP: *app
-#       VOLSYNC_CAPACITY: 10Gi
+#       KOPIUR_CAPACITY: 10Gi
 #   sourceRef:
 #     kind: GitRepository
 #     name: flux-system
@@ -77,7 +77,7 @@ metadata:
   name: &app startech
 spec:
   components:
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
   dependsOn:
     - name: mc-router
     - name: rook-ceph-cluster
@@ -88,7 +88,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 10Gi
+      KOPIUR_CAPACITY: 10Gi
   sourceRef:
     kind: GitRepository
     name: flux-system

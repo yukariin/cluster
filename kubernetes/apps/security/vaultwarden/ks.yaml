@@ -39,7 +39,7 @@ metadata:
 spec:
   components:
     - ../../../../components/postgres/app-template
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
   dependsOn:
     - name: vaultwarden-db
     - name: pocket-id-operator

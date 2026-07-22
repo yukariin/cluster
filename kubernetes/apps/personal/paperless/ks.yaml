@@ -8,7 +8,7 @@ spec:
   components:
     - ../../../../components/dragonfly
     - ../../../../components/keda
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
   dependsOn:
     - name: dragonfly
       namespace: database
@@ -22,7 +22,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CAPACITY: 5Gi
+      KOPIUR_CAPACITY: 5Gi
     substituteFrom:
       - kind: Secret
         name: paperless-oidc-credentials

@@ -72,7 +72,7 @@ metadata:
 spec:
   components:
     - ../../../../components/postgres/base/cert
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
   dependsOn:
     - name: matrix-mas-db
     - name: matrix-synapse-db
@@ -85,7 +85,7 @@ spec:
     substitute:
       APP: *app
       PG_APP: *app
-      VOLSYNC_CAPACITY: 10Gi
+      KOPIUR_CAPACITY: 10Gi
   sourceRef:
     kind: GitRepository
     name: flux-system
