@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kopiur.home-operations.com/clusterrepository_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: nas
+spec:
+  allowedNamespaces:
+    all: true
+  backend:
+    filesystem:
+      path: /repo
+      volume:
+        nfs:
+          server: nas.internal
+          path: /mnt/data_pool/kopia
+  credentialProjection:
+    allowed: true
+  encryption:
+    passwordSecretRef:
+      name: kopiur-nas-secret
+      namespace: kopiur-system
+      key: KOPIA_PASSWORD
+  # NOT set on moverDefaults: moverDefaults.securityContext is baked onto
+  # every mover's *container* securityContext, which always wins over the
+  # per-app explicit mover.securityContext that components/kopiur/backup
+  # and restore set — silently clobbering source-PVC reads for any app
+  # whose real uid or gid isn't 568
+  # Scoped to maintenance.mover instead, which has no PVC to inherit from and so nothing to clobber.
+  maintenance:
+    mover:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+  # Movers ran BestEffort (no resources) — Talos OOM killer's first victims under node memory pressure
+  moverDefaults:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+  scheduleDefaults:
+    timezone: Europe/Moscow
