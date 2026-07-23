@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app autotagger
+  name: autotagger
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,15 +12,16 @@ spec:
   interval: 1h
   values:
     controllers:
-      *app:
+      autotagger:
         containers:
           app:
             image:
               repository: ghcr.io/yukariin/autotagger
-              tag: eva02@sha256:60d58602c5a067e20c350533431693928df8dcc6d9cb136ce6977a9aaac7e534
+              tag: convnextv2@sha256:72852bd6531c98832e5f2b159ffa2665d0cbfc4f6bf8af439af8d1bd32e9410c
             env:
-              GUNICORN_WORKERS: 4
-              GUNICORN_THREADS: 1
+              AUTOTAGGER_DEVICE: GPU
+              GUNICORN_WORKERS: 1
+              GUNICORN_THREADS: 4
             probes:
               liveness: &probes
                 enabled: true
@@ -39,6 +40,8 @@ spec:
               readOnlyRootFilesystem: true
               capabilities: {drop: ["ALL"]}
             resources:
+              claims:
+                - name: gpu
               requests:
                 cpu: 1
                 memory: 2Gi
@@ -46,6 +49,9 @@ spec:
                 cpu: 4
                 memory: 4Gi
     defaultPodOptions:
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: autotagger-gpu
       securityContext:
         runAsNonRoot: true
         runAsUser: 568

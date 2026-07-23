@@ -60,21 +60,30 @@ spec:
   targetNamespace: image
   wait: true
 
-# ---
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
-# apiVersion: kustomize.toolkit.fluxcd.io/v1
-# kind: Kustomization
-# metadata:
-#   name: autotagger
-# spec:
-#   interval: 1h
-#   path: kubernetes/apps/image/danbooru/autotagger
-#   prune: true
-#   sourceRef:
-#     kind: GitRepository
-#     name: flux-system
-#     namespace: flux-system
-#   targetNamespace: image
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app autotagger
+spec:
+  components:
+    - ../../../../components/gpu
+  dependsOn:
+    - name: intel-gpu-resource-driver
+      namespace: kube-system
+  interval: 1h
+  path: kubernetes/apps/image/danbooru/autotagger
+  prune: true
+  postBuild:
+    substitute:
+      APP: *app
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: image
+  wait: true
 
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
