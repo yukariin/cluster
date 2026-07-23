@@ -96,7 +96,7 @@ spec:
           INITIAL_COMMIT: pubkey
           MERGES: pubkey
           SIGNING_EMAIL: "noreply@git.mistelinn.org"
-          SIGNING_KEY: /data/git/.ssh-signing/key.pub
+          SIGNING_KEY: /data/signing/ed25519.pub
           SIGNING_NAME: "git.mistelinn.org Instance"
           WIKI: never
         security:
@@ -139,10 +139,19 @@ spec:
           existingSecret: forgejo-oidc-credentials
           groupClaimName: groups
           provider: openidConnect
-    signing:
-      enabled: true
-      ssh:
-        existingSecret: forgejo-signing-key-secret
+    extraContainerVolumeMounts:
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
+    extraInitVolumeMounts:
+      - name: signing-key
+        mountPath: /data/signing
+        readOnly: true
+    extraVolumes:
+      - name: signing-key
+        secret:
+          secretName: forgejo-signing-key-secret
+          defaultMode: 0400
     persistence:
       enabled: true
       create: false
