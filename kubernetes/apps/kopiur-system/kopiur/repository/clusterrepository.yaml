@@ -21,19 +21,14 @@ spec:
       name: kopiur-nas-secret
       namespace: kopiur-system
       key: KOPIA_PASSWORD
-  # NOT set on moverDefaults: moverDefaults.securityContext is baked onto
-  # every mover's *container* securityContext, which always wins over the
-  # per-app explicit mover.securityContext that components/kopiur/backup
-  # and restore set — silently clobbering source-PVC reads for any app
-  # whose real uid or gid isn't 568
-  # Scoped to maintenance.mover instead, which has no PVC to inherit from and so nothing to clobber.
-  maintenance:
-    mover:
-      securityContext:
-        runAsUser: 568
-        runAsGroup: 568
-  # Movers ran BestEffort (no resources) — Talos OOM killer's first victims under node memory pressure
   moverDefaults:
+    securityContext:
+      runAsUser: 568
+      runAsGroup: 568
+    podSecurityContext:
+      fsGroup: 568
+      fsGroupChangePolicy: OnRootMismatch
+    # Movers ran BestEffort (no resources) — Talos OOM killer's first victims under node memory pressure
     resources:
       requests:
         cpu: 50m

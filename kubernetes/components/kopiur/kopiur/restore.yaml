@@ -11,6 +11,8 @@ spec:
     securityContext:
       runAsUser: ${KOPIUR_PUID:=568}
       runAsGroup: ${KOPIUR_PGID:=568}
+    podSecurityContext:
+      fsGroup: ${KOPIUR_PGID:=568}
   policy:
     onMissingSnapshot: Continue # default for fromPolicy — empty volume if none
   source:
