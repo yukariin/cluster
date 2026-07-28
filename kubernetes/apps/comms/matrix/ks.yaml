@@ -86,6 +86,8 @@ spec:
       APP: *app
       PG_APP: *app
       KOPIUR_CAPACITY: 10Gi
+      KOPIUR_PUID: "10091"
+      KOPIUR_PGID: "10091"
   sourceRef:
     kind: GitRepository
     name: flux-system
