@@ -53,9 +53,7 @@ spec:
     operator:
       podDisruptionBudget:
         enabled: true
-        minAvailable: 1
-        maxUnavailable: null
-        unhealthyPodEvictionPolicy: AlwaysAllow
+        maxUnavailable: 1
       dashboards:
         enabled: true
       prometheus:
