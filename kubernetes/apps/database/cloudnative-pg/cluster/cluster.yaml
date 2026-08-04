@@ -54,8 +54,6 @@ spec:
     # initdb: {}
     recovery:
       source: &src postgres-restore
-      recoveryTarget:
-        targetTLI: "1"
 
   managed:
     roles:
