@@ -19,11 +19,11 @@ spec:
             severity: warning
         - alert: BackendsWaiting
           annotations:
-            description: Pod {{ $labels.pod }} has been waiting for longer than 5 minutes
-            summary: If a backend is waiting for longer than 5 minutes
+            description: "{{ $value }} backends on pod {{ $labels.pod }} have been blocked waiting on locks for over 5 minutes."
+            summary: Sustained lock contention on the database.
           expr: |-
-            cnpg_backends_waiting_total > 300
-          for: 1m
+            cnpg_backends_waiting_total > 5
+          for: 5m
           labels:
             severity: warning
         - alert: PGDatabase
@@ -55,10 +55,37 @@ spec:
             severity: warning
         - alert: DatabaseDeadlockConflicts
           annotations:
-            description: There are over 10 deadlock conflicts in {{ $labels.pod }}
-            summary: Checks the number of database conflicts
+            description: "Deadlocks are occurring on pod {{ $labels.pod }} ({{ $value | humanize }} deadlocks/s over the last 5 minutes)."
+            summary: Sustained deadlock activity on the database.
           expr: |-
-            cnpg_pg_stat_database_deadlocks > 10
+            rate(cnpg_pg_stat_database_deadlocks[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+        - alert: ReplicaFailingReplication
+          annotations:
+            description: Replica {{ $labels.pod }} is failing to replicate
+            summary: Checks if the replica is failing to replicate
+          expr: |-
+            cnpg_pg_replication_in_recovery > cnpg_pg_replication_is_wal_receiver_up
           for: 1m
+          labels:
+            severity: warning
+        - alert: BarmanCloudBackupStale
+          annotations:
+            description: No successful backup for {{ $labels.pod }} in over 36h (last success {{ $value | humanizeDuration }} ago).
+            summary: Barman Cloud has not produced a successful backup recently.
+          expr: |-
+            time() - barman_cloud_cloudnative_pg_io_last_available_backup_timestamp > 36 * 3600
+          for: 15m
+          labels:
+            severity: warning
+        - alert: BarmanCloudBackupFailed
+          annotations:
+            description: A Barman Cloud backup failed for {{ $labels.pod }} within the last hour.
+            summary: Recent Barman Cloud backup failure.
+          expr: |-
+            time() - barman_cloud_cloudnative_pg_io_last_failed_backup_timestamp < 3600
+          for: 5m
           labels:
             severity: warning
