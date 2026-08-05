@@ -21,6 +21,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
+      DRAGONFLY_REPLICAS: "2"
       KOPIUR_CAPACITY: 25Gi
       KOPIUR_PUID: "1000"
       KOPIUR_PGID: "1000"
