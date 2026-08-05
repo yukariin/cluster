@@ -18,12 +18,25 @@ spec:
         resourceFieldRef:
           resource: limits.memory
           divisor: 1Mi
+  networkPolicyEnabled: false
   replicas: ${DRAGONFLY_REPLICAS:=1}
   resources:
     requests:
       cpu: 50m
     limits:
       memory: 512Mi
+  podSecurityContext:
+    runAsNonRoot: true
+    # builtin dfly user
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
+    fsGroupChangePolicy: OnRootMismatch
+    seccompProfile: {type: RuntimeDefault}
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities: {drop: ["ALL"]}
   topologySpreadConstraints:
     - maxSkew: 1
       topologyKey: "kubernetes.io/hostname"
