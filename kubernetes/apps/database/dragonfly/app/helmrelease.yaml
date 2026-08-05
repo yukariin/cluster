@@ -15,6 +15,13 @@ spec:
     crds:
       install: true
 
+    grafanaDashboard:
+      enabled: true
+      grafanaOperator:
+        enabled: true
+        matchLabels:
+          dashboards: grafana
+
     manager:
       resources:
         requests:
