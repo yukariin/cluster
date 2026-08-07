@@ -1,0 +1,98 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/recyclarr/recyclarr/refs/tags/v8.7.1/schemas/config-schema.json
+sonarr:
+  sonarr:
+    base_url: http://sonarr
+    api_key: !env_var SONARR_API_KEY
+    delete_old_custom_formats: true
+    media_management:
+      propers_and_repacks: do_not_prefer
+    media_naming:
+      series: jellyfin-tvdb
+      season: default
+      episodes:
+        rename: true
+        standard: default
+        daily: default
+        anime: default
+
+    quality_definition:
+      type: series
+
+    quality_profiles:
+      - name: WEB-1080p
+        trash_id: 72dae194fc92bf828f32cde7744e51a1
+        reset_unmatched_scores:
+          enabled: true
+      - name: Remux-1080p - Anime
+        trash_id: 20e0fc959f1f1704bed501f23bdae76f
+        reset_unmatched_scores:
+          enabled: true
+
+    custom_formats:
+      - # FLUX trumps REPACKS
+        trash_ids:
+          - 5d9fd1b1e06cd8a475462f40214b7df6 # FLUX
+        assign_scores_to:
+          - name: "WEB-1080p"
+            score: 100
+          - name: "Remux-1080p - Anime"
+            score: 100
+      - # Unwanted
+        trash_ids:
+          - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
+          - 82d40da2bc6923f41e14394075dd4b03 # No-RlsGroup
+          - e1a997ddb54e3ecbfe06341ad323c458 # Obfuscated
+          - 06d66ab109d4d2eddb2794d21526d140 # Retags
+        assign_scores_to:
+          - name: "WEB-1080p"
+          - name: "Remux-1080p - Anime"
+      - trash_ids:
+          - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncensored
+        assign_scores_to:
+          - name: "Remux-1080p - Anime"
+            score: 100
+
+radarr:
+  movies:
+    base_url: http://radarr
+    api_key: !env_var RADARR_API_KEY
+    delete_old_custom_formats: true
+    media_management:
+      propers_and_repacks: do_not_prefer
+    media_naming:
+      folder: jellyfin-tmdb
+      movie:
+        rename: true
+        standard: jellyfin-tmdb
+
+    quality_definition:
+      type: movie
+
+    quality_profiles:
+      - name: HD Bluray + WEB
+        trash_id: d1d67249d3890e49bc12e275d989a7e9
+        reset_unmatched_scores:
+          enabled: true
+      - name: Remux-1080p - Anime
+        trash_id: 722b624f9af1e492284c4bc842153a38
+        reset_unmatched_scores:
+          enabled: true
+
+    custom_formats:
+      - # Unwanted
+        trash_ids:
+          - 957d0f44b592285f26449575e8b1167e # Special Edition
+          - b6832f586342ef70d9c128d40c07b872 # Bad Dual Groups
+          - cc444569854e9de0b084ab2b8b1532b2 # Black and White Editions
+          - ae9b7c9ebde1f3bd336a8cbd1ec4c5e5 # No-RlsGroup
+          - 7357cf5161efbf8c4d5d0c30b4815ee2 # Obfuscated
+          - 5c44f52a8714fdd79bb4d98e2673be1f # Retags
+          - f537cf427b64c38c8e36298f657e4828 # Scene
+        assign_scores_to:
+          - name: "HD Bluray + WEB"
+      - trash_ids:
+          - 064af5f084a0a24458cc8ecd3220f93f # Uncensored
+        assign_scores_to:
+          - name: "Remux-1080p - Anime"
+            score: 100
