@@ -36,8 +36,6 @@ sonarr:
         assign_scores_to:
           - name: "WEB-1080p"
             score: 100
-          - name: "Remux-1080p - Anime"
-            score: 100
       - # Unwanted
         trash_ids:
           - 32b367365729d530ca1c124a0b180c64 # Bad Dual Groups
