@@ -43,3 +43,5 @@ spec:
 
     dashboards:
       enabled: true
+      grafanaOperator:
+        enabled: true
