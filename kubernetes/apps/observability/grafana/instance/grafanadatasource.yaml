@@ -13,6 +13,8 @@ spec:
     name: prometheus
     access: proxy
     isDefault: true
+    jsonData:
+      timeInterval: 1m
     url: http://prometheus-operated.observability.svc.cluster.local:9090
 
 ---
