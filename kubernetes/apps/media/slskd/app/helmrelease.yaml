@@ -117,8 +117,3 @@ spec:
           soulseek:
             port: *soulseekPort
             protocol: TCP
-    serviceMonitor:
-      app:
-        serviceName: "{{ .Release.Name }}"
-        endpoints:
-          - port: http
