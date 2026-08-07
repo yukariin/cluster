@@ -11,9 +11,9 @@ spec:
         - alert: BlackboxInstanceDown
           expr: |-
             probe_success == 0
-          for: 5m
+          for: 15m
           annotations:
             summary: >-
-              The host {{ $labels.instance }} is down
+              The host {{ $labels.target }} is currently unreachable
           labels:
             severity: critical
