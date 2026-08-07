@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -19,7 +19,8 @@ spec:
           hostnames:
             - "alertmanager.mistelinn.org"
           parentRefs:
-            - {name: envoy-internal, namespace: network}
+            - {name: envoy-internal, namespace: network,}
+
       alertmanagerSpec:
         alertmanagerConfiguration:
           name: alertmanager
@@ -34,10 +35,38 @@ spec:
                 requests:
                   storage: 1Gi
 
+    kubeApiServer:
+      enabled: true
+      serviceMonitor:
+        metricRelabelings:
+          # Drop high cardinality labels
+          - action: drop
+            sourceLabels:
+              - "__name__"
+            regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
+          - action: drop
+            sourceLabels:
+              - "__name__"
+            regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
+
     kubeEtcd:
       service:
         selector:
           component: kube-apiserver # etcd runs on control plane nodes
+
+    kubelet:
+      enabled: true
+      serviceMonitor:
+        metricRelabelings:
+          # Drop high cardinality labels
+          - action: labeldrop
+            regex: (uid)
+          - action: labeldrop
+            regex: (id|name)
+          - action: drop
+            sourceLabels:
+              - "__name__"
+            regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
 
     kubeProxy:
       enabled: false
@@ -49,7 +78,8 @@ spec:
           hostnames:
             - "prometheus.mistelinn.org"
           parentRefs:
-            - {name: envoy-internal, namespace: network}
+            - {name: envoy-internal, namespace: network,}
+
       prometheusSpec:
         externalUrl: "https://prometheus.mistelinn.org"
         version: v2.55.1 # override 'unsupported Prometheus version' error
@@ -67,6 +97,7 @@ spec:
         serviceMonitorSelectorNilUsesHelmValues: false
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
+        scrapeInterval: 1m
         scrapeConfigSelectorNilUsesHelmValues: false
         retention: 7d
         retentionSize: 8GB
