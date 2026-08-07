@@ -22,10 +22,10 @@ spec:
       namespace: kopiur-system
       key: KOPIA_PASSWORD
   moverDefaults:
-    securityContext:
+    securityContext: &sc
       runAsUser: 568
       runAsGroup: 568
-    podSecurityContext:
+    podSecurityContext: &psc
       fsGroup: 568
       fsGroupChangePolicy: OnRootMismatch
     # Movers ran BestEffort (no resources) — Talos OOM killer's first victims under node memory pressure
@@ -33,5 +33,10 @@ spec:
       requests:
         cpu: 50m
         memory: 128Mi
+  server:
+    namespace: kopiur-system
+    readOnly: true
+    securityContext: *sc
+    podSecurityContext: *psc
   scheduleDefaults:
     timezone: Europe/Moscow
