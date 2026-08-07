@@ -50,5 +50,13 @@ spec:
           tcp:
             preferred_ip_protocol: ip4
 
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities: {add: ["NET_RAW"]}
+
     serviceMonitor:
       enabled: true
+      defaults:
+        interval: 1m
+        scrapeTimeout: 10s
