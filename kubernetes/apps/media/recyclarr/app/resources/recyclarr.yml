@@ -49,7 +49,12 @@ sonarr:
           - 026d5aadd1a6b4e550b134cb6c72b3ca # Uncensored
         assign_scores_to:
           - name: "Remux-1080p - Anime"
-            score: 100
+            score: 101
+      - trash_ids:
+          - b2550eb333d27b75833e25b8c2557b38 # 10bit
+        assign_scores_to:
+          - name: "Remux-1080p - Anime"
+            score: 10
 
 radarr:
   movies:
@@ -93,4 +98,9 @@ radarr:
           - 064af5f084a0a24458cc8ecd3220f93f # Uncensored
         assign_scores_to:
           - name: "Remux-1080p - Anime"
-            score: 100
+            score: 101
+      - trash_ids:
+          - a5d148168c4506b55cf53984107c396e # 10bit
+        assign_scores_to:
+          - name: "Remux-1080p - Anime"
+            score: 10
