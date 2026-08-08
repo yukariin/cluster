@@ -13,6 +13,7 @@ spec:
   values:
     controllers:
       navidrome:
+        type: statefulset
         containers:
           app:
             image:
@@ -59,7 +60,16 @@ spec:
                 cpu: 10m
                 memory: 128Mi
               limits:
-                memory: 1Gi
+                memory: 2Gi # cold cache for cover transcodes eats ram
+        statefulset:
+          volumeClaimTemplates:
+            - name: cache
+              storageClass: ceph-block
+              accessMode: ReadWriteOnce
+              size: 2Gi
+              advancedMounts:
+                app:
+                  - path: /config/cache
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -79,13 +89,10 @@ spec:
           - path: /music
             subPath: media/music
             readOnly: true
-      tmpfs:
+      tmp:
         type: emptyDir
         globalMounts:
-          - path: /config/cache
-            subPath: cache
           - path: /tmp
-            subPath: tmp
     route:
       app:
         annotations:
