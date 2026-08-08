@@ -54,6 +54,11 @@ spec:
         spec:
           containers:
             - name: grafana
+              env:
+                # chart-provisioned GrafanaDatasource CRs declare no plugins,
+                # so the VM datasource plugins are installed here instead
+                - name: GF_INSTALL_PLUGINS
+                  value: victoriametrics-logs-datasource 0.26.3,victoriametrics-metrics-datasource 0.25.2
               envFrom:
                 - secretRef:
                     name: grafana-secret

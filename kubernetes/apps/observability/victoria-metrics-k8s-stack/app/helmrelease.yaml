@@ -22,17 +22,11 @@ spec:
         spec:
           allowCrossNamespaceImport: true
 
-    # only consumed by the sync-job config (grafana subchart is disabled): synced
-    # dashboards pin their datasource variable to this uid, which must match the
-    # uid of the grafana-operator managed `prometheus` GrafanaDatasource
     defaultDatasources:
-      victoriametrics:
-        datasources:
-          - name: prometheus
-            type: prometheus
-            access: proxy
-            uid: prometheus
-            isDefault: true
+      grafanaOperator:
+        enabled: true
+        spec:
+          allowCrossNamespaceImport: true
 
     vmsingle:
       spec:
@@ -127,72 +121,30 @@ spec:
         parentRefs:
           - {name: envoy-internal, namespace: network,}
 
+    # control-plane scraping disabled: only per-app/cluster metrics are used
+    # (kubelet/cadvisor, kube-state-metrics and node-exporter stay enabled)
     kubeApiServer:
-      vmScrape:
-        spec:
-          endpoints:
-            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-              port: https
-              scheme: https
-              tlsConfig:
-                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-                serverName: kubernetes
-              metricRelabelConfigs:
-                # Drop high cardinality labels
-                - action: drop
-                  source_labels:
-                    - __name__
-                  regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
-                - action: drop
-                  source_labels:
-                    - __name__
-                  regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
-          jobLabel: component
-          namespaceSelector:
-            matchNames:
-              - default
-          selector:
-            matchLabels:
-              component: apiserver
-              provider: kubernetes
-
-    # chart-default tlsConfig (caFile + serverName: kubernetes) cannot verify
-    # Talos control-plane certs on node IPs; skip verification like kps did
+      enabled: false
     kubeControllerManager:
-      vmScrape:
-        spec:
-          jobLabel: app.kubernetes.io/component
-          endpoints:
-            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-              port: http-metrics
-              scheme: https
-              tlsConfig:
-                insecureSkipVerify: true
-
-    kubeScheduler:
-      vmScrape:
-        spec:
-          jobLabel: app.kubernetes.io/component
-          endpoints:
-            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-              port: http-metrics
-              scheme: https
-              tlsConfig:
-                insecureSkipVerify: true
-
+      enabled: false
     kubeEtcd:
-      service:
-        port: 2381
-        targetPort: 2381
-        selector:
-          component: kube-apiserver # etcd runs on control plane nodes
-      vmScrape:
-        spec:
-          jobLabel: app.kubernetes.io/component
-          endpoints:
-            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
-              port: http-metrics
-              scheme: http
+      enabled: false
+    kubeScheduler:
+      enabled: false
+
+    defaultRules:
+      groups:
+        # rule groups whose inputs disappear with control-plane scraping;
+        # the *Down alerts among them are absent()-based and would fire forever
+        kube-apiserver-availability.rules: {enabled: false}
+        kube-apiserver-burnrate.rules: {enabled: false}
+        kube-apiserver-histogram.rules: {enabled: false}
+        kube-apiserver-slos: {enabled: false}
+        kube-scheduler.rules: {enabled: false}
+        kubernetes-system-apiserver: {enabled: false}
+        kubernetes-system-controller-manager: {enabled: false}
+        kubernetes-system-scheduler: {enabled: false}
 
     grafana:
       enabled: false
+      forceDeployDatasource: true
