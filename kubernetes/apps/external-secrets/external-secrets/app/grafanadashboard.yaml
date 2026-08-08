@@ -10,7 +10,7 @@ spec:
     matchLabels:
       dashboards: grafana
   datasources:
-    - datasourceName: VictoriaMetrics
+    - datasourceName: prometheus # substituted into uid slots — must match the DS uid, not its name
       inputName: DS_PROMETHEUS
   configMapRef:
     name: external-secrets-dashboard
