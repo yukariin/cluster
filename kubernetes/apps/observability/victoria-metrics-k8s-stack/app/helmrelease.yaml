@@ -12,11 +12,16 @@ spec:
   values:
     fullnameOverride: victoria-metrics
 
+    global:
+      image:
+        registry: quay.io
+
     victoria-metrics-operator:
       operator:
         enable_converter_ownership: true
 
     defaultDashboards:
+      defaultTimezone: browser
       grafanaOperator:
         enabled: true
         spec:
@@ -27,6 +32,13 @@ spec:
         enabled: true
         spec:
           allowCrossNamespaceImport: true
+
+    defaultRules:
+      rules:
+        etcdMemberCommunicationSlow:
+          create: false
+        RecordingRulesNoData:
+          create: false
 
     vmsingle:
       spec:
@@ -60,7 +72,7 @@ spec:
     vlsingle:
       enabled: true
       spec:
-        retentionPeriod: 14d
+        retentionPeriod: 30d
         storage:
           storageClassName: ceph-block
           accessModes:
@@ -90,16 +102,21 @@ spec:
     vmagent:
       spec:
         scrapeInterval: 1m
+        extraArgs:
+          promscrape.dropOriginalLabels: "true"
+          promscrape.maxScrapeSize: 50MiB
 
     vmalert:
       spec:
-        evaluationInterval: 1m
+        evaluationInterval: 1m # match scrapeInterval
         extraArgs:
           external.url: https://prometheus.mistelinn.org
 
     alertmanager:
       spec:
         externalURL: https://alertmanager.mistelinn.org
+        image:
+          repository: quay.io/prometheus/alertmanager
         # the converted VMAlertmanagerConfig routes cluster-wide alerts; without this
         # every route gets a namespace=observability matcher and cross-namespace
         # alerts fall through to the blackhole root
@@ -111,9 +128,90 @@ spec:
               resources:
                 requests:
                   storage: 1Gi
+      # VMAlertmanagerConfig schema (snake_case), rendered as a managed CR;
+      # note: no `global` key here (resolve_timeout 5m is the AM default) and
+      # pushover `ttl` is not supported by the VM schema
+      useManagedConfig: true
       config:
-        global:
-          resolve_timeout: 5m
+        route:
+          receiver: pushover
+          group_by:
+            - alertname
+            - cluster
+            - job
+          group_wait: 1m
+          group_interval: 5m
+          repeat_interval: 12h
+          routes:
+            - receiver: blackhole
+              matchers:
+                - alertname = "InfoInhibitor"
+            - receiver: heartbeat
+              matchers:
+                - alertname = "Watchdog"
+              group_wait: 0s
+              group_interval: 5m
+              repeat_interval: 5m
+            - receiver: pushover
+              matchers:
+                - severity = "critical"
+        inhibit_rules:
+          - equal:
+              - alertname
+              - namespace
+            source_matchers:
+              - severity = "critical"
+            target_matchers:
+              - severity = "warning"
+          # upstream kube-prometheus semantics: InfoInhibitor mutes info-severity noise
+          - equal:
+              - namespace
+            source_matchers:
+              - alertname = "InfoInhibitor"
+            target_matchers:
+              - severity = "info"
+        receivers:
+          - name: blackhole
+          - name: heartbeat
+            webhook_configs:
+              - url_secret:
+                  name: alertmanager-secret
+                  key: HEARTBEAT_URL
+          - name: pushover
+            pushover_configs:
+              - html: true
+                send_resolved: true
+                sound: gamelan
+                priority: |-
+                  {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
+                title: >-
+                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
+                message: |-
+                  {{- range .Alerts }}
+                    {{- if ne .Annotations.description "" }}
+                      {{ .Annotations.description }}
+                    {{- else if ne .Annotations.summary "" }}
+                      {{ .Annotations.summary }}
+                    {{- else if ne .Annotations.message "" }}
+                      {{ .Annotations.message }}
+                    {{- else }}
+                      Alert description not available
+                    {{- end }}
+                    {{- if gt (len .Labels.SortedPairs) 0 }}
+                      <small>
+                        {{- range .Labels.SortedPairs }}
+                          <b>{{ .Name }}:</b> {{ .Value }}
+                        {{- end }}
+                      </small>
+                    {{- end }}
+                  {{- end }}
+                token:
+                  name: alertmanager-secret
+                  key: PUSHOVER_APP_TOKEN
+                user_key:
+                  name: alertmanager-secret
+                  key: PUSHOVER_USER_KEY
+                url_title: View in Alertmanager
       route:
         enabled: true
         hostnames:
@@ -121,30 +219,98 @@ spec:
         parentRefs:
           - {name: envoy-internal, namespace: network,}
 
-    # control-plane scraping disabled: only per-app/cluster metrics are used
-    # (kubelet/cadvisor, kube-state-metrics and node-exporter stay enabled)
     kubeApiServer:
-      enabled: false
-    kubeControllerManager:
-      enabled: false
-    kubeEtcd:
-      enabled: false
-    kubeScheduler:
-      enabled: false
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: https
+              scheme: https
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                serverName: kubernetes
+              relabelConfigs:
+                - sourceLabels:
+                    - "__meta_kubernetes_endpoint_node_name"
+                  targetLabel: instance
+              metricRelabelConfigs:
+                # Drop high cardinality labels
+                - action: drop
+                  sourceLabels:
+                    - "__name__"
+                  regex: ".*_bucket"
 
-    defaultRules:
-      groups:
-        # rule groups whose inputs disappear with control-plane scraping;
-        # the *Down alerts among them are absent()-based and would fire forever
-        kube-apiserver-availability.rules: {enabled: false}
-        kube-apiserver-burnrate.rules: {enabled: false}
-        kube-apiserver-histogram.rules: {enabled: false}
-        kube-apiserver-slos: {enabled: false}
-        kube-scheduler.rules: {enabled: false}
-        kubernetes-system-apiserver: {enabled: false}
-        kubernetes-system-controller-manager: {enabled: false}
-        kubernetes-system-scheduler: {enabled: false}
+    kubeControllerManager:
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: https
+              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              tlsConfig:
+                insecureSkipVerify: true
+              metricRelabelConfigs:
+                # Drop high cardinality labels
+                - action: drop
+                  sourceLabels:
+                    - "__name__"
+                  regex: ".*_bucket"
+
+    kubeEtcd:
+      enabled: true
+      service:
+        port: 2381
+        targetPort: 2381
+        selector:
+          component: kube-apiserver
+      vmScrape:
+        spec:
+          endpoints:
+            - scheme: http
+
+    kubeScheduler:
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: https
+              bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              tlsConfig:
+                insecureSkipVerify: true
+              metricRelabelConfigs:
+                # Drop high cardinality labels
+                - action: drop
+                  sourceLabels:
+                    - "__name__"
+                  regex: ".*_bucket"
 
     grafana:
       enabled: false
       forceDeployDatasource: true
+
+    extraRules:
+      dockerhub-rules:
+        create: true
+        groups:
+          - name: dockerhub
+            rules:
+              - alert: DockerhubRateLimitRisk
+                annotations:
+                  summary: There are {{ $value }} containers pulling from Dockerhub. This may lead to rate limiting.
+                expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} < 30) > 100
+                labels:
+                  severity: critical
+      oom-rules:
+        create: true
+        groups:
+          - name: oom
+            rules:
+              - alert: OomKilled
+                annotations:
+                  summary: Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.
+                expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
+                labels:
+                  severity: critical
