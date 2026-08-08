@@ -10,6 +10,6 @@ spec:
     matchLabels:
       dashboards: grafana
   datasources:
-    - datasourceName: prometheus # substituted into uid slots — must match the DS uid, not its name
+    - datasourceName: prometheus
       inputName: DS_PROMETHEUS
   url: https://grafana.com/api/dashboards/20842/revisions/3/download

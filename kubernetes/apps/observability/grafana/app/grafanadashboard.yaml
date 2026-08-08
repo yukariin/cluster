@@ -10,7 +10,7 @@ spec:
     matchLabels:
       dashboards: grafana
   datasources:
-    - datasourceName: prometheus # substituted into uid slots — must match the DS uid, not its name
+    - datasourceName: prometheus
       inputName: DS_PROMETHEUS
   configMapRef:
     name: grafana-operator-dashboard
