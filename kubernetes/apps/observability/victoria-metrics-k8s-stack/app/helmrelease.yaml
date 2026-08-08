@@ -64,13 +64,6 @@ spec:
             uid: prometheus
             isDefault: true
 
-    defaultRules:
-      rules:
-        etcdMemberCommunicationSlow:
-          create: false
-        RecordingRulesNoData:
-          create: false
-
     vmsingle:
       spec:
         retentionPeriod: 30d
@@ -224,6 +217,13 @@ spec:
               - severity = "critical"
             target_matchers:
               - severity = "warning"
+          # upstream kube-prometheus semantics: InfoInhibitor mutes info-severity noise
+          - equal:
+              - namespace
+            source_matchers:
+              - alertname = "InfoInhibitor"
+            target_matchers:
+              - severity = "info"
         receivers:
           - name: blackhole
           - name: heartbeat
