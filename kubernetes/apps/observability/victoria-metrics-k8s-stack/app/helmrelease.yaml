@@ -156,6 +156,30 @@ spec:
               component: apiserver
               provider: kubernetes
 
+    # chart-default tlsConfig (caFile + serverName: kubernetes) cannot verify
+    # Talos control-plane certs on node IPs; skip verification like kps did
+    kubeControllerManager:
+      vmScrape:
+        spec:
+          jobLabel: app.kubernetes.io/component
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                insecureSkipVerify: true
+
+    kubeScheduler:
+      vmScrape:
+        spec:
+          jobLabel: app.kubernetes.io/component
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              tlsConfig:
+                insecureSkipVerify: true
+
     kubeEtcd:
       service:
         port: 2381
