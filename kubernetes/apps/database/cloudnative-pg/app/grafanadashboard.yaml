@@ -13,5 +13,5 @@ spec:
     - datasourceName: VictoriaMetrics
       inputName: DS_PROMETHEUS
   configMapRef:
-    name: cnpg-dashboard
+    name: cnpg-grafana-dashboard
     key: cnp.json
