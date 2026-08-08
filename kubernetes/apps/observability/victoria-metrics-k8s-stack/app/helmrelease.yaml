@@ -70,9 +70,9 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 640Mi
+            memory: 768Mi
           limits:
-            memory: 1Gi
+            memory: 1536Mi
         storage:
           storageClassName: ceph-block
           accessModes:
@@ -106,9 +106,9 @@ spec:
         resources:
           requests:
             cpu: 25m
-            memory: 64Mi
+            memory: 128Mi
           limits:
-            memory: 256Mi
+            memory: 512Mi
         storage:
           storageClassName: ceph-block
           accessModes:
@@ -156,9 +156,9 @@ spec:
         resources:
           requests:
             cpu: 10m
-            memory: 64Mi
+            memory: 96Mi
           limits:
-            memory: 128Mi
+            memory: 192Mi
 
     alertmanager:
       spec:
