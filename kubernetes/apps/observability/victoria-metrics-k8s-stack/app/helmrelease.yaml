@@ -54,6 +54,15 @@ spec:
         enabled: true
         spec:
           allowCrossNamespaceImport: true
+      victoriametrics:
+        datasources:
+          # uid `prometheus` is the ecosystem convention: upstream dashboards
+          # (flux2-monitoring-example, cloudnative-pg) hardcode it in panel refs
+          - name: VictoriaMetrics
+            type: prometheus
+            access: proxy
+            uid: prometheus
+            isDefault: true
 
     defaultRules:
       rules:
