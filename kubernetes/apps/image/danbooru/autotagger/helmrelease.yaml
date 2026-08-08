@@ -20,6 +20,7 @@ spec:
               tag: convnextv2@sha256:72852bd6531c98832e5f2b159ffa2665d0cbfc4f6bf8af439af8d1bd32e9410c
             env:
               AUTOTAGGER_DEVICE: GPU
+              AUTOTAGGER_INFERENCE_PRECISION: f32
               GUNICORN_WORKERS: 1
               GUNICORN_THREADS: 4
             probes:
