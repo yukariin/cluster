@@ -1,12 +1,12 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
-apiVersion: monitoring.coreos.com/v1
-kind: PrometheusRule
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/operator.victoriametrics.com/vmrule_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMRule
 metadata:
-  name: kube-prometheus-stack-additional
+  name: victoria-metrics-additional
 spec:
   groups:
-    - name: kube-prometheus-stack-additional.rules
+    - name: victoria-metrics-additional.rules
       rules:
         - alert: DockerHubRateLimitRisk
           expr: |-

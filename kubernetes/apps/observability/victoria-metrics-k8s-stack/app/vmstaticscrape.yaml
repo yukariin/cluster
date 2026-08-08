@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/operator.victoriametrics.com/vmstaticscrape_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: node-exporter
+spec:
+  targetEndpoints:
+    - targets:
+        - nas.internal:9100
+      path: /metrics
+      relabelConfigs:
+        - action: replace
+          targetLabel: job
+          replacement: node-exporter
+        - action: replace
+          targetLabel: node
+          replacement: nas
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/operator.victoriametrics.com/vmstaticscrape_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: traefik
+spec:
+  targetEndpoints:
+    - targets:
+        - "traefik.mistelinn.org"
+      scheme: https
+      path: /metrics
+      relabelConfigs:
+        - action: replace
+          targetLabel: job
+          replacement: traefik
+        - action: replace
+          targetLabel: node
+          replacement: nas

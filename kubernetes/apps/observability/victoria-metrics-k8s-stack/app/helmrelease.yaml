@@ -1,0 +1,174 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: victoria-metrics-k8s-stack
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: victoria-metrics-k8s-stack
+  interval: 1h
+  values:
+    fullnameOverride: victoria-metrics
+
+    victoria-metrics-operator:
+      operator:
+        enable_converter_ownership: true
+
+    defaultDashboards:
+      grafanaOperator:
+        enabled: true
+        spec:
+          allowCrossNamespaceImport: true
+
+    # only consumed by the sync-job config (grafana subchart is disabled): synced
+    # dashboards pin their datasource variable to this uid, which must match the
+    # uid of the grafana-operator managed `prometheus` GrafanaDatasource
+    defaultDatasources:
+      victoriametrics:
+        datasources:
+          - name: prometheus
+            type: prometheus
+            access: proxy
+            uid: prometheus
+            isDefault: true
+
+    vmsingle:
+      spec:
+        retentionPeriod: 30d
+        storage:
+          storageClassName: ceph-block
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 20Gi
+      route:
+        enabled: true
+        hostnames:
+          - "prometheus.mistelinn.org"
+        parentRefs:
+          - {name: envoy-internal, namespace: network}
+        extraRules:
+          - filters:
+              - type: RequestRedirect
+                requestRedirect:
+                  path:
+                    type: ReplaceFullPath
+                    replaceFullPath: /vmui/
+                  statusCode: 302
+            matches:
+              - path:
+                  type: Exact
+                  value: /
+
+    vlsingle:
+      enabled: true
+      spec:
+        retentionPeriod: 14d
+        storage:
+          storageClassName: ceph-block
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+      route:
+        enabled: true
+        hostnames:
+          - "logs.mistelinn.org"
+        parentRefs:
+          - {name: envoy-internal, namespace: network}
+        extraRules:
+          - filters:
+              - type: RequestRedirect
+                requestRedirect:
+                  path:
+                    type: ReplaceFullPath
+                    replaceFullPath: /select/vmui/
+                  statusCode: 302
+            matches:
+              - path:
+                  type: Exact
+                  value: /
+
+    vmagent:
+      spec:
+        scrapeInterval: 1m
+
+    vmalert:
+      spec:
+        evaluationInterval: 1m
+        extraArgs:
+          external.url: https://prometheus.mistelinn.org
+
+    alertmanager:
+      spec:
+        externalURL: https://alertmanager.mistelinn.org
+        # the converted VMAlertmanagerConfig routes cluster-wide alerts; without this
+        # every route gets a namespace=observability matcher and cross-namespace
+        # alerts fall through to the blackhole root
+        disableNamespaceMatcher: true
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: ceph-block
+              resources:
+                requests:
+                  storage: 1Gi
+      config:
+        global:
+          resolve_timeout: 5m
+      route:
+        enabled: true
+        hostnames:
+          - "alertmanager.mistelinn.org"
+        parentRefs:
+          - {name: envoy-internal, namespace: network,}
+
+    kubeApiServer:
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: https
+              scheme: https
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                serverName: kubernetes
+              metricRelabelConfigs:
+                # Drop high cardinality labels
+                - action: drop
+                  source_labels:
+                    - __name__
+                  regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
+                - action: drop
+                  source_labels:
+                    - __name__
+                  regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
+          jobLabel: component
+          namespaceSelector:
+            matchNames:
+              - default
+          selector:
+            matchLabels:
+              component: apiserver
+              provider: kubernetes
+
+    kubeEtcd:
+      service:
+        port: 2381
+        targetPort: 2381
+        selector:
+          component: kube-apiserver # etcd runs on control plane nodes
+      vmScrape:
+        spec:
+          jobLabel: app.kubernetes.io/component
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: http
+
+    grafana:
+      enabled: false

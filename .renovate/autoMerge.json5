@@ -17,6 +17,7 @@
       matchPackageNames: [
         "ghcr.io/renovatebot/renovate",
         "/kube-prometheus-stack/",
+        "/victoria-metrics-k8s-stack/",
       ],
       automerge: true,
       automergeType: "pr",

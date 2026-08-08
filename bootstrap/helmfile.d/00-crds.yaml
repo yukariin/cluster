@@ -30,10 +30,20 @@ releases:
     chart: oci://ghcr.io/home-operations/charts-mirror/keda
     version: 2.20.2
 
+  # CRDs only (this stage extracts the CustomResourceDefinition kind and discards
+  # the rest) — the kube-prometheus-stack release itself is not installed; the
+  # cluster runs VictoriaMetrics instead. Kept because monitoring.coreos.com CRDs
+  # (ServiceMonitor, PodMonitor, PrometheusRule, Probe, ...) are still consumed
+  # throughout the repo and converted by the VM operator.
   - name: kube-prometheus-stack
     namespace: observability
     chart: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
     version: 88.1.3
+
+  - name: victoria-metrics-k8s-stack
+    namespace: observability
+    chart: oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack
+    version: 0.90.1
 
   - name: silence-operator
     namespace: observability
