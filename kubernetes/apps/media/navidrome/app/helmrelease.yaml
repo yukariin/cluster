@@ -20,7 +20,7 @@ spec:
               repository: ghcr.io/navidrome/navidrome
               tag: 0.63.2@sha256:9012939114fbb1bb641b81cf96dec5ded15f0aafefe8d47a511d7cb919658e40
             env:
-              ND_AGENTS: audiomuseai,lastfm,deezer # first sonic-similarity-capable agent wins
+              ND_AGENTS: audiomuseai,lastfm,spotify,deezer
               ND_BASEURL: "https://{{ .Release.Name }}.mistelinn.org"
               ND_CACHEFOLDER: /config/cache
               ND_COVERARTPRIORITY: "folder.*, cover.*, front.*"
