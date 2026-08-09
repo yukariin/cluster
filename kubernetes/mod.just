@@ -14,7 +14,9 @@ apply-ks ns ks:
 
 [doc('Browse a PVC')]
 browse-pvc ns claim:
-    kubectl browse-pvc -n {{ ns }} -i mirror.gcr.io/alpine:latest {{ claim }}
+    kubectl run -n {{ ns }} browse-pvc-{{ claim }} -it --rm --restart=Never \
+        --image=mirror.gcr.io/alpine:latest \
+        --overrides='{"spec":{"containers":[{"name":"browse-pvc-{{ claim }}","image":"mirror.gcr.io/alpine:latest","stdin":true,"tty":true,"command":["/bin/sh"],"workingDir":"/mnt","volumeMounts":[{"mountPath":"/mnt","name":"data"}]}],"volumes":[{"name":"data","persistentVolumeClaim":{"claimName":"{{ claim }}"}}]}}'
 
 [doc('Delete local Flux Kustomization')]
 delete-ks ns ks:
@@ -32,11 +34,11 @@ prune-pods:
         kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true
     done
 
-[doc('Snapshot VolSync PVCs')]
+[doc('Snapshot every kopiur SnapshotPolicy now')]
 [script]
 snapshot:
-    kubectl get replicationsources --no-headers -A | while read -r ns name _; do
-        kubectl -n "$ns" patch replicationsources "$name" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}'
+    kubectl get snapshotpolicies --no-headers -A | while read -r ns name _; do
+        kopiur snapshot now --policy "$name" -n "$ns"
     done
 
 [arg('state', pattern='suspend|resume')]
@@ -48,6 +50,13 @@ keda state:
     done
 
 [arg('state', pattern='suspend|resume')]
+[doc('Suspend or resume kopiur')]
+kopiur state:
+    flux -n kopiur-system {{ state }} kustomization kopiur
+    flux -n kopiur-system {{ state }} helmrelease kopiur
+    kubectl -n kopiur-system scale deployment kopiur-controller --replicas {{ if state != "suspend" { "1" } else { "0" } }}
+
+[arg('state', pattern='suspend|resume')]
 [doc('Suspend or resume CNPG clusters for node maintenance')]
 [script]
 cnpg state:
@@ -55,13 +64,6 @@ cnpg state:
         kubectl -n "$ns" patch cluster "$name" --type merge \
             -p '{"spec":{"nodeMaintenanceWindow":{"inProgress":{{ if state == "suspend" { "true" } else { "false" } }},"reusePVC":true}}}'
     done
-
-[arg('state', pattern='suspend|resume')]
-[doc('Suspend or resume VolSync')]
-volsync state:
-    flux -n volsync-system {{ state }} kustomization volsync
-    flux -n volsync-system {{ state }} helmrelease volsync
-    kubectl -n volsync-system scale deployment volsync --replicas {{ if state != "suspend" { "1" } else { "0" } }}
 
 [doc('Sync ExternalSecrets')]
 [script]
