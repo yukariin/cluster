@@ -19,8 +19,6 @@ spec:
               repository: ghcr.io/kieraneglin/pinchflat
               tag: latest@sha256:01b4f98aabaf3f5fe394213f7a32578c9e84e42080f52e2f8334021a4473b202
             env:
-              # TZ: Europe/Moscow
-              TZ_DATA_DIR: /tmp/elixir_tzdata_data
               LOG_LEVEL: info
               PORT: &port 80
             probes:
@@ -81,13 +79,15 @@ spec:
             app:
               - path: /downloads
                 subPath: media/youtube
-      tmp:
+      tmpfs:
         type: emptyDir
         advancedMounts:
           pinchflat:
             app:
               - subPath: tmp
                 path: /tmp
+              - subPath: logs
+                path: /config/logs
               - subPath: yt-dlp
                 path: /etc/yt-dlp
               # ytdlp update
