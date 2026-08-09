@@ -12,6 +12,6 @@ spec:
   datasources:
     - datasourceName: prometheus
       inputName: DS_PROMETHEUS
-  configMapRef:
-    name: cnpg-grafana-dashboard
-    key: cnp.json
+  # chart-bundled copy is a stale snapshot still querying the deprecated
+  # cnpg_collector_* backup metrics; upstream main handles plugin backups
+  url: https://raw.githubusercontent.com/cloudnative-pg/grafana-dashboards/main/charts/cluster/grafana-dashboard.json

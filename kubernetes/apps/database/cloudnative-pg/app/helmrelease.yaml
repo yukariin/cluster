@@ -13,7 +13,7 @@ spec:
     monitoring:
       podMonitorEnabled: true
       grafanaDashboard:
-        create: true
+        create: false # stale bundled snapshot; dashboard tracks upstream via GrafanaDashboard url
 
     resources:
       requests:
