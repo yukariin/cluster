@@ -55,7 +55,7 @@ spec:
       route:
         enabled: true
         hostnames:
-          - "prometheus.mistelinn.org"
+          - "metrics.mistelinn.org"
         parentRefs:
           - {name: envoy-internal, namespace: network}
         extraRules:
@@ -112,7 +112,13 @@ spec:
       spec:
         evaluationInterval: 1m # match scrapeInterval
         extraArgs:
-          external.url: https://prometheus.mistelinn.org
+          external.url: https://alerts.mistelinn.org
+      route:
+        enabled: true
+        hostnames:
+          - "alerts.mistelinn.org"
+        parentRefs:
+          - {name: envoy-internal, namespace: network,}
 
     alertmanager:
       spec:
@@ -164,8 +170,14 @@ spec:
             source_matchers:
               - severity = "critical"
             target_matchers:
+              - severity =~ "warning|info"
+          - equal:
+              - alertname
+              - namespace
+            source_matchers:
               - severity = "warning"
-          # upstream kube-prometheus semantics: InfoInhibitor mutes info-severity noise
+            target_matchers:
+              - severity = "info"
           - equal:
               - namespace
             source_matchers:
