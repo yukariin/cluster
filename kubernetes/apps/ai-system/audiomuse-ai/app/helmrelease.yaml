@@ -25,7 +25,6 @@ spec:
               # Service
               SERVICE_TYPE: flask
               # General
-              TEMP_DIR: /tmp
               CLAP_ENABLED: "true"
               ENABLE_PROXY_FIX: true
               # Backend; bootstrap only, v3 persists media-server config in DB
@@ -105,7 +104,6 @@ spec:
       tmp:
         type: emptyDir
         globalMounts:
-          - path: /tmp
           - path: /app/temp_audio
       plugins:
         type: emptyDir
