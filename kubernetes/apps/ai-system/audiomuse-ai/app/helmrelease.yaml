@@ -40,8 +40,6 @@ spec:
               PGSSLCERT: /var/run/secrets/postgresql/tls.crt
               PGSSLKEY: /var/run/secrets/postgresql/tls.key
               PGSSLROOTCERT: /var/run/secrets/postgres-server-ca/ca.crt
-              # Redis
-              REDIS_URL: redis://audiomuse-ai-dragonfly:6379
               # Providers
               AI_MODEL_PROVIDER: NONE
             envFrom: &envFrom

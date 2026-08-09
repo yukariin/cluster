@@ -39,12 +39,9 @@ metadata:
   name: &app audiomuse-ai
 spec:
   components:
-    - ../../../../components/dragonfly
     - ../../../../components/postgres/app-template
   dependsOn:
     - name: audiomuse-ai-db
-    - name: dragonfly
-      namespace: database
   interval: 1h
   path: kubernetes/apps/ai-system/audiomuse-ai/app
   prune: true
