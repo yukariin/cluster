@@ -11,7 +11,9 @@ spec:
   logoutCallbackUrls:
     - https://kavita.mistelinn.org/signout-callback-oidc
   allowedUserGroups:
-    - name: users
+    - name: kavita-users
+      namespace: security
+    - name: kavita-r18
       namespace: security
   pkceEnabled: true
   skipConsent: true

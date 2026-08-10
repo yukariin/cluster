@@ -101,15 +101,27 @@ spec:
         - name: users
           spec:
             friendlyName: Users
-            customClaims:
-              - key: kavita-roles
-                value: "[ \"Login\", \"Download\", \"library-Book\", \"library-Light Novel\", \"library-Manga\" ]"
             users:
               userRefs:
                 - name: yukarin
         - name: docs
           spec:
             friendlyName: Documents
+            users:
+              userRefs:
+                - name: yukarin
+        - name: kavita-users
+          spec:
+            friendlyName: Kavita Users
+            customClaims:
+              - key: kavita-roles
+                value: "[ \"Login\", \"Download\", \"library-Book\", \"library-Light Novel\", \"library-Manga\" ]"
+        - name: kavita-r18
+          spec:
+            friendlyName: Kavita R18 Users
+            customClaims:
+              - key: kavita-roles
+                value: "[ \"Login\", \"Download\", \"library-Book\", \"library-Light Novel\", \"library-Manga\", \"library-[R18] Manga\", \"library-[R18] Doujinshi\" ]"
             users:
               userRefs:
                 - name: yukarin
