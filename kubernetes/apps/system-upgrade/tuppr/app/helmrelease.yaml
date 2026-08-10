@@ -12,13 +12,13 @@ spec:
   values:
     replicaCount: 2
     monitoring:
-      serviceMonitor:
-        enabled: true
-      prometheusRule:
-        enabled: true
       dashboards:
         enabled: true
         grafanaOperator:
           enabled: true
           matchLabels:
             dashboards: grafana
+      prometheusRule:
+        enabled: true
+      serviceMonitor:
+        enabled: true
