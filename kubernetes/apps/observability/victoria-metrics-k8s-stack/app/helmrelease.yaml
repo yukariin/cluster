@@ -42,6 +42,13 @@ spec:
             uid: prometheus
             isDefault: true
 
+    defaultRules:
+      rules:
+        etcdMemberCommunicationSlow:
+          enabled: false
+        RecordingRulesNoData:
+          enabled: false
+
     vmsingle:
       spec:
         retentionPeriod: 30d
