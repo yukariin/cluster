@@ -27,4 +27,5 @@ spec:
             namespaced: false
           name:
             as: probe_success
-          metricsQuery: max_over_time(<<.Series>>{<<.LabelMatchers>>}[1m])
+          # global scrape is 1m; [2m] window = up unless 2 consecutive ticks failed
+          metricsQuery: max_over_time(<<.Series>>{<<.LabelMatchers>>}[2m])
