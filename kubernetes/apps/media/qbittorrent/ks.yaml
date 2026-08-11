@@ -6,7 +6,7 @@ metadata:
   name: &app qbittorrent
 spec:
   components:
-    - ../../../../components/keda
+    - ../../../../components/nfs-scaler
     - ../../../../components/kopiur
   dependsOn:
     - name: rook-ceph-cluster

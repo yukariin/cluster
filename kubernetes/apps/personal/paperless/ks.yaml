@@ -7,7 +7,7 @@ metadata:
 spec:
   components:
     - ../../../../components/dragonfly
-    - ../../../../components/keda
+    - ../../../../components/nfs-scaler
     - ../../../../components/kopiur
   dependsOn:
     - name: dragonfly

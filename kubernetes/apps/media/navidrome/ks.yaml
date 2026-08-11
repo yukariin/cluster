@@ -6,7 +6,7 @@ metadata:
   name: &app navidrome
 spec:
   components:
-    - ../../../../components/keda
+    - ../../../../components/nfs-scaler
     - ../../../../components/kopiur
   dependsOn:
     - name: rook-ceph-cluster
@@ -17,7 +17,7 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      KEDA_KIND: StatefulSet
+      NFS_KIND: StatefulSet
   sourceRef:
     kind: GitRepository
     name: flux-system

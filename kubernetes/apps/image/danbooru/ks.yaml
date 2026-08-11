@@ -40,7 +40,7 @@ metadata:
 spec:
   components:
     - ../../../../components/dragonfly
-    - ../../../../components/keda
+    - ../../../../components/nfs-scaler
     - ../../../../components/postgres/app-template
   dependsOn:
     - name: danbooru-db
