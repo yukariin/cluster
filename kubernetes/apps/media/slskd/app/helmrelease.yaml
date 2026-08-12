@@ -32,6 +32,7 @@ spec:
               SLSKD_NO_HTTPS: true
               SLSKD_NO_VERSION_CHECK: true
               SLSKD_REMOTE_CONFIGURATION: false
+              SLSKD_SHARE_CACHE_RETENTION: "1440" # minutes; 1 day
               SLSKD_SLSK_LISTEN_PORT: &soulseekPort 50300
               SLSKD_UMASK: "002"
             probes:
