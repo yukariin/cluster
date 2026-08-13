@@ -83,6 +83,12 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
+      classifier:
+        type: configMap
+        name: bitmagnet-classifier
+        globalMounts:
+          - path: /config/bitmagnet/classifier.yml
+            subPath: classifier.yml
       tmp:
         type: emptyDir
         globalMounts:

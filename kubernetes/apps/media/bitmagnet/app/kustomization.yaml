@@ -5,3 +5,12 @@ kind: Kustomization
 resources:
   - externalsecret.yaml
   - helmrelease.yaml
+
+configMapGenerator:
+  - name: bitmagnet-classifier
+    files:
+      - ./resources/classifier.yml
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
