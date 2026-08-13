@@ -11,7 +11,7 @@ workflows:
     - if_else:
         condition:
           and:
-            - "torrent.baseName.length() > 0"
+            - "torrent.baseName.size() > 0"
             - "!torrent.baseName.matches(r'[A-Za-z]')"
             - "!torrent.baseName.matches(r'[\\p{Hiragana}\\p{Katakana}]')"
             - "!([torrent.baseName] + torrent.files.map(f, f.basePath)).join(' ').matches(keywords.anime)"
