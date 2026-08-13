@@ -1,0 +1,118 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: bitmagnet
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: flux-system
+  interval: 1h
+  values:
+    controllers:
+      bitmagnet:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bitmagnet-io/bitmagnet
+              tag: v0.10.1@sha256:b6373349a30193b436ce6b05e21f91aa4934074268105dded1f3b065b8c86f19
+            command:
+              - bitmagnet
+            args:
+              - worker
+              - run
+              - --all
+            env:
+              HOME: /config
+              XDG_CONFIG_HOME: /config
+              # DB; client cert auth against the shared CNPG cluster
+              POSTGRES_HOST: pooler-rw.database.svc
+              POSTGRES_NAME: bitmagnet
+              POSTGRES_USER: bitmagnet
+              POSTGRES_SSL_MODE: verify-full
+              POSTGRES_SSL_CERT_PATH: /var/run/secrets/postgresql/tls.crt
+              POSTGRES_SSL_KEY_PATH: /var/run/secrets/postgresql/tls.key
+              POSTGRES_SSL_ROOT_CERT_PATH: /var/run/secrets/postgres-server-ca/ca.crt
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /status
+                    port: &port 3333
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  periodSeconds: 10
+                  failureThreshold: 30
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+    defaultPodOptions:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile: {type: RuntimeDefault}
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.mistelinn.org"
+        parentRefs:
+          - {name: envoy-internal, namespace: network}
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    service:
+      app:
+        forceRename: "{{ .Release.Name }}"
+        primary: true
+        ports:
+          http:
+            port: *port
+      bittorrent:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: 192.168.100.91
+        externalTrafficPolicy: Local
+        ports:
+          bittorrent-tcp:
+            port: 3334
+            protocol: TCP
+          bittorrent-udp:
+            port: 3334
+            protocol: UDP
