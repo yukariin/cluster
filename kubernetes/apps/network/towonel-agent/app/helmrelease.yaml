@@ -1,0 +1,40 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: towonel-agent
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: towonel-agent
+  interval: 1h
+  values:
+    controllers:
+      main:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        replicas: 2
+        podDisruptionBudget:
+          minAvailable: 1
+
+    agent:
+      services:
+        - hostname: "*.mistelinn.org"
+          origin: envoy-external:443
+      inviteTokenSecret:
+        name: towonel-agent-secret
+
+    serviceMonitor:
+      main:
+        enabled: true
+
+    monitoring:
+      prometheusRule:
+        enabled: true
+      dashboards:
+        enabled: true
+        grafanaOperator:
+          enabled: true
+          matchLabels:
+            dashboards: grafana

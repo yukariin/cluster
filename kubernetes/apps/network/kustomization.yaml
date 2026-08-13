@@ -14,3 +14,4 @@ resources:
   - envoy-gateway/ks.yaml
   - external-dns/ks.yaml
   - smtp-relay/ks.yaml
+  - towonel-agent/ks.yaml
