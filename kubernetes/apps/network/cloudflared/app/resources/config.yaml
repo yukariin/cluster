@@ -1,9 +1,0 @@
----
-ingress:
-  - hostname: "*.mistelinn.org"
-    service: https://envoy-external.network.svc.cluster.local:443
-    originRequest:
-      http2Origin: true
-      originServerName: "external.mistelinn.org"
-
-  - service: http_status:404

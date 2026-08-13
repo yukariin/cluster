@@ -6,12 +6,11 @@ metadata:
   name: towonel-agent
 spec:
   endpoints:
-    # DNS-only (grey cloud): agents/edges dial the hub over QUIC and clients
-    # need direct TLS-passthrough connects, neither survives the CF proxy.
     - dnsName: hub.mistelinn.org
       recordType: A
       targets:
         - ${VPS_IP}
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"
+    - dnsName: external.mistelinn.org
+      recordType: A
+      targets:
+        - ${VPS_IP}
