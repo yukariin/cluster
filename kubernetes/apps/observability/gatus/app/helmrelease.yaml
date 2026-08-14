@@ -70,6 +70,7 @@ spec:
               size: 1Gi
     defaultPodOptions:
       automountServiceAccountToken: true # gatus-sidecar
+      enableServiceLinks: false
       dnsConfig:
         options:
           - name: ndots
