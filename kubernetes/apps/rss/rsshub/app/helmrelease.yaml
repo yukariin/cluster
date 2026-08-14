@@ -68,6 +68,7 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             url: "https://rsshub.mistelinn.org/healthz"
+            conditions: ["[STATUS] == 200", "[BODY] == ok"]
         hostnames:
           - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:

@@ -60,6 +60,9 @@ spec:
           route:
             enabled: true
             name: pocket-id
+            annotations:
+              gatus.home-operations.com/endpoint: |-
+                conditions: ["[STATUS] == 200", "len([BODY]) > 0"]
             parentRefs:
               - name: envoy-external
                 namespace: network

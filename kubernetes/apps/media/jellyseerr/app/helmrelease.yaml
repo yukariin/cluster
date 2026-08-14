@@ -68,6 +68,7 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             url: "https://jellyseerr.mistelinn.org/api/v1/status"
+            conditions: ["[STATUS] == 200", "has([BODY].version) == true"]
         hostnames:
           - "{{ .Release.Name }}.mistelinn.org"
           - "requests.mistelinn.org"

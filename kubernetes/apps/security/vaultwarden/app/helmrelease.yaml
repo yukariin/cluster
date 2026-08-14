@@ -98,6 +98,7 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             url: "https://passwords.mistelinn.org/alive"
+            conditions: ["[STATUS] == 200", "len([BODY]) > 0"]
         hostnames:
           - "passwords.mistelinn.org"
         parentRefs:

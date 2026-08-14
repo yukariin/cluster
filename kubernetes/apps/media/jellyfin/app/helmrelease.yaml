@@ -89,6 +89,7 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             url: "https://jellyfin.mistelinn.org/health"
+            conditions: ["[STATUS] == 200", "[BODY] == Healthy"]
         hostnames:
           - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:

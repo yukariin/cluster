@@ -99,6 +99,7 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             url: "https://navidrome.mistelinn.org/ping"
+            conditions: ["[STATUS] == 200", "len([BODY]) > 0"]
         hostnames:
           - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:

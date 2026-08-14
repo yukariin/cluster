@@ -78,6 +78,7 @@ spec:
         annotations:
           gatus.home-operations.com/endpoint: |-
             url: "https://miniflux.mistelinn.org/healthcheck"
+            conditions: ["[STATUS] == 200", "[BODY] == OK"]
         hostnames:
           - "{{ .Release.Name }}.mistelinn.org"
         parentRefs:
