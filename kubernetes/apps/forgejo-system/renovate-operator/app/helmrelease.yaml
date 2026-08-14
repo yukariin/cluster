@@ -20,6 +20,9 @@ spec:
         redirectUrl: https://renovate.mistelinn.org/auth/callback
         additionalScopes:
           - groups
+    authorization:
+      # PocketID client already restricts login to the admins group
+      enabled: false
 
     route:
       enabled: true
