@@ -67,8 +67,6 @@ spec:
                 cpu: 5m
                 memory: 10M
     defaultPodOptions:
-      automountServiceAccountToken: false
-      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 568

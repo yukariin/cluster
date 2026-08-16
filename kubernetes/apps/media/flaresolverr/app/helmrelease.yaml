@@ -46,8 +46,6 @@ spec:
                 cpu: "2"
                 memory: 2Gi
     defaultPodOptions:
-      automountServiceAccountToken: false
-      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         # hardcoded in image

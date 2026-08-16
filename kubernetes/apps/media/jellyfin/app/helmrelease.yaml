@@ -52,8 +52,6 @@ spec:
               limits:
                 memory: 2Gi
     defaultPodOptions:
-      automountServiceAccountToken: false
-      enableServiceLinks: false
       resourceClaims:
         - name: gpu
           resourceClaimTemplateName: jellyfin-gpu

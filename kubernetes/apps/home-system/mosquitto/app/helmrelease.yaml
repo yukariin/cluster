@@ -45,8 +45,6 @@ spec:
               accessMode: ReadWriteOnce
               size: 1Gi
     defaultPodOptions:
-      automountServiceAccountToken: false
-      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 568
