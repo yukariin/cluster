@@ -13,6 +13,7 @@ spec:
   values:
     controllers:
       autotagger:
+        type: statefulset
         containers:
           app:
             image:
@@ -21,6 +22,7 @@ spec:
             env:
               AUTOTAGGER_DEVICE: GPU
               AUTOTAGGER_INFERENCE_PRECISION: f32
+              AUTOTAGGER_OPENVINO_CACHE_DIR: /cache
               GUNICORN_WORKERS: 1
               GUNICORN_THREADS: 4
             probes:
@@ -48,7 +50,13 @@ spec:
                 memory: 2Gi
               limits:
                 cpu: 4
-                memory: 4Gi
+                memory: 6Gi # cold-cache compile spike
+        statefulset:
+          volumeClaimTemplates:
+            - name: cache
+              storageClass: ceph-block
+              accessMode: ReadWriteOnce
+              size: 5Gi
     defaultPodOptions:
       resourceClaims:
         - name: gpu
