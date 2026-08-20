@@ -86,6 +86,8 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: startech.mistelinn.org
           external-dns.alpha.kubernetes.io/target: mc-router.mistelinn.org
+          external-dns.kubernetes.io/hostname: startech.mistelinn.org
+          external-dns.kubernetes.io/target: mc-router.mistelinn.org
           mc-router.itzg.me/externalServerName: startech.mistelinn.org
         ports:
           minecraft:
