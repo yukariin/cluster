@@ -1,0 +1,18 @@
+---
+use_default_settings: true
+
+general:
+  instance_name: Search
+  enable_metrics: false
+
+search:
+  default_lang: "en"
+  formats:
+    - html
+    - json
+
+server:
+  # base_url, port, secret_key set via env vars
+  image_proxy: true
+  limiter: true
+  public_instance: false
