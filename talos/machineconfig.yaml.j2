@@ -1,5 +1,6 @@
 ---
-# yaml-language-server: $schema=https://schemas.ajgon.casa/other/talos.config.json
+# Pinned to the schema for the installed Talos release.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/siderolabs/talos/v1.13.9/pkg/machinery/config/schemas/config.schema.json
 version: v1alpha1
 machine:
   ca:
@@ -9,15 +10,15 @@ machine:
     {% endif %}
 
   features:
-    apidCheckExtKeyUsage: true
-    diskQuotaSupport: true
+    apidCheckExtKeyUsage: true # Legacy no-op in Talos >= 1.12; EKU checks are always enabled
+    diskQuotaSupport: true # Talos v1.13 generated default
     hostDNS:
-      enabled: true
-      forwardKubeDNSToHost: true # Requires Cilium socketLB features
+      enabled: true # Talos v1.13 generated default
+      forwardKubeDNSToHost: true # Talos v1.13 generated default; requires Cilium socketLB features
       resolveMemberNames: true
     kubePrism:
-      enabled: true
-      port: 7445
+      enabled: true # Talos v1.13 generated default
+      port: 7445 # Talos v1.13 default
     {% if ENV.IS_CONTROLLER %}
     kubernetesTalosAPIAccess:
       allowedKubernetesNamespaces:
@@ -26,16 +27,18 @@ machine:
         - os:admin
       enabled: true
     {% endif %}
-    rbac: true
+    rbac: true # Legacy no-op in Talos >= 1.12; Talos API RBAC is always enabled
 
   files:
     # Spegel
     - op: create
       path: /etc/cri/conf.d/20-customization.part
+      # permissions is omitted, so the rendered mode is 0o000 (root can still read it, but this is unusual).
       content: |
         [plugins."io.containerd.cri.v1.images"]
           discard_unpacked_layers = false
         [plugins."io.containerd.cri.v1.runtime"]
+          # WARNING: Talos v1.13 defaults to ["/run/cdi"]; this override hides dynamic extension CDI specs.
           cdi_spec_dirs = ["/var/cdi/static", "/var/cdi/dynamic"]
           device_ownership_from_security_context = true
     # NFS
@@ -53,12 +56,12 @@ machine:
 
   install:
     image: factory.talos.dev/metal-installer-secureboot/90c9690abad7aeba0fa89f22cd2511261c85a4e898ed7911583b37e02d11c575:v1.13.9
-    wipe: false
+    wipe: false # Overridden to true by every current node patch
   
-  time:
+  time: # Deprecated in Talos v1.13; migrate to a TimeSyncConfig document
     servers:
       - 192.168.90.1    # UDM-P gateway on homelab VLAN - prefer local over internet
-      - time.cloudflare.com
+      - time.cloudflare.com # Talos v1.13 default NTP server
 
   kernel:
     modules:
@@ -66,16 +69,16 @@ machine:
       - name: thunderbolt
 
   kubelet:
-    defaultRuntimeSeccompProfileEnabled: true
-    disableManifestsDirectory: true
+    defaultRuntimeSeccompProfileEnabled: true # Talos v1.13 generated default
+    disableManifestsDirectory: true # Talos v1.13 generated default
     extraConfig:
       featureGates:
-        UserNamespacesSupport: true
+        UserNamespacesSupport: true # Kubernetes v1.36 GA/default; retained as an explicit assertion
       # imageMaximumGCAge: 24h
       imageGCHighThresholdPercent: 65
       imageGCLowThresholdPercent: 50
       serializeImagePulls: false
-    image: ghcr.io/siderolabs/kubelet:v1.36.3
+    image: ghcr.io/siderolabs/kubelet:v1.36.3 # Talos v1.13.9 bundled default
     nodeIP:
       validSubnets:
         - 192.168.90.0/24
@@ -86,7 +89,7 @@ machine:
 
   sysctls:
     # Filesystem Watchers
-    fs.inotify.max_user_instances: "8192" # More inotify events
+    fs.inotify.max_user_instances: "8192" # Talos v1.13 default
     fs.inotify.max_user_watches: "1048576" # More inotify events
 
     # Virtual Memory Tuning
@@ -120,7 +123,7 @@ machine:
   sysfs:
     devices.system.cpu.intel_pstate.hwp_dynamic_boost: "1"
 
-  systemDiskEncryption:
+  systemDiskEncryption: # Deprecated in Talos v1.13; migrate to STATE/EPHEMERAL VolumeConfig documents
     ephemeral:
       provider: luks2
       keys:
@@ -132,7 +135,7 @@ machine:
         - slot: 0
           tpm: {}
 
-  network:
+  network: # Deprecated in Talos v1.13; migrate nameservers to a ResolverConfig document
     nameservers:
       - 192.168.90.1    # UDM-P gateway on homelab VLAN - prefer local over internet
       - 1.1.1.1
@@ -157,19 +160,19 @@ cluster:
     endpoint: https://k8s.internal:6443
 
   discovery:
-    enabled: true
+    enabled: true # Talos v1.13 generated default
     registries:
       kubernetes:
-        disabled: true
+        disabled: true # Talos v1.13 generated default
       service:
-        disabled: false
+        disabled: false # Talos v1.13 default
 
   id: '{{ ENV.CLUSTER_ID }}'
 
   network:
     cni:
       name: none
-    dnsDomain: cluster.local
+    dnsDomain: cluster.local # Talos v1.13 default
     podSubnets:
       - 10.42.0.0/16
     serviceSubnets:
@@ -186,7 +189,7 @@ cluster:
   allowSchedulingOnControlPlanes: true
 
   apiServer:
-    auditPolicy:
+    auditPolicy: # Talos v1.13 default audit policy
       apiVersion: audit.k8s.io/v1
       kind: Policy
       rules:
@@ -194,19 +197,19 @@ cluster:
     certSANs:
       - k8s.internal
 
-    disablePodSecurityPolicy: true
+    disablePodSecurityPolicy: true # Legacy no-op in Talos >= 1.12; PSP was removed from Kubernetes
 
     extraArgs:
       enable-aggregator-routing: "true" # mandatory without kube-proxy
       feature-gates: HPAScaleToZero=true
 
-    image: registry.k8s.io/kube-apiserver:v1.36.3
+    image: registry.k8s.io/kube-apiserver:v1.36.3 # Talos v1.13.9 bundled default
 
   controllerManager:
     extraArgs:
       bind-address: 0.0.0.0
       feature-gates: HPAScaleToZero=true
-    image: registry.k8s.io/kube-controller-manager:v1.36.3
+    image: registry.k8s.io/kube-controller-manager:v1.36.3 # Talos v1.13.9 bundled default
 
   coreDNS:
     disabled: true
@@ -225,7 +228,7 @@ cluster:
 
   proxy:
     disabled: true
-    image: registry.k8s.io/kube-proxy:v1.36.3
+    image: registry.k8s.io/kube-proxy:v1.36.3 # Talos v1.13.9 bundled default; unused while proxy is disabled
 
   scheduler:
     config:
@@ -247,7 +250,7 @@ cluster:
                     whenUnsatisfiable: ScheduleAnyway
     extraArgs:
       bind-address: 0.0.0.0
-    image: registry.k8s.io/kube-scheduler:v1.36.3
+    image: registry.k8s.io/kube-scheduler:v1.36.3 # Talos v1.13.9 bundled default
 
   secretboxEncryptionSecret: '{{ ENV.CLUSTER_SECRETBOX_ENCRYPTION_SECRET }}'
 
@@ -259,15 +262,15 @@ cluster:
 apiVersion: v1alpha1
 kind: LinkConfig
 name: eth0
-mtu: 1500
-up: true
+mtu: 1500 # Usual system default
+up: true # Talos v1.13 default
 addresses: []
 
 ---
 apiVersion: v1alpha1
 kind: DHCPv4Config
 name: eth0
-clientIdentifier: mac
+clientIdentifier: mac # Talos v1.13 default
 
 ---
 apiVersion: v1alpha1
@@ -281,7 +284,7 @@ kind: VLANConfig
 name: eth0.30
 vlanID: 30
 parent: eth0
-mtu: 1500
+mtu: 1500 # Usual system default
 
 ---
 apiVersion: v1alpha1

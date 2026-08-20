@@ -53,7 +53,6 @@ spec:
         runAsGroup: *fs_id
         fsGroup: *fs_id
         fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: {type: RuntimeDefault}
     service:
       app:
         ports:
