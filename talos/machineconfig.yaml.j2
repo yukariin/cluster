@@ -302,15 +302,13 @@ rules:
 apiVersion: v1alpha1
 kind: LinkConfig
 name: eth0
-mtu: 1500 # Usual system default
-up: true # Talos v1.13 default
+mtu: 1500
 addresses: []
 
 ---
 apiVersion: v1alpha1
 kind: DHCPv4Config
 name: eth0
-clientIdentifier: mac # Talos v1.13 default
 
 ---
 apiVersion: v1alpha1
@@ -324,7 +322,7 @@ kind: VLANConfig
 name: eth0.30
 vlanID: 30
 parent: eth0
-mtu: 1500 # Usual system default
+mtu: 1500
 
 ---
 apiVersion: v1alpha1
