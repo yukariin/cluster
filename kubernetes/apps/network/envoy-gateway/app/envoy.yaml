@@ -171,12 +171,12 @@ spec:
     initialStreamWindowSize: 2Mi
     initialConnectionWindowSize: 32Mi
     onInvalidMessage: TerminateStream
-  proxyProtocol:
-    optional: true
   # Internet traffic reaches this gateway through the towonel agent, which is a
   # TCP tunnel prepending a PROXY header. Direct LAN traffic has no PROXY header,
   # so proxyProtocol must remain optional. HTTP/3 is unreachable over the tunnel
   # and must stay off — see envoy-internal for why the two are exclusive.
+  proxyProtocol:
+    optional: true
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
