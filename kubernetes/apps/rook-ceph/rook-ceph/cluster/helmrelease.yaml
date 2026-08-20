@@ -102,6 +102,11 @@ spec:
             memory: 4Gi
           limits:
             memory: 8Gi # Required for bootstrap
+      security:
+        cephx:
+          daemon:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
       storage:
         useAllNodes: false
         useAllDevices: false
