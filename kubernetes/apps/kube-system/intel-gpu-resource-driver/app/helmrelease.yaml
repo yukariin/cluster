@@ -11,8 +11,8 @@ spec:
   interval: 1h
   values:
     cdi:
-      staticPath: /var/cdi/static
-      dynamicPath: /var/cdi/dynamic
+      staticPath: /run/cdi
+      dynamicPath: /run/cdi
     kubeletPlugin:
       # xpumd is not deployed, so disable health monitoring to avoid
       # trying to connect to /run/xpumd/intelxpuinfo.sock.
