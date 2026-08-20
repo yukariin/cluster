@@ -107,8 +107,6 @@ spec:
       app:
         controller: gtnh
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: gtnh.mistelinn.org
-          external-dns.alpha.kubernetes.io/target: mc-router.mistelinn.org
           external-dns.kubernetes.io/hostname: gtnh.mistelinn.org
           external-dns.kubernetes.io/target: mc-router.mistelinn.org
           mc-router.itzg.me/externalServerName: gtnh.mistelinn.org

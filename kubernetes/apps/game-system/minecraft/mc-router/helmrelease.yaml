@@ -14,7 +14,6 @@ spec:
       minecraft:
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: mc-router.mistelinn.org
           external-dns.kubernetes.io/hostname: mc-router.mistelinn.org
           lbipam.cilium.io/ips: 192.168.100.130
         externalTrafficPolicy: Local
