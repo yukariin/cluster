@@ -134,11 +134,8 @@ metadata:
 spec:
   compressor:
     - type: Zstd
-      zstd: {}
     - type: Brotli
-      brotli: {}
     - type: Gzip
-      gzip: {}
   connection:
     bufferLimit: 8Mi
   retry:
@@ -153,13 +150,15 @@ spec:
   timeout:
     http:
       requestTimeout: 0s
+    tcp:
+      connectTimeout: 5s
 
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.envoyproxy.io/clienttrafficpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: ClientTrafficPolicy
 metadata:
-  name: envoy
+  name: envoy-external
 spec:
   clientIPDetection:
     xForwardedFor:
@@ -172,12 +171,53 @@ spec:
     initialStreamWindowSize: 2Mi
     initialConnectionWindowSize: 32Mi
     onInvalidMessage: TerminateStream
-  http3: {}
   proxyProtocol:
     optional: true
-  targetSelectors:
+  # Internet traffic reaches this gateway through the towonel agent, which is a
+  # TCP tunnel prepending a PROXY header. Direct LAN traffic has no PROXY header,
+  # so proxyProtocol must remain optional. HTTP/3 is unreachable over the tunnel
+  # and must stay off — see envoy-internal for why the two are exclusive.
+  targetRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
+      name: envoy-external
+  tcpKeepalive: {}
+  timeout:
+    http:
+      requestReceivedTimeout: 0s
+  tls:
+    minVersion: "1.2"
+    alpnProtocols:
+      - h2
+      - http/1.1
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.envoyproxy.io/clienttrafficpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: ClientTrafficPolicy
+metadata:
+  name: envoy-internal
+spec:
+  clientIPDetection:
+    xForwardedFor:
+      trustedCIDRs:
+        - 10.42.0.0/16
+  connection:
+    bufferLimit: 8Mi
+    maxAcceptPerSocketEvent: 0
+  http2:
+    initialStreamWindowSize: 2Mi
+    initialConnectionWindowSize: 32Mi
+    onInvalidMessage: TerminateStream
+  # LAN clients connect straight to the LoadBalancer, so QUIC works and there is
+  # no PROXY header to parse. Enabling proxyProtocol here would make Envoy reject
+  # the https-quic listener ("no registered implementation for
+  # envoy.filters.listener.proxy_protocol"), which is not valid on UDP listeners.
+  http3: {}
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy-internal
   tcpKeepalive: {}
   timeout:
     http:
