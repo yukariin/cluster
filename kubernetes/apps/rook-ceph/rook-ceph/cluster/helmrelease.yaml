@@ -82,10 +82,12 @@ spec:
             enabled: true
           - name: pg_autoscaler
             enabled: true
-          # mitigates mgr leak in Ceph 20.2.2 (tracker #77724); revert on v20.2.3
-          - name: nfs
-            enabled: false
+          # Keep rook disabled per upstream. Disable NFS too: Ceph enables it at
+          # bootstrap, and dashboard NFS calls fail without an orchestrator backend.
+          # ref: https://rook.io/docs/rook/v1.20/Upgrade/ceph-upgrade/#disable-the-rook-mgr-module
           - name: rook
+            enabled: false
+          - name: nfs
             enabled: false
       network:
         provider: host
