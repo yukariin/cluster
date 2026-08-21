@@ -50,7 +50,7 @@ spec:
                 memory: 2Gi
               limits:
                 cpu: 4
-                memory: 6Gi # cold-cache compile spike
+                memory: 4Gi
         statefulset:
           volumeClaimTemplates:
             - name: cache
