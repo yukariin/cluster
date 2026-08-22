@@ -11,10 +11,10 @@ spec:
   healthChecks:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Snapshot
-      expr: '!has(status.phase) || status.phase != "Running"'
+      expr: 'has(status.phase) && !(status.phase in ["Pending", "Running"])'
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Restore
-      expr: '!has(status.phase) || !(status.phase in ["Resolving", "Restoring"])'
+      expr: 'has(status.phase) && !(status.phase in ["Resolving", "Restoring"])'
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       expr: status.ceph.health == 'HEALTH_OK'
