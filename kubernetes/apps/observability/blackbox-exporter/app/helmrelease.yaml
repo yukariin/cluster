@@ -12,6 +12,11 @@ spec:
   values:
     fullnameOverride: *app
 
+    dnsConfig:
+      options:
+        - name: ndots
+          value: "1"
+
     config:
       modules:
         http_2xx:

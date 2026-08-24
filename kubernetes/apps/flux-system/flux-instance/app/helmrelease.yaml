@@ -28,6 +28,17 @@ spec:
         interval: 1h
       kustomize:
         patches:
+          - # Resolve dotted external names before search-domain expansion
+            patch: |-
+              - op: add
+                path: /spec/template/spec/dnsConfig
+                value:
+                  options:
+                    - name: ndots
+                      value: "1"
+            target:
+              kind: Deployment
+              name: source-controller
           - # Increase the number of workers
             patch: |-
               - op: add
