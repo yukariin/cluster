@@ -68,12 +68,19 @@ spec:
         fsGroup: 568
         fsGroupChangePolicy: OnRootMismatch
     persistence:
-      cache:
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: /.cache
-      tmp:
-        type: emptyDir
+            subPath: cache
+          - path: /tmp
+            subPath: tmp
+    route:
+      app:
+        hostnames:
+          - "{{ .Release.Name }}.mistelinn.org"
+        parentRefs:
+          - {name: envoy-internal, namespace: network}
     service:
       app:
         ports:
