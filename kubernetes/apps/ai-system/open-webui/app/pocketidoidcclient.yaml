@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/pocketid.internal/pocketidoidcclient_v1alpha1.json
+apiVersion: pocketid.internal/v1alpha1
+kind: PocketIDOIDCClient
+metadata:
+  name: open-webui
+spec:
+  name: Open WebUI
+  launchUrl: https://chat.mistelinn.org
+  callbackUrls:
+    - https://chat.mistelinn.org/oauth/oidc/callback
+  allowedUserGroups:
+    - name: users
+      namespace: security
+  pkceEnabled: true
+  skipConsent: true
+  secret:
+    keys:
+      clientID: OAUTH_CLIENT_ID
+      clientSecret: OAUTH_CLIENT_SECRET
+      discoveryUrl: OPENID_PROVIDER_URL

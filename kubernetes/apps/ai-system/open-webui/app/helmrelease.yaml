@@ -25,8 +25,14 @@ spec:
               PORT: &port 8080
               GLOBAL_LOG_LEVEL: INFO
               ENABLE_OLLAMA_API: "false"
-              ENABLE_OPENAI_API: "false"
               ENABLE_SIGNUP: "false"
+              ENABLE_LOGIN_FORM: "false"
+              ENABLE_OAUTH_SIGNUP: "true"
+              OAUTH_MERGE_ACCOUNTS_BY_EMAIL: "true"
+              OAUTH_PROVIDER_NAME: Pocket ID
+              OAUTH_SCOPES: openid email profile groups
+              OAUTH_CODE_CHALLENGE_METHOD: S256
+              OPENID_REDIRECT_URI: https://chat.mistelinn.org/oauth/oidc/callback
               ENABLE_VERSION_UPDATE_CHECK: "false"
               ENABLE_WEB_SEARCH: "true"
               WEB_SEARCH_ENGINE: searxng
@@ -36,6 +42,8 @@ spec:
             envFrom:
               - secretRef:
                   name: "{{ .Release.Name }}-secret"
+              - secretRef:
+                  name: "{{ .Release.Name }}-oidc-credentials"
             probes:
               liveness: &probes
                 enabled: true
