@@ -15,6 +15,9 @@ spec:
 
     synapse:
       enabled: true
+      image:
+        registry: ghcr.io
+        repository: element-hq/synapse
       ingress:
         host: "matrix.mistelinn.org"
         className: disabled
@@ -106,6 +109,9 @@ spec:
 
     elementWeb:
       enabled: true
+      image:
+        registry: ghcr.io
+        repository: element-hq/element-web
       ingress:
         host: "element.mistelinn.org"
         className: disabled
