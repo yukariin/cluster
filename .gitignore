@@ -85,3 +85,6 @@ charts
 # docker stacks
 override.env
 .env
+
+# Config/data backups
+backup/
