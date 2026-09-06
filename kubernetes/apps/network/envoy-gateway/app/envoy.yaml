@@ -278,8 +278,9 @@ spec:
             - Include @recommended-conf
             - SecRuleEngine DetectionOnly # On
             - SecResponseBodyAccess Off
-            - SecRequestBodyLimit 1048576
-            - SecRequestBodyLimitAction ProcessPartial
+            - SecRequestBodyAccess Off
+            # - SecRequestBodyLimit 1048576
+            # - SecRequestBodyLimitAction ProcessPartial
             - Include @crs-setup-conf
             # CRS defaults tx.allowed_methods to "GET HEAD POST OPTIONS" (901160).
             # Matrix federation is PUT /_matrix/federation/v1/send/{txnId}, and
