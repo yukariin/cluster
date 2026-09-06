@@ -272,15 +272,13 @@ spec:
         image:
           url: ghcr.io/corazawaf/coraza-proxy-wasm:0.6.0
       config:
-        default_directives: default
         directives_map:
           default:
             - Include @recommended-conf
             - SecRuleEngine DetectionOnly # On
             - SecResponseBodyAccess Off
-            - SecRequestBodyAccess Off
-            # - SecRequestBodyLimit 1048576
-            # - SecRequestBodyLimitAction ProcessPartial
+            - SecRequestBodyLimit 1048576
+            - SecRequestBodyLimitAction ProcessPartial
             - Include @crs-setup-conf
             # CRS defaults tx.allowed_methods to "GET HEAD POST OPTIONS" (901160).
             # Matrix federation is PUT /_matrix/federation/v1/send/{txnId}, and
@@ -289,5 +287,18 @@ spec:
             - Include @owasp_crs/*.conf
           flux-webhook:
             - SecRuleEngine Off
+          no-request-body:
+            - Include @recommended-conf
+            - SecRuleEngine DetectionOnly # On
+            - SecRequestBodyAccess Off
+            - SecResponseBodyAccess Off
+            - Include @crs-setup-conf
+            # CRS defaults tx.allowed_methods to "GET HEAD POST OPTIONS" (901160).
+            # Matrix federation is PUT /_matrix/federation/v1/send/{txnId}, and
+            # 911100 scores 5 = the inbound threshold, so one PUT blocks at phase 1.
+            - SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:'tx.allowed_methods=GET HEAD POST PUT PATCH DELETE OPTIONS'"
+            - Include @owasp_crs/*.conf
+        default_directives: default
         per_authority_directives:
           flux-receiver.mistelinn.org: flux-webhook
+          matrix.mistelinn.org: no-request-body
