@@ -299,3 +299,4 @@ spec:
         per_authority_directives:
           flux-receiver.mistelinn.org: flux-webhook
           matrix.mistelinn.org: no-request-body
+          matrix.mistelinn.org:443: no-request-body
