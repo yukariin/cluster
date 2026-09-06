@@ -5,6 +5,7 @@ kind: EnvoyProxy
 metadata:
   name: envoy
 spec:
+  concurrency: 4
   logging:
     level:
       default: info
@@ -250,3 +251,38 @@ spec:
           requestRedirect:
             scheme: https
             statusCode: 301
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/gateway.envoyproxy.io/envoyextensionpolicy_v1alpha1.json
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyExtensionPolicy
+metadata:
+  name: coraza-waf
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: envoy-external
+  wasm:
+    - name: coraza
+      # Don't take the edge down while trust-building
+      failOpen: true
+      code:
+        type: Image
+        image:
+          url: ghcr.io/corazawaf/coraza-proxy-wasm:0.6.0
+      config:
+        default_directives: default
+        directives_map:
+          default:
+            - Include @recommended-conf
+            - SecRuleEngine DetectionOnly # On
+            - SecResponseBodyAccess Off
+            - SecRequestBodyLimit 1048576
+            - SecRequestBodyLimitAction ProcessPartial
+            - Include @crs-setup-conf
+            - Include @owasp_crs/*.conf
+          flux-webhook:
+            - SecRuleEngine Off
+        per_authority_directives:
+          flux-receiver.mistelinn.org: flux-webhook
