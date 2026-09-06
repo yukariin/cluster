@@ -33,9 +33,8 @@ spec:
         sslMode: verify-full
         password:
           value: unused-cert-auth
-      extraVolumes:
-        - &pgVolume
-          name: postgres-tls
+      extraVolumes: &pgVolumes
+        - name: postgres-tls
           projected:
             defaultMode: 0440
             sources:
@@ -51,17 +50,10 @@ spec:
                   items:
                     - key: ca.crt
                       path: ca.crt
-        - name: synapse-tmp
-          emptyDir:
-            medium: Memory
-            sizeLimit: 512Mi
-      extraVolumeMounts:
-        - &pgVolumeMount
-          name: postgres-tls
+      extraVolumeMounts: &pgVolumeMounts
+        - name: postgres-tls
           mountPath: /var/run/secrets/postgresql
           readOnly: true
-        - name: synapse-tmp
-          mountPath: /tmp
       additional:
         0-baseConfig:
           configSecret: matrix-secret
@@ -86,10 +78,8 @@ spec:
         sslMode: verify-full
         password:
           value: unused-cert-auth
-      extraVolumes:
-        - *pgVolume
-      extraVolumeMounts:
-        - *pgVolumeMount
+      extraVolumes: *pgVolumes
+      extraVolumeMounts: *pgVolumeMounts
       additional:
         0-baseConfig:
           configSecret: matrix-secret
