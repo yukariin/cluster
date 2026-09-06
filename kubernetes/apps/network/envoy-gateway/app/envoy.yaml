@@ -281,6 +281,10 @@ spec:
             - SecRequestBodyLimit 1048576
             - SecRequestBodyLimitAction ProcessPartial
             - Include @crs-setup-conf
+            # CRS defaults tx.allowed_methods to "GET HEAD POST OPTIONS" (901160).
+            # Matrix federation is PUT /_matrix/federation/v1/send/{txnId}, and
+            # 911100 scores 5 = the inbound threshold, so one PUT blocks at phase 1.
+            - SecAction "id:900200,phase:1,nolog,pass,t:none,setvar:'tx.allowed_methods=GET HEAD POST PUT PATCH DELETE OPTIONS'"
             - Include @owasp_crs/*.conf
           flux-webhook:
             - SecRuleEngine Off
