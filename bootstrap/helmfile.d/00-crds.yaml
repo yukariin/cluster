@@ -48,4 +48,4 @@ releases:
   - name: kopiur
     namespace: kopiur-system
     chart: oci://ghcr.io/home-operations/charts/kopiur
-    version: 0.10.9
+    version: 0.10.10
