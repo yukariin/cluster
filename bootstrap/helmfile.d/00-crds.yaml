@@ -38,7 +38,7 @@ releases:
   - name: victoria-metrics-k8s-stack
     namespace: observability
     chart: oci://ghcr.io/victoriametrics/helm-charts/victoria-metrics-k8s-stack
-    version: 0.93.0
+    version: 0.94.0
 
   - name: silence-operator
     namespace: observability
