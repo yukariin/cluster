@@ -18,7 +18,6 @@ spec:
         resourceFieldRef:
           resource: limits.memory
           divisor: 1Mi
-  networkPolicyEnabled: false
   replicas: ${DRAGONFLY_REPLICAS:=1}
   resources:
     requests:
