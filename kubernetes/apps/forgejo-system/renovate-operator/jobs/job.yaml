@@ -16,6 +16,10 @@ spec:
       value: "true"
     - name: RENOVATE_GIT_AUTHOR
       value: Renovate Bot <renovate@mistelinn.org>
+    # Forgejo resolves to an internal IP; the endpoint's implicit grant isn't
+    # applied during platform init, so it'd be refused once internalHostAccess=block
+    - name: RENOVATE_HOST_RULES
+      value: '[{"matchHost": "https://git.mistelinn.org", "allowInternal": true}]'
     - name: RENOVATE_PLATFORM_COMMIT
       value: enabled
     - name: RENOVATE_REDIS_URL
