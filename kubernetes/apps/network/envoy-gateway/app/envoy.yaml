@@ -263,6 +263,7 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: envoy-external
+      sectionName: https
   wasm:
     - name: coraza
       # Don't take the edge down while trust-building
@@ -275,6 +276,7 @@ spec:
         directives_map:
           default:
             - Include @recommended-conf
+            - SecDebugLogLevel 2
             - SecRuleEngine DetectionOnly # On
             - SecResponseBodyAccess Off
             - SecRequestBodyLimit 1048576
@@ -289,6 +291,7 @@ spec:
             - SecRuleEngine Off
           no-request-body:
             - Include @recommended-conf
+            - SecDebugLogLevel 2
             - SecRuleEngine DetectionOnly # On
             - SecRequestBodyAccess Off
             - SecResponseBodyAccess Off
