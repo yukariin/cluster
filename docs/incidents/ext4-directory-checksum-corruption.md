@@ -11,6 +11,39 @@ that theory. The best-supported explanation is now a transient client-side RBD
 mapping/read problem during rapid cache-volume teardown and layered-clone
 mapping. The exact failing component has not yet been proven.
 
+## Status (2026-10-03): resolved in practice
+
+No recurrence since the 2026-07-15 mitigation. Two changes removed the suspect
+sequence in close succession:
+
+1. **2026-07-15:** the VolSync kopia cache moved from a Ceph RBD PVC to a
+   disk-backed `emptyDir` (see
+   [Mitigation applied on 2026-07-15](#mitigation-applied-on-2026-07-15)). The
+   short-lived 4 GiB RBD map/unmap that preceded the bad reads no longer
+   happens.
+2. **2026-07-22/23:** VolSync was replaced by kopiur (see
+   [the migration record](../migration/volsync-to-kopiur.md)). Restores now go
+   through a kopiur `Restore` volume populator. The manifests have no cache PVC
+   and no ReplicationDestination snapshot→clone step.
+
+Because both changes landed within a week, the absence of errors cannot
+attribute the fix to one of them. The working explanation is unchanged: the
+node's kernel RBD client reused a device ID that had just been backing a smaller
+image, and the first bad read sat exactly at the old device's size.
+
+The VolSync-specific sections below (mitigation, observation plan) are kept as
+history. The evidence-preservation and repair procedures still apply if the
+fault returns.
+
+Still open from the observation plan:
+
+- Kernel logs are not retained across reboots; only container logs are
+  shipped. Talos has no `machine.logging` destination configured.
+- No alert exists for `EXT4-fs error`, `EXT4-fs warning`, `Bad message`, or
+  RBD I/O errors.
+- No disposable test restore has been run through kopiur's full
+  populate → first-mount path.
+
 ## Symptoms
 
 Application-level errors include:

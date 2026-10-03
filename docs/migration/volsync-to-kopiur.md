@@ -1,6 +1,11 @@
 # Migrating backups from VolSync (kopia fork) to Kopiur
 
-Cutover plan for `feature/kopiur`: replace the VolSync kopia fork
+**Status:** completed. Cutover merged 2026-07-22 (`21cc5f3c`); VolSync was
+decommissioned 2026-07-23 (`3ab2ee77`, `f01d6973`). Steps 1–6 below are kept
+as the record of how it was done. For day-to-day operation, the useful part is
+[Behavior changes to remember afterwards](#behavior-changes-to-remember-afterwards).
+
+Original cutover plan for `feature/kopiur`: replace the VolSync kopia fork
 (`volsync-perfectra1n`) with [Kopiur](https://kopiur.home-operations.com/) as
 the backup operator for all 23 apps using the `components/volsync` flux
 component. The kopia repository on the NAS is **adopted in place** — no data is
