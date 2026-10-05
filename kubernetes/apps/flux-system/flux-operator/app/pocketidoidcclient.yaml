@@ -6,6 +6,8 @@ metadata:
   name: flux-web
 spec:
   launchUrl: https://flux.mistelinn.org
+  logo:
+    nameOverride: flux-operator
   callbackUrls:
     - "https://flux.mistelinn.org/oauth2/callback"
   allowedUserGroups:

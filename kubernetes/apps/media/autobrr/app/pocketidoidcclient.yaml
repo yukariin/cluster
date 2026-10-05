@@ -6,6 +6,8 @@ metadata:
   name: autobrr
 spec:
   launchUrl: https://autobrr.mistelinn.org
+  logo:
+    darkLogoUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/{{name}}.webp"
   callbackUrls:
     - "https://autobrr.mistelinn.org/api/auth/oidc/callback"
   allowedUserGroups:

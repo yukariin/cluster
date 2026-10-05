@@ -6,6 +6,9 @@ metadata:
   name: renovate-operator
 spec:
   launchUrl: https://renovate.mistelinn.org
+  logo:
+    nameOverride: renovate
+    darkLogoUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/{{name}}.webp"
   callbackUrls:
     - https://renovate.mistelinn.org/auth/callback
   allowedUserGroups:

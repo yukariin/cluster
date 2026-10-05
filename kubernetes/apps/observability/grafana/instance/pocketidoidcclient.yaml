@@ -6,6 +6,8 @@ metadata:
   name: grafana
 spec:
   launchUrl: https://grafana.mistelinn.org
+  logo:
+    darkLogoUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/{{name}}.webp"
   callbackUrls:
     - https://grafana.mistelinn.org/login/generic_oauth
   allowedUserGroups:

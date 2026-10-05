@@ -6,6 +6,8 @@ metadata:
   name: forgejo
 spec:
   launchUrl: https://git.mistelinn.org
+  logo:
+    darkLogoUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/{{name}}.webp"
   callbackUrls:
     - https://git.mistelinn.org/user/oauth2/pocket-id/callback
   allowedUserGroups:

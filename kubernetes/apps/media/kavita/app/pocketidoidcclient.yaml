@@ -6,6 +6,8 @@ metadata:
   name: kavita
 spec:
   launchUrl: https://kavita.mistelinn.org
+  logo:
+    darkLogoUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/{{name}}.webp"
   callbackUrls:
     - https://kavita.mistelinn.org/signin-oidc
   logoutCallbackUrls:

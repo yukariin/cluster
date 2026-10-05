@@ -6,6 +6,8 @@ metadata:
   name: qui
 spec:
   launchUrl: https://qui.mistelinn.org
+  logo:
+    darkLogoUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/webp/{{name}}.webp"
   callbackUrls:
     - "https://qui.mistelinn.org/api/auth/oidc/callback"
   allowedUserGroups:
