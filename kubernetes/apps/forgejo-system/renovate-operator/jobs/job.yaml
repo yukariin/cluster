@@ -19,12 +19,12 @@ spec:
     # Forgejo resolves to an internal IP; the endpoint's implicit grant isn't
     # applied during platform init, so it'd be refused once internalHostAccess=block
     - name: RENOVATE_HOST_RULES
-      value: '[{"matchHost": "https://git.mistelinn.org", "allowInternal": true}]'
+      value: "[{'matchHost': 'https://git.mistelinn.org', 'allowInternal': true}]"
     - name: RENOVATE_PLATFORM_COMMIT
       value: enabled
     - name: RENOVATE_REDIS_URL
       value: redis://renovate-operator-jobs-dragonfly:6379
-  image: ghcr.io/renovatebot/renovate:44.115.13
+  image: ghcr.io/renovatebot/renovate:44.133.0
   parallelism: 5
   provider:
     name: forgejo
