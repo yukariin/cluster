@@ -10,6 +10,10 @@ spec:
     name: rook-ceph
   interval: 1h
   values:
+    csi:
+      # 1.21.0 chart templates this key without a default -> renders null -> "" in the
+      # operator configmap, which Rook treats as false and deletes CephConnection/ClientProfile.
+      createCsiOperatorResources: true
     image:
       repository: ghcr.io/rook/ceph
     monitoring:
