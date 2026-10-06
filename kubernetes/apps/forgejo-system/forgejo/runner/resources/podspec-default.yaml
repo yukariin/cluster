@@ -7,10 +7,10 @@ containers:
     imagePullPolicy: IfNotPresent
     name: main
     resources:
-      limits:
-        cpu: "2"
-        memory: 2Gi
       requests:
         cpu: 100m
         memory: 256Mi
+      limits:
+        cpu: "2"
+        memory: 2Gi
 restartPolicy: Never

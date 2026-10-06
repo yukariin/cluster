@@ -32,7 +32,7 @@ spec:
           k8s-plugin:
             image:
               repository: registry.erwanleboucher.dev/erwanleboucher.dev/eleboucher/runner-k8s-plugin
-              tag: 12.10.9@sha256:7fb94371ccc6ef3ff7e2110b2c04050a68bb8031d3224ed8aee2cd5e1d31c673
+              tag: 13.2.1@sha256:d62811841a20fd1a311b2c90c6ffcec37d09e52ebb46834b0c04f3ad2a3bcbe7
             args:
               - --listen
               - unix:///plugin/forgejo-runner-k8s.sock
@@ -50,17 +50,23 @@ spec:
         containers:
           runner:
             image:
-              repository: registry.erwanleboucher.dev/erwanleboucher.dev/eleboucher/runner
-              tag: 12.13.0@sha256:b71959782cea9cbc86eaeb47e5ba32bf8179fbd117dd849e001c9a13807b1a07
-            command:
-              - sh
-              - -ec
-              - |
-                exec /bin/forgejo-runner daemon \
-                  --config /config/runner.yaml \
-                  --url "http://forgejo-http:3000" \
-                  --uuid "$(cat /etc/forgejo-runner-secret/uuid)" \
-                  --token-url file:///etc/forgejo-runner-secret/token
+              repository: data.forgejo.org/forgejo/runner
+              tag: 13.2.0@sha256:ca3d5eea46004789a175d1369eec6829d3ea9bfbe2011a06625b4bdaa55f7552
+            env:
+              RUNNER_UUID:
+                valueFrom:
+                  secretKeyRef:
+                    name: forgejo-runner-secret
+                    key: uuid
+            # args, not command: keeps the image's dumb-init ENTRYPOINT as PID 1;
+            # $(RUNNER_UUID) is expanded by the kubelet, the runner has no uuid-from-file option
+            args:
+              - /bin/forgejo-runner
+              - daemon
+              - --config=/config/runner.yaml
+              - --url=http://forgejo-http:3000
+              - --uuid=$(RUNNER_UUID)
+              - --token-url=file:///etc/runner-secret/token
             resources:
               requests:
                 cpu: 5m
@@ -84,15 +90,8 @@ spec:
         type: secret
         name: forgejo-runner-secret
         globalMounts:
-          - path: /etc/forgejo-runner-secret
+          - path: /etc/runner-secret
             readOnly: true
-      cache:
-        type: persistentVolumeClaim
-        accessMode: ReadWriteOnce
-        size: 10Gi
-        storageClass: ceph-block
-        globalMounts:
-          - path: /data/cache
       tmpfs:
         type: emptyDir
         globalMounts:
