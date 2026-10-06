@@ -15,7 +15,6 @@ resources:
   - jellyfin/ks.yaml
   - jellyseerr/ks.yaml
   - kavita/ks.yaml
-  # - komf/ks.yaml
   # - lidarr/ks.yaml
   - maintainerr/ks.yaml
   - navidrome/ks.yaml
