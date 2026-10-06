@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmcpserver_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMMCPServer
+metadata:
+  name: searxng-mcp
+spec:
+  alias: searxng_mcp
+  params:
+    allow_all_keys: true
+  workload:
+    # renovate: datasource=docker depName=docker.io/isokoliuk/mcp-searxng
+    image: docker.io/isokoliuk/mcp-searxng:2.5.0@sha256:13939bb5076f2e93f7dbef41e6623592e4c70f3f8efac8951599ad1e80b4606e
+    port: 8080
+    env:
+      - name: SEARXNG_URL
+        value: http://searxng.ai-system.svc.cluster.local:8080
+      - name: MCP_HTTP_PORT
+        value: "8080"
+      - name: MCP_HTTP_HOST
+        value: 0.0.0.0
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 256Mi
