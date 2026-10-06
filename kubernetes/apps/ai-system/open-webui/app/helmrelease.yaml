@@ -32,7 +32,6 @@ spec:
                   secretKeyRef:
                     name: litellm-key-open-webui
                     key: LITELLM_API_KEY
-              TOOL_SERVER_CONNECTIONS: '[{"type":"mcp","url":"http://litellm.ai-system.svc.cluster.local:4000/mcp","spec_type":"url","spec":"","path":"openapi.json","auth_type":"none","key":"","config":{"enable":true},"info":{"id":"mcp-gateway","name":"MCP Gateway","description":""}}]'
               ENABLE_SIGNUP: "false"
               ENABLE_LOGIN_FORM: "false"
               ENABLE_OAUTH_SIGNUP: "true"
