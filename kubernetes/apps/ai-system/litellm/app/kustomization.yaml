@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.config.k8s.io/kustomization_v1beta1.json
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - externalsecret.yaml
+  - litellmproxy.yaml
+  - models.yaml
+  - pocketidoidcclient.yaml
+  - virtualkeys.yaml
+  - servicemonitor.yaml
+patches:
+  # Prisma can't read PEM client keys; it takes a PKCS#12 identity instead.
+  # Same Secret already holds tls.key in clear, so the p12 password is not a secret.
+  # Modern2023: the default LegacyRC2 profile won't load under OpenSSL 3.
+  - target:
+      group: cert-manager.io
+      kind: Certificate
+      version: v1
+    patch: |-
+      apiVersion: cert-manager.io/v1
+      kind: Certificate
+      metadata:
+        name: not-used
+      spec:
+        keystores:
+          pkcs12:
+            create: true
+            profile: Modern2023
+            password: litellm

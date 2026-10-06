@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/fluxcd.controlplane.io/resourceset_v1.json
+# Costs are USD per token and drive virtual-key budgets; a model LiteLLM can't
+# price counts as $0 and slips past every maxBudget.
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: litellm-models
+spec:
+  inputs:
+    # Moonshot: platform.kimi.ai/docs/pricing/chat
+    - model: kimi-k3
+      prefix: moonshot
+      apiKey: MOONSHOT_API_KEY
+      maxInputTokens: 1048576
+      inputCost: "0.000003"
+      outputCost: "0.000015"
+      cacheReadCost: "0.0000003"
+    - model: kimi-k2.7-code
+      prefix: moonshot
+      apiKey: MOONSHOT_API_KEY
+      maxInputTokens: 262144
+      inputCost: "0.00000095"
+      outputCost: "0.000004"
+      cacheReadCost: "0.00000019"
+    - model: kimi-k2.7-code-highspeed
+      prefix: moonshot
+      apiKey: MOONSHOT_API_KEY
+      maxInputTokens: 262144
+      inputCost: "0.0000019"
+      outputCost: "0.000008"
+      cacheReadCost: "0.00000038"
+    - model: kimi-k2.6
+      prefix: moonshot
+      apiKey: MOONSHOT_API_KEY
+      maxInputTokens: 262144
+      inputCost: "0.00000095"
+      outputCost: "0.000004"
+      cacheReadCost: "0.00000016"
+    # DeepSeek: api-docs.deepseek.com/quick_start/pricing (peak rates; off-peak is half)
+    - model: deepseek-flash
+      prefix: deepseek
+      apiKey: DEEPSEEK_API_KEY
+      maxInputTokens: 1000000
+      inputCost: "0.0000003"
+      outputCost: "0.0000012"
+      cacheReadCost: "0.000000006"
+    - model: deepseek-v4-pro
+      prefix: deepseek
+      apiKey: DEEPSEEK_API_KEY
+      maxInputTokens: 1000000
+      inputCost: "0.00000132"
+      outputCost: "0.00000396"
+      cacheReadCost: "0.000000044"
+  resources:
+    - apiVersion: litellm.home-operations.com/v1alpha1
+      kind: LiteLLMModel
+      metadata:
+        name: << inputs.model | replace "." "-" >>
+        namespace: ai-system
+      spec:
+        proxyRef: litellm
+        modelName: << inputs.model >>
+        params:
+          model: << inputs.prefix >>/<< inputs.model >>
+          apiKeyRef:
+            name: litellm-secret
+            key: << inputs.apiKey >>
+          dropParams: true
+        info:
+          maxInputTokens: << inputs.maxInputTokens >>
+          supportsFunctionCalling: true
+          supportsPromptCaching: true
+          extra:
+            input_cost_per_token: << inputs.inputCost >>
+            output_cost_per_token: << inputs.outputCost >>
+            cache_read_input_token_cost: << inputs.cacheReadCost >>
+
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+# OpenRouter: one wildcard instead of a curated list; LiteLLM's bundled cost
+# map prices openrouter/* ids.
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: openrouter
+spec:
+  proxyRef: litellm
+  modelName: openrouter/*
+  params:
+    model: openrouter/*
+    apiKeyRef:
+      name: litellm-secret
+      key: OPENROUTER_API_KEY
+    dropParams: true

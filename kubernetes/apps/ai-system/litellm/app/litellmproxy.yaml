@@ -1,0 +1,144 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmproxy_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMProxy
+metadata:
+  name: litellm
+spec:
+  # rc: 1.104 added a psycopg migration lock that hands Prisma's sslcert (the CA) to libpq
+  # as a client cert; 1.105 translates it to sslrootcert
+  # renovate: datasource=docker depName=ghcr.io/berriai/litellm versioning=loose
+  image: ghcr.io/berriai/litellm:v1.105.0-rc.1@sha256:67831417c1415ec704b62b1fd75fa5efecd9b3dcec0ad15450e8e5ce4a3333e6
+  replicas: 1
+  apiAccess:
+    masterKeyRef:
+      name: litellm-secret
+      key: LITELLM_MASTER_KEY
+  podAnnotations:
+    reloader.stakater.com/auto: "true"
+  route:
+    hostnames:
+      - litellm.mistelinn.org
+    parentRefs:
+      - name: envoy-internal
+        namespace: network
+  callbacks:
+    callbacks:
+      - prometheus
+  generalSettings:
+    master_key: os.environ/LITELLM_MASTER_KEY
+    # UI is Pocket ID SSO only; the master key still works as an API bearer
+    # (operator, scrape, recovery) since that path never hits the login form
+    disable_env_credential_login: true
+    disable_password_login_when_sso_enabled: true
+    database_connection_pool_limit: 10
+    proxy_batch_write_at: 60
+  litellmSettings:
+    drop_params: true
+    # expand provider wildcards (openrouter/*) into real ids on /v1/models
+    check_provider_endpoint: true
+    request_timeout: 600
+    json_logs: true
+  env:
+    - name: LITELLM_LOG
+      value: ERROR
+    - name: LITELLM_MODE
+      value: PRODUCTION
+    - name: PROXY_BASE_URL
+      value: https://litellm.mistelinn.org
+    # Pocket ID SSO; endpoints + client creds come from litellm-oidc-credentials
+    - name: GENERIC_SCOPE
+      value: openid email profile groups
+    - name: GENERIC_CLIENT_USE_PKCE
+      value: "true"
+    - name: GENERIC_USER_ID_ATTRIBUTE
+      value: sub
+    - name: GENERIC_ROLE_MAPPINGS_GROUP_CLAIM
+      value: groups
+    # python dict literal; highest-privilege match wins
+    - name: GENERIC_ROLE_MAPPINGS_ROLES
+      value: "{'proxy_admin': ['admins']}"
+    - name: GENERIC_ROLE_MAPPINGS_DEFAULT_ROLE
+      value: internal_user_viewer
+    - name: LITELLM_MASTER_KEY
+      valueFrom:
+        secretKeyRef:
+          name: litellm-secret
+          key: LITELLM_MASTER_KEY
+    - name: LITELLM_SALT_KEY
+      valueFrom:
+        secretKeyRef:
+          name: litellm-secret
+          key: LITELLM_SALT_KEY
+    # Prisma TLS dialect: sslcert = server CA, sslidentity = PKCS#12 client identity
+    - name: DATABASE_URL
+      value: "postgresql://litellm@pooler-rw.database.svc:5432/litellm?sslmode=require&sslaccept=strict&sslcert=/var/run/secrets/postgres-server-ca/ca.crt&sslidentity=/var/run/secrets/postgresql/keystore.p12&sslpassword=litellm"
+    # libpq side gets no client cert from the translated URL, so it falls back to these;
+    # Prisma ignores PG* vars
+    - name: PGSSLCERT
+      value: /var/run/secrets/postgresql/tls.crt
+    - name: PGSSLKEY
+      value: /var/run/secrets/postgresql/tls.key
+  envFrom:
+    # optional: API traffic must not wait on Pocket ID
+    - secretRef:
+        name: litellm-oidc-credentials
+        optional: true
+  livenessProbe:
+    httpGet:
+      path: /health/liveliness
+      port: 4000
+    initialDelaySeconds: 60
+  readinessProbe:
+    httpGet:
+      path: /health/readiness
+      port: 4000
+    initialDelaySeconds: 60
+  resources:
+    requests:
+      cpu: 25m
+      memory: 512Mi
+    limits:
+      memory: 2Gi
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: OnRootMismatch
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities: {drop: ["ALL"]}
+  volumes:
+    - name: tmp
+      emptyDir:
+        sizeLimit: 512Mi
+    - name: cache
+      emptyDir:
+        sizeLimit: 512Mi
+    - name: npm
+      emptyDir:
+        sizeLimit: 512Mi
+    - name: postgres-certs
+      secret:
+        secretName: postgres-litellm-cert
+        defaultMode: 0440
+    - name: postgres-server-ca
+      secret:
+        secretName: postgres-server-ca
+        defaultMode: 0440
+  volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+    # uid 568 has no passwd entry, so HOME=/ and prisma caches land here
+    - name: cache
+      mountPath: /.cache
+    - name: npm
+      mountPath: /.npm
+    - name: postgres-certs
+      mountPath: /var/run/secrets/postgresql
+      readOnly: true
+    - name: postgres-server-ca
+      mountPath: /var/run/secrets/postgres-server-ca
+      readOnly: true

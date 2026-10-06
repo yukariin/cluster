@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: litellm-db
+spec:
+  dependsOn:
+    - name: cluster
+      namespace: database
+  healthCheckExprs:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Database
+      inProgress: "!has(status.applied)"
+      failed: status.applied == false
+      current: status.applied == true
+  interval: 1h
+  timeout: 5m
+  retryInterval: 2m
+  path: kubernetes/components/postgres/base/database
+  prune: true
+  postBuild:
+    substitute:
+      APP: litellm
+      OWNER: litellm
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: database
+  wait: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: litellm-operator
+spec:
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: litellm-operator
+      namespace: ai-system
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: litellmproxies.litellm.home-operations.com
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: litellmvirtualkeys.litellm.home-operations.com
+  interval: 1h
+  path: kubernetes/apps/ai-system/litellm/operator
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: ai-system
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app litellm
+spec:
+  components:
+    - ../../../../components/postgres/base/cert
+  dependsOn:
+    - name: litellm-db
+    - name: litellm-operator
+    - name: pocket-id-operator
+      namespace: security
+  interval: 1h
+  path: kubernetes/apps/ai-system/litellm/app
+  prune: true
+  postBuild:
+    substitute:
+      APP: *app
+      PG_APP: litellm
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: ai-system
+  wait: false

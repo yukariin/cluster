@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - audiomuse.yaml
   - danbooru.yaml
+  - litellm.yaml
   - matrix.yaml
   - miniflux.yaml
   - vaultwarden.yaml

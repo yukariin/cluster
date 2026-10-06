@@ -10,6 +10,7 @@ components:
 resources:
   - namespace.yaml
   - audiomuse-ai/ks.yaml
+  - litellm/ks.yaml
   - open-webui/ks.yaml
   - searxng/ks.yaml
   - sillytavern/ks.yaml

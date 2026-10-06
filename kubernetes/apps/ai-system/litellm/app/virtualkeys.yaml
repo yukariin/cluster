@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/fluxcd.controlplane.io/resourceset_v1.json
+# One LiteLLMVirtualKey per labelled ResourceSetInputProvider; clients declare
+# theirs next to their own manifests and get Secret litellm-key-<name>.
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: litellm-virtual-keys
+spec:
+  wait: true
+  inputsFrom:
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSetInputProvider
+      selector:
+        matchLabels:
+          litellm.mistelinn.org/virtualkey: "true"
+  resources:
+    - apiVersion: litellm.home-operations.com/v1alpha1
+      kind: LiteLLMVirtualKey
+      metadata:
+        name: << inputs.name >>
+        namespace: ai-system
+      spec:
+        proxyRef: litellm
+        keyAlias: << inputs.name >>
+        secretName: litellm-key-<< inputs.name >>
+        secretKey: LITELLM_API_KEY
+        maxBudget: << get inputs "maxBudget" | default "5" | quote >>
+        budgetDuration: << get inputs "budgetDuration" | default "30d" >>
+        rpmLimit: << get inputs "rpmLimit" | default 30 >>
+        maxParallelRequests: << get inputs "maxParallelRequests" | default 4 >>
+        # [] = every model on the proxy
+        models: << get inputs "models" | default list | toJson >>

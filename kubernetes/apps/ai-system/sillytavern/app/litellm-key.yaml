@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/fluxcd.controlplane.io/resourcesetinputprovider_v1.json
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSetInputProvider
+metadata:
+  name: sillytavern
+  labels:
+    litellm.mistelinn.org/virtualkey: "true"
+spec:
+  type: Static
+  defaultValues:
+    name: sillytavern
+    maxBudget: "10"
+    budgetDuration: 30d

@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - externalsecret.yaml
   - helmrelease.yaml
+  - litellm-key.yaml
   - pocketidoidcclient.yaml

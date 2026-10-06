@@ -25,6 +25,13 @@ spec:
               PORT: &port 8080
               GLOBAL_LOG_LEVEL: INFO
               ENABLE_OLLAMA_API: "false"
+              # bootstrap only; once set, connections live in the DB (Admin > Connections)
+              OPENAI_API_BASE_URL: http://litellm.ai-system.svc.cluster.local:4000/v1
+              OPENAI_API_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: litellm-key-open-webui
+                    key: LITELLM_API_KEY
               ENABLE_SIGNUP: "false"
               ENABLE_LOGIN_FORM: "false"
               ENABLE_OAUTH_SIGNUP: "true"
