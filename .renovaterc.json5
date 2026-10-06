@@ -19,5 +19,11 @@
       matchDatasources: ["terraform-provider", "terraform-module"],
       registryUrls: ["https://registry.opentofu.org"],
     },
+    {
+      description: "Hold helm at v3: v4's rewritten --wait deadlocks on PDBs during bootstrap (see .mise.toml)",
+      matchManagers: ["mise"],
+      matchDepNames: ["helm"],
+      allowedVersions: "<4",
+    },
   ],
 }
