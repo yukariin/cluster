@@ -129,7 +129,8 @@ spec:
   params:
     # OpenRouter serves image models over /chat/completions, not /images/generations,
     # so mode stays `chat` — the picture comes back in message.images[].
-    model: openrouter/qwen/qwen-image-3
+    model: openai/qwen/qwen-image-3
+    apiBase: https://openrouter.ai/api/v1
     apiKeyRef:
       name: litellm-secret
       key: OPENROUTER_API_KEY
