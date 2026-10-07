@@ -33,11 +33,20 @@ spec:
     disable_password_login_when_sso_enabled: true
     database_connection_pool_limit: 10
     proxy_batch_write_at: 60
+  routerSettings:
+    routing_strategy: simple-shuffle
+    redis_host: os.environ/REDIS_HOST
+    redis_port: os.environ/REDIS_PORT
+    num_retries: 3
+    timeout: 600
   litellmSettings:
+    cache: true
+    cache_params:
+      type: redis
+      host: os.environ/REDIS_HOST
+      port: os.environ/REDIS_PORT
     drop_params: true
-    # expand provider wildcards (openrouter/*) into real ids on /v1/models
-    check_provider_endpoint: true
-    request_timeout: 600
+    merge_reasoning_content_in_choices: true
     json_logs: true
   env:
     - name: LITELLM_LOG
@@ -60,6 +69,10 @@ spec:
       value: "{'proxy_admin': ['admins']}"
     - name: GENERIC_ROLE_MAPPINGS_DEFAULT_ROLE
       value: internal_user_viewer
+    - name: REDIS_HOST
+      value: litellm-dragonfly
+    - name: REDIS_PORT
+      value: "6379"
     - name: LITELLM_MASTER_KEY
       valueFrom:
         secretKeyRef:

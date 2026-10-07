@@ -29,6 +29,7 @@ spec:
     namespace: flux-system
   targetNamespace: database
   wait: true
+
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -55,6 +56,7 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: ai-system
+
 ---
 # yaml-language-server: $schema=https://k8s-schemas.home-operations.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -64,9 +66,12 @@ metadata:
 spec:
   components:
     - ../../../../components/postgres/base/cert
+    - ../../../../components/dragonfly
   dependsOn:
     - name: litellm-db
     - name: litellm-operator
+    - name: dragonfly
+      namespace: database
     - name: pocket-id-operator
       namespace: security
   interval: 1h
@@ -81,4 +86,3 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: ai-system
-  wait: false
