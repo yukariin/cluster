@@ -187,8 +187,6 @@ spec:
         path: /mnt/data_pool/danbooru
       tmp:
         type: emptyDir
-        medium: Memory
-        sizeLimit: 1Gi
     route:
       app:
         hostnames:
