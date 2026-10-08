@@ -185,11 +185,10 @@ spec:
         type: nfs
         server: nas.internal
         path: /mnt/data_pool/danbooru
-      tmpfs:
+      tmp:
         type: emptyDir
-        globalMounts:
-          - path: /tmp
-            subPath: tmp
+        medium: Memory
+        sizeLimit: 1Gi
     route:
       app:
         hostnames:
