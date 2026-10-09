@@ -16,3 +16,16 @@ server:
   image_proxy: true
   limiter: true
   public_instance: false
+
+# Engines that geo/reputation-block our egress: duckduckgo (html) → CAPTCHA,
+# brave → 429, startpage → captcha-block.
+# duckduckgo web (lite endpoint) isn't challenged.
+engines:
+  - name: duckduckgo
+    disabled: true
+  - name: duckduckgo web
+    disabled: false
+  - name: brave
+    disabled: true
+  - name: startpage
+    disabled: true
