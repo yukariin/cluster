@@ -22,28 +22,20 @@ spec:
               tag: 2026.10.0@sha256:5a2ab74ae179c11e2dbbce67f307cdcf2c1257b3abb0f654d3a310b3d8ea57da
             env:
               EULA: true
-              TYPE: CUSTOM
-              GENERIC_PACKS: GT_New_Horizons_2.8.4_Server_Java_17-25
-              GENERIC_PACKS_SUFFIX: .zip
-              GENERIC_PACKS_PREFIX: https://downloads.gtnewhorizons.com/ServerPacks/
-              MODS: https://github.com/GTNewHorizons/GTNH-Web-Map/releases/download/0.3.38/gtnh-web-map-0.3.38.jar,https://github.com/GTNewHorizons/worldedit-gtnh/releases/download/v0.0.7/worldedit-v0.0.7.jar
-              # if this isn't true, then the container tries to download the modpack every run
-              SKIP_GENERIC_PACK_UPDATE_CHECK: "true"
+              TYPE: GTNH
+              # Versions from https://downloads.gtnewhorizons.com/versions.json
+              GTNH_PACK_VERSION: 2.9.0-RC-2
+              MODS: https://github.com/GTNewHorizons/GTNH-Web-Map/releases/download/0.4-beta-1/gtnh-web-map-0.4-beta-1.jar,https://github.com/GTNewHorizons/worldedit-gtnh/releases/download/v0.0.10/worldedit-v0.0.10.jar
+              # Always re-apply /config overrides, also after a pack upgrade replaces config/
+              SYNC_SKIP_NEWER_IN_DESTINATION: false
               MAX_MEMORY: 8G
-              # Make sure that this matches what is in your pack's startserver bash file
-              JVM_OPTS: "-Dfml.readTimeout=180 @java9args.txt"
-              CUSTOM_SERVER: "https://github.com/GTNewHorizons/lwjgl3ify/releases/download/3.0.26/lwjgl3ify-3.0.26-forgePatches.jar"
-              # Set server.properties according to GTNH server defaults
-              DIFFICULTY: hard
-              ENABLE_COMMAND_BLOCK: true
               SPAWN_PROTECTION: 1
               VIEW_DISTANCE: 8
               MODE: 0
-              LEVEL_TYPE: "rwg"
-              ALLOW_FLIGHT: true
               # Defaults
               BROADCAST_RCON_TO_OPS: false
               ENABLE_WHITELIST: true
+              SEED: "181414113759486831"
             envFrom:
               - secretRef:
                   name: gtnh-secret
@@ -61,7 +53,8 @@ spec:
                 enabled: true
                 spec:
                   exec: *probeExec
-                  failureThreshold: 300
+                  # first boot downloads + unpacks the ~550MB pack and generates the world
+                  failureThreshold: 900
                   initialDelaySeconds: 60
                   periodSeconds: 1
             securityContext:
@@ -77,7 +70,8 @@ spec:
                 cpu: 100m
                 memory: 256Mi
               limits:
-                memory: 8Gi
+                # 8G heap + metaspace/native overhead
+                memory: 10Gi
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -88,6 +82,19 @@ spec:
     persistence:
       data:
         existingClaim: "{{ .Release.Name }}"
+      config:
+        type: configMap
+        name: gtnh-config
+        globalMounts:
+          - path: /config/GregTech/Pollution.cfg
+            subPath: Pollution.cfg
+            readOnly: true
+          - path: /config/lootgames/games/game_of_light.cfg
+            subPath: game_of_light.cfg
+            readOnly: true
+          - path: /config/lootgames/games/sudoku.cfg
+            subPath: sudoku.cfg
+            readOnly: true
       tmpfs:
         type: emptyDir
         medium: Memory
