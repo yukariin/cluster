@@ -16,8 +16,10 @@ sonarr:
         daily: default
         anime: default
 
-    quality_definition:
-      type: series
+    # Disabled: recyclarr 8.7.3 crashes on Sonarr v5 (sizes moved into profiles);
+    # re-enable once recyclarr supports per-profile sizes.
+    # quality_definition:
+    #   type: series
 
     quality_profiles:
       - name: WEB-1080p
