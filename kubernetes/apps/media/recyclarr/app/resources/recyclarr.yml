@@ -16,18 +16,17 @@ sonarr:
         daily: default
         anime: default
 
-    # Disabled: recyclarr 8.7.3 crashes on Sonarr v5 (sizes moved into profiles);
-    # re-enable once recyclarr supports per-profile sizes.
-    # quality_definition:
-    #   type: series
-
     quality_profiles:
       - name: WEB-1080p
         trash_id: 72dae194fc92bf828f32cde7744e51a1
+        quality_definition:
+          type: series
         reset_unmatched_scores:
           enabled: true
       - name: Remux-1080p - Anime
         trash_id: 20e0fc959f1f1704bed501f23bdae76f
+        quality_definition:
+          type: anime
         reset_unmatched_scores:
           enabled: true
 
