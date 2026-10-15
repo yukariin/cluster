@@ -25,6 +25,9 @@ spec:
               WEBUI_URL: "https://chat.mistelinn.org"
               PORT: &port 8080
               GLOBAL_LOG_LEVEL: INFO
+              ENABLE_VERSION_UPDATE_CHECK: "false"
+
+              # Models
               ENABLE_OLLAMA_API: "false"
               # bootstrap only; once set, connections live in the DB (Admin > Connections)
               OPENAI_API_BASE_URL: http://litellm.ai-system.svc.cluster.local:4000/v1
@@ -33,6 +36,8 @@ spec:
                   secretKeyRef:
                     name: litellm-key-open-webui
                     key: LITELLM_API_KEY
+
+              # SSO
               ENABLE_SIGNUP: "false"
               ENABLE_LOGIN_FORM: "false"
               ENABLE_OAUTH_SIGNUP: "true"
@@ -41,7 +46,8 @@ spec:
               OAUTH_SCOPES: openid email profile groups
               OAUTH_CODE_CHALLENGE_METHOD: S256
               OPENID_REDIRECT_URI: https://chat.mistelinn.org/oauth/oidc/callback
-              ENABLE_VERSION_UPDATE_CHECK: "false"
+
+              # Search
               ENABLE_WEB_SEARCH: "true"
               WEB_SEARCH_ENGINE: searxng
               SEARXNG_QUERY_URL: "http://searxng.ai-system.svc.cluster.local:8080/search?q=<query>"
