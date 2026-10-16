@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: kimi-k3
+spec:
+  proxyRef: litellm
+  modelName: kimi-k3
+  params:
+    model: moonshot/kimi-k3
+    apiKeyRef:
+      name: litellm-secret
+      key: MOONSHOT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1048576
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: kimi-k2-7-code
+spec:
+  proxyRef: litellm
+  modelName: kimi-k2.7-code
+  params:
+    model: moonshot/kimi-k2.7-code
+    apiKeyRef:
+      name: litellm-secret
+      key: MOONSHOT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262144
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: kimi-k2-7-code-highspeed
+spec:
+  proxyRef: litellm
+  modelName: kimi-k2.7-code-highspeed
+  params:
+    model: moonshot/kimi-k2.7-code-highspeed
+    apiKeyRef:
+      name: litellm-secret
+      key: MOONSHOT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262144
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+    # not in LiteLLM's cost map; USD per token, platform.kimi.ai/docs/pricing/chat
+    extra:
+      input_cost_per_token: 0.0000019
+      output_cost_per_token: 0.000008
+      cache_read_input_token_cost: 0.00000038
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: kimi-k2-6
+spec:
+  proxyRef: litellm
+  modelName: kimi-k2.6
+  params:
+    model: moonshot/kimi-k2.6
+    apiKeyRef:
+      name: litellm-secret
+      key: MOONSHOT_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 262144
+    supportsFunctionCalling: true
+    supportsPromptCaching: true

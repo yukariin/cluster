@@ -5,8 +5,8 @@ kind: Kustomization
 resources:
   - externalsecret.yaml
   - litellmproxy.yaml
-  - mcpservers.yaml
-  - models.yaml
+  - mcp
+  - models
   - pocketidoidcclient.yaml
   - virtualkeys.yaml
   - servicemonitor.yaml

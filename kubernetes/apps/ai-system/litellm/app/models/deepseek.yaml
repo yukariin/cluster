@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: deepseek-flash
+spec:
+  proxyRef: litellm
+  modelName: deepseek-flash
+  params:
+    model: deepseek/deepseek-flash
+    apiKeyRef:
+      name: litellm-secret
+      key: DEEPSEEK_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1000000
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/litellm.home-operations.com/litellmmodel_v1alpha1.json
+apiVersion: litellm.home-operations.com/v1alpha1
+kind: LiteLLMModel
+metadata:
+  name: deepseek-v4-pro
+spec:
+  proxyRef: litellm
+  modelName: deepseek-v4-pro
+  params:
+    model: deepseek/deepseek-v4-pro
+    apiKeyRef:
+      name: litellm-secret
+      key: DEEPSEEK_API_KEY
+    dropParams: true
+  info:
+    maxInputTokens: 1000000
+    supportsFunctionCalling: true
+    supportsPromptCaching: true
