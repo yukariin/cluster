@@ -2,14 +2,19 @@
 version: v1alpha1
 machine:
   type: controlplane
-  install:
-    diskSelector:
-      model: SAMSUNG MZALQ256HAJD-000L1
-    wipe: true
-  nodeLabels:
-    topology.kubernetes.io/zone: sdm
-
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: flandre
+---
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+provisioning:
+  diskSelector:
+    match: disk.model == "SAMSUNG MZALQ256HAJD-000L1"
+  wipe: true
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  topology.kubernetes.io/zone: sdm
