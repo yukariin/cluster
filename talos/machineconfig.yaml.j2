@@ -125,6 +125,16 @@ rules:
   - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
 
 ---
+apiVersion: v1alpha1
+kind: EtcFileConfig
+name: nfs.conf
+mode: 0o644
+contents: |
+  [nfsrahead]
+  nfs4=16384
+  default=128
+
+---
 # NFS
 apiVersion: v1alpha1
 kind: EtcFileConfig
@@ -375,18 +385,19 @@ apiVersion: v1alpha1
 kind: TimeSyncConfig
 ntp:
   servers:
+    - pool.ntp.org
     - time.cloudflare.com
 
 ---
 apiVersion: v1alpha1
 kind: ResolverConfig
+nameservers:
+  - address: 192.168.90.1 # UDM-P gateway on homelab VLAN - prefer local over internet
+  - address: 1.1.1.1
 hostDNS:
   enabled: true
   forwardKubeDNSToHost: true # requires Cilium socketLB features
   resolveMemberNames: true
-nameservers:
-  - address: 192.168.90.1 # UDM-P gateway on homelab VLAN - prefer local over internet
-  - address: 1.1.1.1
 
 ---
 apiVersion: v1alpha1
@@ -394,6 +405,7 @@ kind: VolumeConfig
 name: STATE
 encryption:
   provider: luks2
+  allowDiscards: true
   keys:
     - slot: 0
       tpm: {}
@@ -404,6 +416,7 @@ kind: VolumeConfig
 name: EPHEMERAL
 encryption:
   provider: luks2
+  allowDiscards: true
   keys:
     - slot: 0
       tpm: {}
