@@ -392,8 +392,7 @@ ntp:
 apiVersion: v1alpha1
 kind: ResolverConfig
 nameservers:
-  - address: 192.168.90.1 # UDM-P gateway on homelab VLAN - prefer local over internet
-  - address: 1.1.1.1
+  - address: 192.168.90.1 # UDM-P gateway on homelab VLAN
 hostDNS:
   enabled: true
   forwardKubeDNSToHost: true # requires Cilium socketLB features
