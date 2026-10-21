@@ -8,7 +8,7 @@ spec:
   # ≥1.105: 1.104 added a psycopg migration lock that hands Prisma's sslcert (the CA) to libpq
   # as a client cert; 1.105 translates it to sslrootcert
   # renovate: datasource=docker depName=ghcr.io/berriai/litellm versioning=loose
-  image: ghcr.io/berriai/litellm:v1.106.2@sha256:7294b90f868c5c38c99b83021c7ba46f9b439e95f8e32964c925c7d2563a03f7
+  image: ghcr.io/berriai/litellm:v1.107.0@sha256:1bbcb1443bc962e45f5aad53fe3d2c30600e0379715fb6c664cdd3ac126c339e
   replicas: 1
   apiAccess:
     masterKeyRef:
