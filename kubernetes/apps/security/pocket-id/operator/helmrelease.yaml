@@ -36,9 +36,9 @@ spec:
           appUrl: "https://id.mistelinn.org"
           emailNotifications:
             apiKeyExpiration: true
-            loginNotification: true
+            loginNotificationMode: browserRecognition
             oneTimeAccessAsAdmin: true
-            verification: true
+            verificationMode: optional
           encryptionKey:
             valueFrom:
               secretKeyRef:
