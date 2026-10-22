@@ -6,6 +6,10 @@ metadata:
   name: bambuddy
 spec:
   launchUrl: https://bambuddy.mistelinn.org
+  # not in dashboard-icons; selfhst has a single variant (outlined, works on both themes)
+  logo:
+    logoUrl: "https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/bambuddy.webp"
+    darkLogoUrl: "https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/bambuddy.webp"
   callbackUrls:
     - https://bambuddy.mistelinn.org/api/v1/auth/oidc/callback
   allowedUserGroups:
