@@ -18,3 +18,4 @@ spec:
     keys:
       clientID: AUTOBRR__OIDC_CLIENT_ID
       clientSecret: AUTOBRR__OIDC_CLIENT_SECRET
+      issuerUrl: AUTOBRR__OIDC_ISSUER

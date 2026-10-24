@@ -18,3 +18,4 @@ spec:
     keys:
       clientID: QUI__OIDC_CLIENT_ID
       clientSecret: QUI__OIDC_CLIENT_SECRET
+      issuerUrl: QUI__OIDC_ISSUER

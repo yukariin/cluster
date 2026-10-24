@@ -30,7 +30,6 @@ spec:
               PORT: &port 80
               OAUTH2_PROVIDER: oidc
               OAUTH2_OIDC_PROVIDER_NAME: Pocket ID
-              OAUTH2_OIDC_DISCOVERY_ENDPOINT: "https://id.mistelinn.org"
               OAUTH2_REDIRECT_URL: "https://miniflux.mistelinn.org/oauth2/oidc/callback"
               OAUTH2_USER_CREATION: "1"
               RUN_MIGRATIONS: "1"

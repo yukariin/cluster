@@ -17,3 +17,4 @@ spec:
     keys:
       clientID: SSO_CLIENT_ID
       clientSecret: SSO_CLIENT_SECRET
+      issuerUrl: SSO_AUTHORITY

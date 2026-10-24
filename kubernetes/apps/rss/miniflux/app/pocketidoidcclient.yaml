@@ -17,3 +17,4 @@ spec:
     keys:
       clientID: OAUTH2_CLIENT_ID
       clientSecret: OAUTH2_CLIENT_SECRET
+      issuerUrl: OAUTH2_OIDC_DISCOVERY_ENDPOINT

@@ -22,9 +22,6 @@ spec:
     auth.generic_oauth:
       enabled: "true"
       name: "Pocket ID"
-      api_url: "https://id.mistelinn.org/api/oidc/userinfo"
-      auth_url: "https://id.mistelinn.org/authorize"
-      token_url: "https://id.mistelinn.org/api/oidc/token"
       scopes: "openid profile email offline_access groups"
       email_attribute_path: "email"
       login_attribute_path: "preferred_username"
@@ -47,6 +44,10 @@ spec:
       enable_gzip: "true"
       root_url: https://grafana.mistelinn.org
   deployment:
+    metadata:
+      annotations:
+        # OIDC endpoints + client secret come from grafana-oidc-credentials; restart on rotation
+        reloader.stakater.com/auto: "true"
     spec:
       strategy:
         type: Recreate
