@@ -1,0 +1,4 @@
+---
+interface:
+  display_name: "Cluster PR Review"
+  short_description: "Review homelab dependency and infrastructure PRs"

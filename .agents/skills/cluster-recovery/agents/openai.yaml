@@ -1,0 +1,4 @@
+---
+interface:
+  display_name: "Cluster Recovery"
+  short_description: "Plan CNPG and Kopiur restores with project context"

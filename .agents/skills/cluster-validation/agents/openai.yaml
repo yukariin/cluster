@@ -1,0 +1,4 @@
+---
+interface:
+  display_name: "Cluster Validation"
+  short_description: "Validate Flux manifests and Helm changes locally"
