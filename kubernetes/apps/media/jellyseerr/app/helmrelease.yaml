@@ -32,7 +32,7 @@ spec:
                 custom: true
                 spec:
                   httpGet:
-                    path: /api/v1/status
+                    path: /api/v1/settings/public
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
@@ -66,8 +66,8 @@ spec:
       app:
         annotations:
           gatus.home-operations.com/endpoint: |-
-            url: "https://requests.mistelinn.org/api/v1/status"
-            conditions: ["[STATUS] == 200", "has([BODY].version) == true"]
+            url: "https://requests.mistelinn.org/api/v1/settings/public"
+            conditions: ["[STATUS] == 200", "[BODY].initialized == true"]
         hostnames:
           - "requests.mistelinn.org"
         parentRefs:
