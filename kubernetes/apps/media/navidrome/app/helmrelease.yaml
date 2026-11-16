@@ -45,6 +45,8 @@ spec:
               tag: 0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52
             env:
               ND_AGENTS: audiomuseai,apple-music,lastfm
+              ND_LASTFM_ENABLED: "true"
+              ND_LISTENBRAINZ_ENABLED: "true"
               ND_BASEURL: "https://{{ .Release.Name }}.mistelinn.org"
               ND_CACHEFOLDER: /config/cache
               ND_COVERARTPRIORITY: "folder.*, cover.*, front.*"
