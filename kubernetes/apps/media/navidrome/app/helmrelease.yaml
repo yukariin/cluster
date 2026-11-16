@@ -13,14 +13,38 @@ spec:
   values:
     controllers:
       navidrome:
+        annotations:
+          reloader.stakater.com/auto: "true"
         type: statefulset
+        initContainers:
+          download-plugins:
+            image:
+              repository: curlimages/curl
+              tag: 8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93
+            command:
+              - /bin/sh
+              - -c
+              - |
+                set -u
+                mkdir -p /config/plugins
+                dl() { curl -fsSL --retry 3 -o "/config/plugins/$2" "$1" && echo "ok $2" || echo "skip $2 (download failed, keeping any existing copy)"; }
+                # renovate: datasource=github-releases depName=navidrome/apple-music-plugin
+                dl https://github.com/navidrome/apple-music-plugin/releases/download/v0.2.0/apple-music.ndp apple-music.ndp
+                # renovate: datasource=github-releases depName=kgarner7/navidrome-listenbrainz-daily-playlist
+                dl https://github.com/kgarner7/navidrome-listenbrainz-daily-playlist/releases/download/v6.0.0/listenbrainz-daily-playlist.ndp listenbrainz-daily-playlist.ndp
+                # renovate: datasource=github-releases depName=NeptuneHub/AudioMuse-AI-NV-plugin
+                dl https://github.com/NeptuneHub/AudioMuse-AI-NV-plugin/releases/download/v8/audiomuseai.ndp audiomuseai.ndp
+            securityContext: &sc
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: {drop: ["ALL"]}
         containers:
           app:
             image:
               repository: ghcr.io/navidrome/navidrome
               tag: 0.64.2@sha256:38dc2727bfcfd5ede290f8ada114fc90368146f265ae4701ddddbcbe2a44ee52
             env:
-              ND_AGENTS: audiomuseai,lastfm,spotify,deezer
+              ND_AGENTS: audiomuseai,apple-music,lastfm
               ND_BASEURL: "https://{{ .Release.Name }}.mistelinn.org"
               ND_CACHEFOLDER: /config/cache
               ND_COVERARTPRIORITY: "folder.*, cover.*, front.*"
@@ -34,6 +58,9 @@ spec:
               ND_TRANSCODING_MAXCONCURRENT: 2
               ND_TRANSCODING_MAXCONCURRENTPERUSER: 1
               ND_ENFORCENONROOTUSER: true
+            envFrom:
+              - secretRef:
+                  name: "{{ .Release.Name }}-secret"
             probes:
               liveness: &probes
                 enabled: true
@@ -52,10 +79,7 @@ spec:
                 spec:
                   periodSeconds: 10
                   failureThreshold: 30
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: {drop: ["ALL"]}
+            securityContext: *sc
             resources:
               requests:
                 cpu: 10m
@@ -81,14 +105,18 @@ spec:
     persistence:
       config:
         existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config
       media:
         type: nfs
         server: nas.internal
         path: /mnt/data_pool/data
-        globalMounts:
-          - path: /music
-            subPath: media/music
-            readOnly: true
+        advancedMounts:
+          navidrome:
+            app:
+              - path: /music
+                subPath: media/music
+                readOnly: true
       tmp:
         type: emptyDir
         globalMounts:
