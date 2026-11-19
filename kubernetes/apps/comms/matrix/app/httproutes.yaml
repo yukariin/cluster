@@ -105,7 +105,7 @@ spec:
     - "rtc.mistelinn.org"
   rules:
     - backendRefs:
-        - name: matrix-matrix-rtc-authorisation-service
+        - name: matrix-matrix-rtc-authorisation
           namespace: comms
           port: 8080
       matches:
