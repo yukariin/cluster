@@ -20,7 +20,7 @@ spec:
           app:
             image: &image
               repository: ghcr.io/danbooru/danbooru
-              tag: production@sha256:3188a6da4f7515ffc22169cf615b2342497323edafb6891ede5dc46ed9d821c5
+              tag: production@sha256:8439f831462073775f25a8ebc6be495e7596bfc6b1e14288a646abeb583e4f80
             env: &env
               # Base settings
               RAILS_ENV: "production"
